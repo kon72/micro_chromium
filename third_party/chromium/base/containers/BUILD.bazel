@@ -1,0 +1,10 @@
+load(
+    "//third_party/chromium:build_defs.bzl",
+    "chromium_cc_library",
+)
+
+chromium_cc_library(
+    name = "contains",
+    hdrs = ["contains.h"],
+    visibility = ["//visibility:public"],
+)

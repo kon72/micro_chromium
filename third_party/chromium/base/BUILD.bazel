@@ -1,0 +1,41 @@
+load("@rules_cc//cc:cc_test.bzl", "cc_test")
+load(
+    "//third_party/chromium:build_defs.bzl",
+    "chromium_cc_library",
+)
+
+chromium_cc_library(
+    name = "check",
+    hdrs = ["check.h"],
+    visibility = ["//third_party/chromium:__subpackages__"],
+    deps = ["@abseil-cpp//absl/log:absl_check"],
+)
+
+chromium_cc_library(
+    name = "compiler_specific",
+    hdrs = ["compiler_specific.h"],
+    visibility = ["//visibility:public"],
+    deps = ["//third_party/chromium/build:build_config"],
+)
+
+chromium_cc_library(
+    name = "scoped_generic",
+    hdrs = ["scoped_generic.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":check",
+        ":compiler_specific",
+    ],
+)
+
+cc_test(
+    name = "scoped_generic_unittest",
+    size = "small",
+    srcs = ["scoped_generic_unittest.cc"],
+    deps = [
+        ":scoped_generic",
+        "//third_party/chromium/base/containers:contains",
+        "//third_party/chromium/build:build_config",
+        "//third_party/chromium/testing/gtest",
+    ],
+)

@@ -1,0 +1,3 @@
+replace-raw_ptr-with-raw-pointer.patch
+add-check-shim.patch
+fix-googletest-include.patch

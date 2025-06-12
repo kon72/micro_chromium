@@ -1,0 +1,17 @@
+load(
+    "//third_party/chromium:build_defs.bzl",
+    "chromium_cc_library",
+)
+
+chromium_cc_library(
+    name = "build_config",
+    hdrs = ["build_config.h"],
+    visibility = ["//visibility:public"],
+    deps = [":buildflag"],
+)
+
+chromium_cc_library(
+    name = "buildflag",
+    hdrs = ["buildflag.h"],
+    visibility = ["//third_party/chromium:__subpackages__"],
+)

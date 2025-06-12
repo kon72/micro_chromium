@@ -1,0 +1,5 @@
+licenses(["notice"])  # Apache License 2.0
+
+package(default_visibility = ["//visibility:private"])
+
+exports_files(["LICENSE"])

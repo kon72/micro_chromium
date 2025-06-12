@@ -1,0 +1,32 @@
+module(
+    name = "micro_chromium",
+    version = "head",
+    compatibility_level = 1,
+)
+
+bazel_dep(name = "platforms", version = "1.0.0")
+
+# Required for debugging on macOS.
+# See https://github.com/bazelbuild/bazel/issues/23110
+# This must come above rules_cc as Bazel selects toolchains based on which is
+# generated first.
+bazel_dep(name = "apple_support", version = "1.22.0")
+
+bazel_dep(name = "rules_cc", version = "0.1.1")
+
+bazel_dep(name = "abseil-cpp", version = "20250512.0")
+
+bazel_dep(name = "googletest", version = "1.17.0")
+bazel_dep(name = "google_benchmark", version = "1.9.4")
+
+bazel_dep(name = "hedron_compile_commands", dev_dependency = True)
+git_override(
+    module_name = "hedron_compile_commands",
+    remote = "https://github.com/hedronvision/bazel-compile-commands-extractor.git",
+    commit = "4f28899228fb3ad0126897876f147ca15026151e",
+    patch_strip = 1,
+    patches = ["//third_party:hedron_compile_commands_fixes.diff"],
+)
+
+cc_configure = use_extension("@rules_cc//cc:extensions.bzl", "cc_configure_extension", dev_dependency = True)
+use_repo(cc_configure, "local_config_cc")

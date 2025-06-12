@@ -1,0 +1,60 @@
+common --experimental_ui_max_stdouterr_bytes=-1
+
+build --enable_platform_specific_config
+
+startup --windows_enable_symlinks
+build --enable_runfiles
+
+build --incompatible_strict_action_env
+run --incompatible_strict_action_env
+test --incompatible_strict_action_env
+
+build --features=header_modules
+build --features=layering_check
+build --features=parse_headers
+build --features=process_headers_in_dependencies
+build --repo_env=APPLE_SUPPORT_LAYERING_CHECK_BETA=1
+
+# For googletest
+build --define='absl=1'
+test --test_env="GTEST_INSTALL_FAILURE_SIGNAL_HANDLER=1"
+
+# Linux
+build:linux --cxxopt=-std=c++20
+build:linux --host_cxxopt=-std=c++20
+
+# Windows
+build:windows --cxxopt=/std:c++20
+build:windows --host_cxxopt=/std:c++20
+build:windows --copt=/utf-8
+build:windows --host_copt=/utf-8
+# For using M_* math constants on Windows with MSVC.
+build:windows --copt=/D_USE_MATH_DEFINES
+build:windows --host_copt=/D_USE_MATH_DEFINES
+# Make sure to include as little of windows.h as possible
+build:windows --copt=-DWIN32_LEAN_AND_MEAN
+build:windows --host_copt=-DWIN32_LEAN_AND_MEAN
+build:windows --copt=-DNOGDI
+build:windows --host_copt=-DNOGDI
+build:windows --config=win_clang
+
+# macOS
+build:macos --cxxopt=-std=c++20
+build:macos --host_cxxopt=-std=c++20
+
+# clang-cl
+build:win_clang --extra_toolchains=@local_config_cc//:cc-toolchain-x64_windows-clang-cl
+build:win_clang --extra_execution_platforms=//:x64_windows-clang-cl
+build:win_clang --host_platform=//:x64_windows-clang-cl
+
+# Sets the default Apple platform to macOS.
+build --apple_platform_type=macos
+
+# Compile ObjC++ files with C++20
+build --per_file_copt=.*\.mm\$@-std=c++20
+
+# Allow debugging with XCODE
+build --apple_generate_dsym
+
+# This bazelrc file can be used for user-specific custom build settings.
+try-import %workspace%/.user.bazelrc

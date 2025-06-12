@@ -1,0 +1,7 @@
+/bazel-*
+/.user.bazelrc
+/MODULE.bazel.lock
+/external
+/compile_commands.json
+/.cache/
+/third_party/chromium/.pc/
