@@ -1,3 +1,4 @@
 add-check-shim.patch
 fix-googletest-include.patch
+disable-raw-ptr-exclusion-annotation.patch
 replace-raw_ptr-with-raw-pointer.patch

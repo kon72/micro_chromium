@@ -1,0 +1,10 @@
+load(
+    "//third_party/chromium:build_defs.bzl",
+    "chromium_cc_library",
+)
+
+chromium_cc_library(
+    name = "raw_ptr_exclusion",
+    hdrs = ["raw_ptr_exclusion.h"],
+    visibility = ["//third_party/chromium:__subpackages__"],
+)

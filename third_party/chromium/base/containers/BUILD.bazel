@@ -4,6 +4,19 @@ load(
 )
 
 chromium_cc_library(
+    name = "checked_iterators",
+    srcs = ["span_forward_internal.h"],
+    hdrs = ["checked_iterators.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//third_party/chromium/base:check",
+        "//third_party/chromium/base:compiler_specific",
+        "//third_party/chromium/base/memory:raw_ptr_exclusion",
+        "//third_party/chromium/build:build_config",
+    ],
+)
+
+chromium_cc_library(
     name = "contains",
     hdrs = ["contains.h"],
     visibility = ["//visibility:public"],
