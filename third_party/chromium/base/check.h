@@ -9,4 +9,6 @@
 
 #define CHECK(cond) ABSL_CHECK(cond)
 
+#define DCHECK(cond) ABSL_DCHECK(cond)
+
 #endif  // BASE_CHECK_H_

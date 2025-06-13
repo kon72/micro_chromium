@@ -1,0 +1,26 @@
+load("@rules_cc//cc:cc_test.bzl", "cc_test")
+load(
+    "//third_party/chromium:build_defs.bzl",
+    "chromium_cc_library",
+)
+
+chromium_cc_library(
+    name = "string_view_util",
+    hdrs = ["string_view_util.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//third_party/chromium/base:compiler_specific",
+        "//third_party/chromium/base/containers:span",
+    ],
+)
+
+cc_test(
+    name = "string_view_util_unittest",
+    size = "small",
+    srcs = ["string_view_util_unittest.cc"],
+    deps = [
+        ":string_view_util",
+        "//third_party/chromium/base/containers:span",
+        "//third_party/chromium/testing/gtest",
+    ],
+)
