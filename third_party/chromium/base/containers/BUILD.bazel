@@ -21,3 +21,18 @@ chromium_cc_library(
     hdrs = ["contains.h"],
     visibility = ["//visibility:public"],
 )
+
+chromium_cc_library(
+    name = "span",
+    srcs = ["span_forward_internal.h"],
+    hdrs = ["span.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":checked_iterators",
+        "//third_party/chromium/base:check",
+        "//third_party/chromium/base:compiler_specific",
+        "//third_party/chromium/base/numerics:integral_constant_like",
+        "//third_party/chromium/base/numerics:safe_conversions",
+        "//third_party/chromium/base/types:to_address",
+    ],
+)
