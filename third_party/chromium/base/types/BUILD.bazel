@@ -1,0 +1,23 @@
+load("@bazel_skylib//rules:build_test.bzl", "build_test")
+load(
+    "//third_party/chromium:build_defs.bzl",
+    "chromium_cc_library",
+)
+
+chromium_cc_library(
+    name = "to_address",
+    hdrs = ["to_address.h"],
+    visibility = ["//visibility:public"],
+)
+
+build_test(
+    name = "to_address_unittest",
+    targets = [":to_address_unittest_lib"],
+)
+
+chromium_cc_library(
+    name = "to_address_unittest_lib",
+    testonly = True,
+    srcs = ["to_address_unittest.cc"],
+    deps = [":to_address"],
+)

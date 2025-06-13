@@ -28,6 +28,8 @@ files=(
   'base/numerics/safe_conversions_impl.h'
   'base/scoped_generic.h'
   'base/scoped_generic_unittest.cc'
+  'base/types/to_address.h'
+  'base/types/to_address_unittest.cc'
   'build/build_config.h'
   'build/buildflag.h'
   'testing/gtest/include/gtest/gtest.h'
