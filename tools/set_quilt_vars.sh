@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 # Adopted from https://github.com/ungoogled-software/ungoogled-chromium/blob/47bc6ecca740b3a700865e0c1418a1802af4bba2/devutils/set_quilt_vars.sh
 
 # Sets quilt variables for updating the patches

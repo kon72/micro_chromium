@@ -2,22 +2,13 @@
 
 set -euo pipefail
 
-download_file() {
-  local repo_url="$1"
-  local revision="$2"
-  local file="$3"
-  local out_dir="$4"
-
-  echo "- ${file}" >&2
-  local blob_url="${repo_url}/+/${revision}/${file}?format=text"
-  local out_file="${out_dir}/${file}"
-  mkdir -p "$(dirname "${out_file}")"
-  curl --silent --show-error --fail "${blob_url}" \
-    | base64 --decode > "${out_file}"
-}
-
-repo_url='https://chromium.googlesource.com/chromium/src'
+upstream_url='https://chromium.googlesource.com/chromium/src'
 revision='ba5e91c3c31fb669ddb0eaaaf8d9c356f6cade70'
+checkout_dirs=(
+  'base'
+  'build'
+  'testing/gtest'
+)
 files=(
   '.clang-format'
   'base/compiler_specific.h'
@@ -38,17 +29,37 @@ files=(
   'LICENSE'
 )
 
-temp_dir="$(mktemp -d)"
-trap 'rm -rf "${temp_dir}"' EXIT
-mkdir "${temp_dir}/chromium"
+upstream_dir='third_party/chromium-upstream'
+out_dir='third_party/chromium'
 
-echo "Downloading Chromium files into ${temp_dir}/chromium" >&2
+git -C "${upstream_dir}" rev-parse --is-inside-work-tree > /dev/null 2>&1 || {
+  git clone --sparse --depth=1 --revision="${revision}" \
+    "${upstream_url}" "${upstream_dir}"
+  git -C "${upstream_dir}" sparse-checkout set "${checkout_dirs[@]}"
+}
+git -C "${upstream_dir}" checkout "${revision}" || {
+  echo "Failed to checkout revision ${revision} in ${upstream_dir}" >&2
+  exit 1
+}
+if ! git -C "${upstream_dir}" diff --quiet; then
+  echo "The repository ${upstream_dir} is dirty" >&2
+  exit 1
+fi
+
+echo "Syncing upstream files to ${out_dir}..."
+fd --unrestricted --type=file \
+  --exclude='**/BUILD.bazel' \
+  --exclude='build_defs.bzl' \
+  --exec rm -f {} \; \
+  . "${out_dir}"
+find "${out_dir}" -type d -empty -delete
 for file in "${files[@]}"; do
-  download_file "${repo_url}" "${revision}" "${file}" "${temp_dir}/chromium"
+  src="${upstream_dir}/${file}"
+  dst="${out_dir}/${file}"
+  mkdir -p "$(dirname "${dst}")"
+  if [[ -f ${src} ]]; then
+    cp "${src}" "${dst}"
+  else
+    echo "File ${src} does not exist, skipping." >&2
+  fi
 done
-
-echo "Syncing downloaded files to third_party directory" >&2
-rsync -aP --delete \
-  --exclude="BUILD.bazel" \
-  --exclude="build_defs.bzl" \
-  "${temp_dir}/chromium" third_party
