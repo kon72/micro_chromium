@@ -1,0 +1,21 @@
+load(
+    "//third_party/chromium:build_defs.bzl",
+    "chromium_cc_library",
+)
+
+chromium_cc_library(
+    name = "integral_constant_like",
+    hdrs = ["integral_constant_like.h"],
+    visibility = ["//visibility:public"],
+)
+
+chromium_cc_library(
+    name = "safe_conversions",
+    srcs = [
+        "safe_conversions_arm_impl.h",
+        "safe_conversions_impl.h",
+    ],
+    hdrs = ["safe_conversions.h"],
+    visibility = ["//visibility:public"],
+    deps = [":integral_constant_like"],
+)
