@@ -22,6 +22,8 @@ files=(
   '.clang-format'
   'base/compiler_specific.h'
   'base/containers/contains.h'
+  # 'base/containers/contains_nocompile.nc'
+  # 'base/containers/contains_unittest.cc'
   'base/numerics/integral_constant_like.h'
   'base/numerics/safe_conversions.h'
   'base/numerics/safe_conversions_arm_impl.h'
