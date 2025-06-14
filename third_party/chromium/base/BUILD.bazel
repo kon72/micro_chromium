@@ -11,6 +11,13 @@ chromium_cc_library(
 )
 
 chromium_cc_library(
+    name = "bits",
+    hdrs = ["bits.h"],
+    visibility = ["//visibility:public"],
+    deps = [":check"],
+)
+
+chromium_cc_library(
     name = "check",
     hdrs = ["check.h"],
     visibility = ["//third_party/chromium:__subpackages__"],

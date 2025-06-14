@@ -85,6 +85,30 @@ chromium_cc_library(
 )
 
 cc_test(
+    name = "strcat_unittest",
+    size = "small",
+    srcs = ["strcat_unittest.cc"],
+    deps = [
+        ":strcat",
+        ":strings",
+        "//third_party/chromium/testing/gtest",
+    ],
+)
+
+cc_test(
+    name = "string_util_unittest",
+    size = "small",
+    srcs = ["string_util_unittest.cc"],
+    deps = [
+        ":strings",
+        "//third_party/chromium/base:bits",
+        "//third_party/chromium/build:build_config",
+        "//third_party/chromium/testing/gmock",
+        "//third_party/chromium/testing/gtest",
+    ],
+)
+
+cc_test(
     name = "string_view_util_unittest",
     size = "small",
     srcs = ["string_view_util_unittest.cc"],
