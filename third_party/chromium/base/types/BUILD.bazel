@@ -1,4 +1,5 @@
 load("@bazel_skylib//rules:build_test.bzl", "build_test")
+load("@rules_cc//cc:cc_test.bzl", "cc_test")
 load(
     "//third_party/chromium:build_defs.bzl",
     "chromium_cc_library",
@@ -7,6 +8,41 @@ load(
 chromium_cc_library(
     name = "always_false",
     hdrs = ["always_false.h"],
+    visibility = ["//visibility:public"],
+)
+
+chromium_cc_library(
+    name = "expected",
+    srcs = ["expected_internal.h"],
+    hdrs = ["expected.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//third_party/chromium/base:check",
+        "//third_party/chromium/base/strings:strcat",
+        "//third_party/chromium/base/strings:to_string",
+    ],
+)
+
+chromium_cc_library(
+    name = "expected_macros",
+    hdrs = ["expected_macros.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":expected",
+        ":is_instantiation",
+        "//third_party/chromium/base:compiler_specific",
+        "//third_party/chromium/base/macros:concat",
+        "//third_party/chromium/base/macros:if",
+        "//third_party/chromium/base/macros:is_empty",
+        "//third_party/chromium/base/macros:remove_parens",
+        "//third_party/chromium/base/macros:uniquify",
+        "//third_party/chromium/base/memory:raw_ptr_exclusion",
+    ],
+)
+
+chromium_cc_library(
+    name = "is_instantiation",
+    hdrs = ["is_instantiation.h"],
     visibility = ["//visibility:public"],
 )
 
@@ -26,6 +62,31 @@ chromium_cc_library(
     name = "to_address",
     hdrs = ["to_address.h"],
     visibility = ["//visibility:public"],
+)
+
+cc_test(
+    name = "expected_macros_unittest",
+    size = "small",
+    srcs = ["expected_macros_unittest.cc"],
+    deps = [
+        ":expected",
+        ":expected_macros",
+        "//third_party/chromium/base/test:gmock_expected_support",
+        "//third_party/chromium/testing/gmock",
+        "//third_party/chromium/testing/gtest",
+    ],
+)
+
+build_test(
+    name = "is_instantiation_unittest",
+    targets = [":is_instantiation_unittest_lib"],
+)
+
+chromium_cc_library(
+    name = "is_instantiation_unittest_lib",
+    testonly = True,
+    srcs = ["is_instantiation_unittest.cc"],
+    deps = [":is_instantiation"],
 )
 
 build_test(
