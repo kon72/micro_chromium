@@ -18,6 +18,13 @@ chromium_cc_library(
 )
 
 chromium_cc_library(
+    name = "check_op",
+    hdrs = ["check_op.h"],
+    visibility = ["//third_party/chromium:__subpackages__"],
+    deps = ["@abseil-cpp//absl/log:absl_check"],
+)
+
+chromium_cc_library(
     name = "compiler_specific",
     hdrs = ["compiler_specific.h"],
     visibility = ["//visibility:public"],
