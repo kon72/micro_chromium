@@ -14,6 +14,18 @@ chromium_cc_library(
     ],
 )
 
+chromium_cc_library(
+    name = "utf_string_conversion_utils",
+    srcs = ["utf_string_conversion_utils.cc"],
+    hdrs = ["utf_string_conversion_utils.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//third_party/chromium/base:base_export",
+        "//third_party/chromium/base/third_party/icu",
+        "//third_party/chromium/build:build_config",
+    ],
+)
+
 cc_test(
     name = "string_view_util_unittest",
     size = "small",
@@ -21,6 +33,16 @@ cc_test(
     deps = [
         ":string_view_util",
         "//third_party/chromium/base/containers:span",
+        "//third_party/chromium/testing/gtest",
+    ],
+)
+
+cc_test(
+    name = "utf_string_conversion_utils_unittest",
+    size = "small",
+    srcs = ["utf_string_conversion_utils_unittest.cc"],
+    deps = [
+        ":utf_string_conversion_utils",
         "//third_party/chromium/testing/gtest",
     ],
 )

@@ -11,6 +11,7 @@ checkout_dirs=(
 )
 files=(
   '.clang-format'
+  'base/base_export.h'
   'base/compiler_specific.h'
   'base/containers/contains.h'
   # 'base/containers/contains_nocompile.nc'
@@ -32,6 +33,10 @@ files=(
   'base/strings/string_view_util.h'
   # 'base/strings/string_view_util_nocompile.nc'
   'base/strings/string_view_util_unittest.cc'
+  'base/strings/utf_string_conversion_utils.cc'
+  'base/strings/utf_string_conversion_utils.h'
+  'base/strings/utf_string_conversion_utils_unittest.cc'
+  'base/third_party/icu/icu_utf.h'
   'base/types/to_address.h'
   'base/types/to_address_unittest.cc'
   'build/build_config.h'

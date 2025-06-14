@@ -5,6 +5,12 @@ load(
 )
 
 chromium_cc_library(
+    name = "base_export",
+    hdrs = ["base_export.h"],
+    visibility = ["//third_party/chromium:__subpackages__"],
+)
+
+chromium_cc_library(
     name = "check",
     hdrs = ["check.h"],
     visibility = ["//third_party/chromium:__subpackages__"],
