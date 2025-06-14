@@ -82,7 +82,7 @@ files=(
   # 'base/types/expected_macros_nocompile.nc'
   # 'base/types/expected_macros_perftest.cc'
   'base/types/expected_macros_unittest.cc'
-  # 'base/types/expected_unittest.cc'
+  'base/types/expected_unittest.cc'
   'base/types/is_instantiation.h'
   'base/types/is_instantiation_unittest.cc'
   'base/types/supports_ostream_operator.h'

@@ -65,6 +65,20 @@ chromium_cc_library(
 )
 
 cc_test(
+    name = "expected_unittest",
+    size = "small",
+    srcs = ["expected_unittest.cc"],
+    deps = [
+        ":expected",
+        "//third_party/chromium/base/containers:contains",
+        "//third_party/chromium/base/strings:to_string",
+        "//third_party/chromium/base/test:gmock_expected_support",
+        "//third_party/chromium/testing/gmock",
+        "//third_party/chromium/testing/gtest",
+    ],
+)
+
+cc_test(
     name = "expected_macros_unittest",
     size = "small",
     srcs = ["expected_macros_unittest.cc"],
