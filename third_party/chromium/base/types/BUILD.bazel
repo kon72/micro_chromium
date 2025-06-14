@@ -5,6 +5,12 @@ load(
 )
 
 chromium_cc_library(
+    name = "always_false",
+    hdrs = ["always_false.h"],
+    visibility = ["//visibility:public"],
+)
+
+chromium_cc_library(
     name = "supports_ostream_operator",
     hdrs = ["supports_ostream_operator.h"],
     visibility = ["//visibility:public"],

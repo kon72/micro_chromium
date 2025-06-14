@@ -46,6 +46,7 @@ files=(
   'base/strings/utf_string_conversion_utils.h'
   'base/strings/utf_string_conversion_utils_unittest.cc'
   'base/third_party/icu/icu_utf.h'
+  'base/types/always_false.h'
   'base/types/supports_ostream_operator.h'
   'base/types/supports_ostream_operator_unittest.cc'
   'base/types/to_address.h'
