@@ -1,4 +1,7 @@
 add-check-shim.patch
+add-logging-shim.patch
 fix-googletest-include.patch
 disable-raw-ptr-exclusion-annotation.patch
 replace-raw_ptr-with-raw-pointer.patch
+remove-unused-include.patch
+add-missing-header-for-ostream-operators.patch

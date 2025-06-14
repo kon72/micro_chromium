@@ -1,0 +1,10 @@
+--- a/base/strings/string_util_impl_helpers.h
++++ b/base/strings/string_util_impl_helpers.h
+@@ -16,7 +16,6 @@
+ #include "base/check_op.h"
+ #include "base/compiler_specific.h"
+ #include "base/logging.h"
+-#include "base/notreached.h"
+ #include "base/third_party/icu/icu_utf.h"
+ 
+ namespace base::internal {
