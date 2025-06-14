@@ -5,9 +5,27 @@ load(
 )
 
 chromium_cc_library(
+    name = "supports_ostream_operator",
+    hdrs = ["supports_ostream_operator.h"],
+    visibility = ["//visibility:public"],
+)
+
+chromium_cc_library(
     name = "to_address",
     hdrs = ["to_address.h"],
     visibility = ["//visibility:public"],
+)
+
+build_test(
+    name = "supports_ostream_operator_unittest",
+    targets = [":supports_ostream_operator_unittest_lib"],
+)
+
+chromium_cc_library(
+    name = "supports_ostream_operator_unittest_lib",
+    testonly = True,
+    srcs = ["supports_ostream_operator_unittest.cc"],
+    deps = [":supports_ostream_operator"],
 )
 
 build_test(
