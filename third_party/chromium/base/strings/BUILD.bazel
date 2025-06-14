@@ -5,6 +5,28 @@ load(
 )
 
 chromium_cc_library(
+    name = "strcat",
+    srcs = [
+        "strcat.cc",
+        "strcat_internal.h",
+    ] + select({
+        "@platforms//os:windows": [
+            "strcat_win.cc",
+            "strcat_win.h",
+        ],
+        "//conditions:default": [],
+    }),
+    hdrs = ["strcat.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//third_party/chromium/base:base_export",
+        "//third_party/chromium/base:compiler_specific",
+        "//third_party/chromium/base/containers:span",
+        "//third_party/chromium/build:build_config",
+    ],
+)
+
+chromium_cc_library(
     name = "string_view_util",
     hdrs = ["string_view_util.h"],
     visibility = ["//visibility:public"],
