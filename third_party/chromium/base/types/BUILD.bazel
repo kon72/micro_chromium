@@ -17,6 +17,12 @@ chromium_cc_library(
 )
 
 chromium_cc_library(
+    name = "supports_to_string",
+    hdrs = ["supports_to_string.h"],
+    visibility = ["//visibility:public"],
+)
+
+chromium_cc_library(
     name = "to_address",
     hdrs = ["to_address.h"],
     visibility = ["//visibility:public"],

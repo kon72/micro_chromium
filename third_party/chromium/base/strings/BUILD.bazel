@@ -73,6 +73,21 @@ chromium_cc_library(
 )
 
 chromium_cc_library(
+    name = "to_string",
+    srcs = ["to_string.cc"],
+    hdrs = ["to_string.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":string_view_util",
+        ":strings",
+        "//third_party/chromium/base:base_export",
+        "//third_party/chromium/base/containers:span",
+        "//third_party/chromium/base/types:supports_ostream_operator",
+        "//third_party/chromium/base/types:supports_to_string",
+    ],
+)
+
+chromium_cc_library(
     name = "utf_string_conversion_utils",
     srcs = ["utf_string_conversion_utils.cc"],
     hdrs = ["utf_string_conversion_utils.h"],
