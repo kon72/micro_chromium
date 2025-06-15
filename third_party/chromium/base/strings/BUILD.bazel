@@ -47,7 +47,10 @@ chromium_cc_library(
         "utf_ostream_operators.cc",
         "utf_string_conversions.cc",
     ] + select({
-        "@platforms//os:windows": ["string_util_win.h"],
+        "@platforms//os:windows": [
+            "string_util_win.cc",
+            "string_util_win.h",
+        ],
         "//conditions:default": ["string_util_posix.h"],
     }),
     hdrs = [

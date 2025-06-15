@@ -14,6 +14,10 @@ chromium_cc_library(
         "file_path.h",
         "safe_base_name.h",
     ],
+    linkopts = select({
+        "@platforms//os:windows": ["user32.lib"],
+        "//conditions:default": [],
+    }),
     visibility = ["//visibility:public"],
     deps = [
         "//third_party/chromium/base:base_export",
