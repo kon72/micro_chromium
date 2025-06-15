@@ -1,0 +1,11 @@
+--- a/base/strings/stringprintf.h
++++ b/base/strings/stringprintf.h
+@@ -13,7 +13,7 @@
+ #include "base/base_export.h"
+ #include "base/check.h"
+ #include "base/compiler_specific.h"
+-#include "third_party/abseil-cpp/absl/strings/str_format.h"
++#include "absl/strings/str_format.h"
+ 
+ namespace base {
+ 

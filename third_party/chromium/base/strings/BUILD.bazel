@@ -6,6 +6,17 @@ load(
 )
 
 chromium_cc_library(
+    name = "span_printf",
+    hdrs = ["span_printf.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":strings",
+        "//third_party/chromium/base:compiler_specific",
+        "//third_party/chromium/base/containers:span",
+    ],
+)
+
+chromium_cc_library(
     name = "strcat",
     srcs = [
         "strcat.cc",
@@ -28,12 +39,57 @@ chromium_cc_library(
 )
 
 chromium_cc_library(
+    name = "string_number_conversions",
+    srcs = [
+        "string_number_conversions.cc",
+        "string_number_conversions_internal.h",
+    ] + select({
+        "@platforms//os:windows": [
+            "string_number_conversions_win.cc",
+            "string_number_conversions_win.h",
+        ],
+        "//conditions:default": [],
+    }),
+    hdrs = ["string_number_conversions.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":strings",
+        "//third_party/chromium/base:base_export",
+        "//third_party/chromium/base:check",
+        "//third_party/chromium/base:compiler_specific",
+        "//third_party/chromium/base:logging",
+        "//third_party/chromium/base/containers:span",
+        "//third_party/chromium/base/numerics:safe_math",
+        "//third_party/chromium/base/third_party/double_conversion",
+        "//third_party/chromium/build:build_config",
+    ],
+)
+
+chromium_cc_library(
     name = "string_view_util",
     hdrs = ["string_view_util.h"],
     visibility = ["//visibility:public"],
     deps = [
         "//third_party/chromium/base:compiler_specific",
         "//third_party/chromium/base/containers:span",
+    ],
+)
+
+chromium_cc_library(
+    name = "stringprintf",
+    srcs = ["stringprintf.cc"],
+    hdrs = ["stringprintf.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":span_printf",
+        ":strings",
+        "//third_party/chromium/base:base_export",
+        "//third_party/chromium/base:check",
+        "//third_party/chromium/base:compiler_specific",
+        "//third_party/chromium/base:logging",
+        "//third_party/chromium/base:scoped_clear_last_error",
+        "//third_party/chromium/build:build_config",
+        "@abseil-cpp//absl/strings:str_format",
     ],
 )
 
@@ -166,12 +222,37 @@ chromium_cc_library(
 )
 
 cc_test(
+    name = "span_printf_unittest",
+    size = "small",
+    srcs = ["span_printf_unittest.cc"],
+    deps = [
+        ":span_printf",
+        "//third_party/chromium/testing/gmock",
+        "//third_party/chromium/testing/gtest",
+    ],
+)
+
+cc_test(
     name = "strcat_unittest",
     size = "small",
     srcs = ["strcat_unittest.cc"],
     deps = [
         ":strcat",
         ":strings",
+        "//third_party/chromium/testing/gtest",
+    ],
+)
+
+cc_test(
+    name = "string_number_conversions_unittest",
+    size = "small",
+    srcs = ["string_number_conversions_unittest.cc"],
+    deps = [
+        ":string_number_conversions",
+        ":stringprintf",
+        ":strings",
+        "//third_party/chromium/base:bit_cast",
+        "//third_party/chromium/base:format_macros",
         "//third_party/chromium/testing/gtest",
     ],
 )
@@ -196,6 +277,17 @@ cc_test(
     deps = [
         ":string_view_util",
         "//third_party/chromium/base/containers:span",
+        "//third_party/chromium/testing/gtest",
+    ],
+)
+
+cc_test(
+    name = "stringprintf_unittest",
+    size = "small",
+    srcs = ["stringprintf_unittest.cc"],
+    deps = [
+        ":stringprintf",
+        "//third_party/chromium/build:build_config",
         "//third_party/chromium/testing/gtest",
     ],
 )

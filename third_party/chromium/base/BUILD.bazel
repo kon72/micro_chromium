@@ -18,6 +18,12 @@ chromium_cc_library(
 )
 
 chromium_cc_library(
+    name = "bit_cast",
+    hdrs = ["bit_cast.h"],
+    visibility = ["//visibility:public"],
+)
+
+chromium_cc_library(
     name = "check",
     hdrs = ["check.h"],
     visibility = ["//third_party/chromium:__subpackages__"],
@@ -39,6 +45,13 @@ chromium_cc_library(
 )
 
 chromium_cc_library(
+    name = "format_macros",
+    hdrs = ["format_macros.h"],
+    visibility = ["//visibility:public"],
+    deps = ["//third_party/chromium/build:build_config"],
+)
+
+chromium_cc_library(
     name = "logging",
     hdrs = ["logging.h"],
     visibility = ["//third_party/chromium:__subpackages__"],
@@ -52,12 +65,48 @@ chromium_cc_library(
 )
 
 chromium_cc_library(
+    name = "scoped_clear_last_error",
+    srcs = select({
+        "@platforms//os:windows": ["scoped_clear_last_error_win.cc"],
+        "//conditions:default": [],
+    }),
+    hdrs = ["scoped_clear_last_error.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":base_export",
+        "//third_party/chromium/build:build_config",
+    ],
+)
+
+chromium_cc_library(
     name = "scoped_generic",
     hdrs = ["scoped_generic.h"],
     visibility = ["//visibility:public"],
     deps = [
         ":check",
         ":compiler_specific",
+    ],
+)
+
+cc_test(
+    name = "bit_cast_unittest",
+    size = "small",
+    srcs = ["bit_cast_unittest.cc"],
+    deps = [
+        ":bit_cast",
+        "//third_party/chromium/testing/gtest",
+    ],
+)
+
+cc_test(
+    name = "scoped_clear_last_error_unittest",
+    size = "small",
+    srcs = ["scoped_clear_last_error_unittest.cc"],
+    deps = [
+        ":logging",
+        ":scoped_clear_last_error",
+        "//third_party/chromium/build:build_config",
+        "//third_party/chromium/testing/gtest",
     ],
 )
 
