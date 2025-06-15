@@ -1,5 +1,7 @@
+add-buildflags.patch
 add-check-shim.patch
 add-logging-shim.patch
+add-notreached.patch
 add-win-util.patch
 fix-googletest-include.patch
 fix-abseil-cpp-include.patch
@@ -10,3 +12,4 @@ remove-feature-switch.patch
 no-pickle.patch
 remove-unused-include.patch
 add-missing-header-for-ostream-operators.patch
+use-cxx-json-reader.patch

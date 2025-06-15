@@ -1,3 +1,41 @@
+--- a/base/json/json_common.h
++++ b/base/json/json_common.h
+@@ -8,7 +8,6 @@
+ #include <stddef.h>
+ 
+ #include "base/check_op.h"
+-#include "base/memory/raw_ptr.h"
+ 
+ namespace base {
+ namespace internal {
+@@ -35,7 +34,7 @@ class StackMarker {
+ 
+  private:
+   const size_t max_depth_;
+-  const raw_ptr<size_t> depth_;
++  size_t* const depth_;
+ };
+ 
+ }  // namespace internal
+--- a/base/json/json_writer.h
++++ b/base/json/json_writer.h
+@@ -15,7 +15,6 @@
+ 
+ #include "base/base_export.h"
+ #include "base/json/json_common.h"
+-#include "base/memory/raw_ptr.h"
+ #include "base/values.h"
+ 
+ namespace base {
+@@ -112,7 +111,7 @@ class BASE_EXPORT JSONWriter {
+   bool pretty_print_;
+ 
+   // Where we write JSON data as we generate it.
+-  raw_ptr<std::string> json_string_;
++  std::string* json_string_;
+ 
+   // Maximum depth to write.
+   const size_t max_depth_;
 --- a/base/scoped_generic.h
 +++ b/base/scoped_generic.h
 @@ -13,7 +13,6 @@

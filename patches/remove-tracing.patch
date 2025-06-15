@@ -39,3 +39,178 @@
  #if BUILDFLAG(IS_APPLE)
    // Returns the string in the special canonical decomposed form as defined for
    // HFS, which is close to, but not quite, decomposition form D. See
+--- a/base/values.cc
++++ b/base/values.cc
+@@ -27,9 +27,6 @@
+ #include "base/notreached.h"
+ #include "base/strings/string_util.h"
+ #include "base/strings/utf_string_conversions.h"
+-#include "base/trace_event/memory_usage_estimator.h"  // no-presubmit-check
+-#include "base/trace_event/trace_event.h"
+-#include "base/tracing_buildflags.h"
+ #include "base/types/pass_key.h"
+ #include "base/types/to_address.h"
+ 
+@@ -924,21 +921,10 @@ std::optional<Value> DictValue::ExtractB
+   return extracted;
+ }
+ 
+-size_t DictValue::EstimateMemoryUsage() const {
+-  return base::trace_event::EstimateMemoryUsage(storage_);
+-}
+-
+ std::string DictValue::DebugString() const {
+   return DebugStringImpl(*this);
+ }
+ 
+-void DictValue::WriteIntoTrace(perfetto::TracedValue context) const {
+-  perfetto::TracedDictionary dict = std::move(context).WriteDictionary();
+-  for (auto kv : *this) {
+-    dict.Add(perfetto::DynamicString(kv.first), kv.second);
+-  }
+-}
+-
+ bool operator==(const DictValue& lhs, const DictValue& rhs) {
+   auto deref_2nd = [](const auto& p) { return std::tie(p.first, *p.second); };
+   return std::ranges::equal(lhs.storage_, rhs.storage_, {}, deref_2nd,
+@@ -1265,21 +1251,10 @@ size_t ListValue::EraseValue(const Value
+   return std::erase(storage_, value);
+ }
+ 
+-size_t ListValue::EstimateMemoryUsage() const {
+-  return base::trace_event::EstimateMemoryUsage(storage_);
+-}
+-
+ std::string ListValue::DebugString() const {
+   return DebugStringImpl(*this);
+ }
+ 
+-void ListValue::WriteIntoTrace(perfetto::TracedValue context) const {
+-  perfetto::TracedArray array = std::move(context).WriteArray();
+-  for (const auto& item : *this) {
+-    array.Append(item);
+-  }
+-}
+-
+ ListValue::ListValue(const std::vector<Value>& storage) {
+   storage_.reserve(storage.size());
+   for (const auto& value : storage) {
+@@ -1316,48 +1291,10 @@ bool Value::operator==(const ListValue&
+   return is_list() && GetList() == rhs;
+ }
+ 
+-size_t Value::EstimateMemoryUsage() const {
+-  switch (type()) {
+-    case Type::STRING:
+-      return base::trace_event::EstimateMemoryUsage(GetString());
+-    case Type::BINARY:
+-      return base::trace_event::EstimateMemoryUsage(GetBlob());
+-    case Type::DICT:
+-      return GetDict().EstimateMemoryUsage();
+-    case Type::LIST:
+-      return GetList().EstimateMemoryUsage();
+-    default:
+-      return 0;
+-  }
+-}
+-
+ std::string Value::DebugString() const {
+   return DebugStringImpl(*this);
+ }
+ 
+-void Value::WriteIntoTrace(perfetto::TracedValue context) const {
+-  Visit([&](const auto& member) {
+-    using T = std::decay_t<decltype(member)>;
+-    if constexpr (std::is_same_v<T, std::monostate>) {
+-      std::move(context).WriteString("<none>");
+-    } else if constexpr (std::is_same_v<T, bool>) {
+-      std::move(context).WriteBoolean(member);
+-    } else if constexpr (std::is_same_v<T, int>) {
+-      std::move(context).WriteInt64(member);
+-    } else if constexpr (std::is_same_v<T, DoubleStorage>) {
+-      std::move(context).WriteDouble(member);
+-    } else if constexpr (std::is_same_v<T, std::string>) {
+-      std::move(context).WriteString(member);
+-    } else if constexpr (std::is_same_v<T, BlobStorage>) {
+-      std::move(context).WriteString("<binary data not supported>");
+-    } else if constexpr (std::is_same_v<T, Dict>) {
+-      member.WriteIntoTrace(std::move(context));
+-    } else if constexpr (std::is_same_v<T, List>) {
+-      member.WriteIntoTrace(std::move(context));
+-    }
+-  });
+-}
+-
+ ValueView::ValueView(const Value& value)
+     : data_view_(
+           value.Visit([](const auto& member) { return ViewType(member); })) {}
+--- a/base/values.h
++++ b/base/values.h
+@@ -29,7 +29,6 @@
+ #include "base/containers/checked_iterators.h"
+ #include "base/containers/flat_map.h"
+ #include "base/containers/span.h"
+-#include "base/trace_event/base_tracing_forward.h"
+ #include "base/types/pass_key.h"
+ #include "base/value_iterators.h"
+ 
+@@ -214,16 +213,9 @@ class BASE_EXPORT GSL_OWNER ListValue {
+     return std::erase_if(storage_, predicate);
+   }
+ 
+-  // Estimates dynamic memory usage. See
+-  // base/trace_event/memory_usage_estimator.h for more info.
+-  size_t EstimateMemoryUsage() const;
+-
+   // Serializes to a string for logging and debug purposes.
+   std::string DebugString() const;
+ 
+-  // Write this object into a trace.
+-  void WriteIntoTrace(perfetto::TracedValue) const;
+-
+  private:
+   using ListStorage = std::vector<Value>;
+ 
+@@ -553,16 +545,9 @@ class BASE_EXPORT GSL_OWNER DictValue {
+ 
+   std::optional<Value> ExtractByDottedPath(std::string_view path);
+ 
+-  // Estimates dynamic memory usage. See
+-  // base/trace_event/memory_usage_estimator.h for more info.
+-  size_t EstimateMemoryUsage() const;
+-
+   // Serializes to a string for logging and debug purposes.
+   std::string DebugString() const;
+ 
+-  // Write this object into a trace.
+-  void WriteIntoTrace(perfetto::TracedValue) const;
+-
+  private:
+   BASE_EXPORT friend bool operator==(const DictValue& lhs,
+                                      const DictValue& rhs);
+@@ -834,8 +819,6 @@ class BASE_EXPORT GSL_OWNER Value {
+   Dict TakeDict() &&;
+   List TakeList() &&;
+ 
+-
+-
+   // Note: Do not add more types. See the file-level comment above for why.
+ 
+   // Comparison operators so that Values can easily be used with standard
+@@ -865,16 +848,9 @@ class BASE_EXPORT GSL_OWNER Value {
+   bool operator==(const DictValue& rhs) const;
+   bool operator==(const ListValue& rhs) const;
+ 
+-  // Estimates dynamic memory usage. See
+-  // base/trace_event/memory_usage_estimator.h for more info.
+-  size_t EstimateMemoryUsage() const;
+-
+   // Serializes to a string for logging and debug purposes.
+   std::string DebugString() const;
+ 
+-  // Write this object into a trace.
+-  void WriteIntoTrace(perfetto::TracedValue) const;
+-
+   template <typename Visitor>
+   auto Visit(Visitor&& visitor) const {
+     return std::visit(std::forward<Visitor>(visitor), data_);

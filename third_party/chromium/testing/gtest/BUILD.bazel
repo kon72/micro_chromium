@@ -10,3 +10,10 @@ chromium_cc_library(
     visibility = ["//visibility:public"],
     deps = ["@googletest//:gtest_main"],
 )
+
+chromium_cc_library(
+    name = "gtest_prod",
+    hdrs = ["include/gtest/gtest_prod.h"],
+    visibility = ["//visibility:public"],
+    deps = ["@googletest//:gtest_prod"],
+)

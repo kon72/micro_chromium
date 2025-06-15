@@ -79,3 +79,14 @@
    bool IsParentSlow(const FilePath& child) const;
  
    StringType path_;
+--- a/base/json/json_parser.cc
++++ b/base/json/json_parser.cc
+@@ -14,8 +14,6 @@
+ 
+ #include "base/check_op.h"
+ #include "base/compiler_specific.h"
+-#include "base/feature_list.h"
+-#include "base/features.h"
+ #include "base/json/json_reader.h"
+ #include "base/notreached.h"
+ #include "base/numerics/safe_conversions.h"

@@ -1,3 +1,4 @@
+load("@rules_cc//cc:cc_test.bzl", "cc_test")
 load(
     "//third_party/chromium:build_defs.bzl",
     "chromium_cc_library",
@@ -23,6 +24,35 @@ chromium_cc_library(
 )
 
 chromium_cc_library(
+    name = "flat_map",
+    hdrs = ["flat_map.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":flat_tree",
+        "//third_party/chromium/base:check",
+    ],
+)
+
+chromium_cc_library(
+    name = "flat_tree",
+    hdrs = ["flat_tree.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":span",
+        "//third_party/chromium/base:check",
+        "//third_party/chromium/base:compiler_specific",
+        "//third_party/chromium/base/memory:raw_ptr_exclusion",
+    ],
+)
+
+chromium_cc_library(
+    name = "map_util",
+    hdrs = ["map_util.h"],
+    visibility = ["//visibility:public"],
+    deps = ["//third_party/chromium/base/types:to_address"],
+)
+
+chromium_cc_library(
     name = "span",
     srcs = ["span_forward_internal.h"],
     hdrs = ["span.h"],
@@ -34,5 +64,17 @@ chromium_cc_library(
         "//third_party/chromium/base/numerics:integral_constant_like",
         "//third_party/chromium/base/numerics:safe_math",
         "//third_party/chromium/base/types:to_address",
+    ],
+)
+
+cc_test(
+    name = "map_util_unittest",
+    size = "small",
+    srcs = ["map_util_unittest.cc"],
+    deps = [
+        ":flat_map",
+        ":map_util",
+        "//third_party/chromium/testing/gmock",
+        "//third_party/chromium/testing/gtest",
     ],
 )

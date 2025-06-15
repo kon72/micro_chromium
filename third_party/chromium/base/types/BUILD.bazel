@@ -47,6 +47,12 @@ chromium_cc_library(
 )
 
 chromium_cc_library(
+    name = "pass_key",
+    hdrs = ["pass_key.h"],
+    visibility = ["//visibility:public"],
+)
+
+chromium_cc_library(
     name = "supports_ostream_operator",
     hdrs = ["supports_ostream_operator.h"],
     visibility = ["//visibility:public"],
@@ -101,6 +107,18 @@ chromium_cc_library(
     testonly = True,
     srcs = ["is_instantiation_unittest.cc"],
     deps = [":is_instantiation"],
+)
+
+build_test(
+    name = "pass_key_unittest",
+    targets = [":pass_key_unittest_lib"],
+)
+
+chromium_cc_library(
+    name = "pass_key_unittest_lib",
+    testonly = True,
+    srcs = ["pass_key_unittest.cc"],
+    deps = [":pass_key"],
 )
 
 build_test(

@@ -8,5 +8,6 @@
 #include "absl/log/absl_log.h"
 
 #define DLOG(severity) ABSL_LOG(severity)
+#define DLOG_IF(severity, condition) ABSL_LOG_IF(severity, condition)
 
 #endif  // BASE_LOGGING_H_
