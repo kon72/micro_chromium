@@ -1,0 +1,81 @@
+--- a/base/files/file_path.cc
++++ b/base/files/file_path.cc
+@@ -16,7 +16,6 @@
+ #include <string_view>
+ 
+ #include "base/check_op.h"
+-#include "base/features.h"
+ #include "base/files/safe_base_name.h"
+ #include "base/numerics/safe_conversions.h"
+ #include "base/pickle.h"
+@@ -271,12 +270,15 @@ ExtractFirstComponent(FilePath::StringVi
+   return {first_component, remainder};
+ }
+ 
++#if 0
+ // State of the `FastFilePathIsParent` feature, to be updated after the feature
+ // list is available.
+ std::atomic_bool g_fast_file_path_is_parent{false};
++#endif
+ 
+ }  // namespace
+ 
++#if 0
+ void FilePath::InitializeFeatures() {
+   // `std::memory_order_relaxed` because there are no dependencies with other
+   // memory operations.
+@@ -284,6 +286,7 @@ void FilePath::InitializeFeatures() {
+       FeatureList::IsEnabled(features::kFastFilePathIsParent),
+       std::memory_order_relaxed);
+ }
++#endif
+ 
+ FilePath::FilePath() = default;
+ 
+@@ -362,15 +365,18 @@ std::vector<FilePath::StringType> FilePa
+ }
+ 
+ bool FilePath::IsParent(const FilePath& child) const {
++#if 0
+   // `std::memory_order_relaxed` because there are no dependencies with other
+   // memory operations.
+   if (g_fast_file_path_is_parent.load(std::memory_order_relaxed)) {
+     return IsParentFast(child);
+   }
++#endif
+ 
+   return IsParentSlow(child);
+ }
+ 
++#if 0
+ bool FilePath::IsParentFast(const FilePath& child) const {
+   StringViewType parent_view = path_;
+   StringViewType child_view = child.path_;
+@@ -443,6 +449,7 @@ bool FilePath::IsParentFast(const FilePa
+     child_view = child_remainder;
+   }
+ }
++#endif
+ 
+ bool FilePath::IsParentSlow(const FilePath& child) const {
+   return AppendRelativePath(child, nullptr);
+--- a/base/files/file_path.h
++++ b/base/files/file_path.h
+@@ -195,9 +195,6 @@ class BASE_EXPORT FilePath {
+   // The character used to identify a file extension.
+   static constexpr CharType kExtensionSeparator = FILE_PATH_LITERAL('.');
+ 
+-  // Initializes features for this class. See `base::features::Init()`.
+-  static void InitializeFeatures();
+-
+   FilePath();
+   FilePath(const FilePath& that);
+   explicit FilePath(StringViewType path);
+@@ -527,7 +524,6 @@ class BASE_EXPORT FilePath {
+   // support UNC paths on Windows.
+   void StripTrailingSeparatorsInternal();
+ 
+-  bool IsParentFast(const FilePath& child) const;
+   bool IsParentSlow(const FilePath& child) const;
+ 
+   StringType path_;

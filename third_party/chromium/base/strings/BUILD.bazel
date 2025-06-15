@@ -2,6 +2,7 @@ load("@rules_cc//cc:cc_test.bzl", "cc_test")
 load(
     "//third_party/chromium:build_defs.bzl",
     "chromium_cc_library",
+    "chromium_objc_library",
 )
 
 chromium_cc_library(
@@ -72,6 +73,68 @@ chromium_cc_library(
     ],
 )
 
+alias(
+    name = "sys_string_conversions",
+    actual = select({
+        "@platforms//os:macos": ":sys_string_conversions_apple",
+        "@platforms//os:ios": ":sys_string_conversions_apple",
+        "@platforms//os:windows": ":sys_string_conversions_win",
+        "//conditions:default": ":sys_string_conversions_posix",
+    }),
+    visibility = ["//visibility:public"],
+)
+
+chromium_objc_library(
+    name = "sys_string_conversions_apple",
+    srcs = ["sys_string_conversions_apple.mm"],
+    hdrs = ["sys_string_conversions.h"],
+    linkopts = [
+        "-Wl,-framework,CoreFoundation",
+        "-Wl,-framework,Foundation",
+    ],
+    target_compatible_with = select({
+        "@platforms//os:macos": [],
+        "@platforms//os:ios": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//third_party/chromium/base:base_export",
+        "//third_party/chromium/base/apple:bridging",
+        "//third_party/chromium/base/apple:scoped_cftyperef",
+        "//third_party/chromium/base/numerics:safe_conversions",
+        "//third_party/chromium/build:build_config",
+    ],
+)
+
+chromium_cc_library(
+    name = "sys_string_conversions_posix",
+    srcs = ["sys_string_conversions_posix.cc"],
+    hdrs = ["sys_string_conversions.h"],
+    target_compatible_with = select({
+        "@platforms//os:macos": ["@platforms//:incompatible"],
+        "@platforms//os:ios": ["@platforms//:incompatible"],
+        "@platforms//os:windows": ["@platforms//:incompatible"],
+        "//conditions:default": [],
+    }),
+    deps = [
+        ":strings",
+        "//third_party/chromium/base:base_export",
+        "//third_party/chromium/base:compiler_specific",
+        "//third_party/chromium/build:build_config",
+    ],
+)
+
+chromium_cc_library(
+    name = "sys_string_conversions_win",
+    srcs = ["sys_string_conversions_win.cc"],
+    hdrs = ["sys_string_conversions.h"],
+    target_compatible_with = ["@platforms//os:windows"],
+    deps = [
+        "//third_party/chromium/base:base_export",
+        "//third_party/chromium/build:build_config",
+    ],
+)
+
 chromium_cc_library(
     name = "to_string",
     srcs = ["to_string.cc"],
@@ -130,6 +193,47 @@ cc_test(
     deps = [
         ":string_view_util",
         "//third_party/chromium/base/containers:span",
+        "//third_party/chromium/testing/gtest",
+    ],
+)
+
+cc_test(
+    name = "sys_string_conversions_unittest",
+    size = "small",
+    srcs = ["sys_string_conversions_unittest.cc"],
+    deps = [
+        ":strings",
+        ":sys_string_conversions",
+        "//third_party/chromium/base/test:scoped_locale",
+        "//third_party/chromium/build:build_config",
+        "//third_party/chromium/testing/gtest",
+    ],
+)
+
+cc_test(
+    name = "sys_string_conversions_apple_unittest",
+    size = "small",
+    target_compatible_with = select({
+        "@platforms//os:macos": [],
+        "@platforms//os:ios": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [":sys_string_conversions_apple_unittest_lib"],
+)
+
+chromium_objc_library(
+    name = "sys_string_conversions_apple_unittest_lib",
+    testonly = True,
+    srcs = ["sys_string_conversions_apple_unittest.mm"],
+    linkopts = ["-Wl,-framework,Foundation"],
+    target_compatible_with = select({
+        "@platforms//os:macos": [],
+        "@platforms//os:ios": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        ":strings",
+        ":sys_string_conversions",
         "//third_party/chromium/testing/gtest",
     ],
 )

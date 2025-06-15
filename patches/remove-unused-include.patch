@@ -8,6 +8,16 @@
  #include "base/third_party/icu/icu_utf.h"
  
  namespace base::internal {
+--- a/base/strings/sys_string_conversions_apple.mm
++++ b/base/strings/sys_string_conversions_apple.mm
+@@ -11,7 +11,6 @@
+ #include <vector>
+ 
+ #include "base/apple/bridging.h"
+-#include "base/apple/foundation_util.h"
+ #include "base/apple/scoped_cftyperef.h"
+ #include "base/numerics/safe_conversions.h"
+ 
 --- a/base/types/expected_unittest.cc
 +++ b/base/types/expected_unittest.cc
 @@ -12,8 +12,6 @@

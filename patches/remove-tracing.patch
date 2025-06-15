@@ -1,0 +1,41 @@
+--- a/base/files/file_path.cc
++++ b/base/files/file_path.cc
+@@ -25,7 +25,6 @@
+ #include "base/strings/sys_string_conversions.h"
+ #include "base/strings/utf_ostream_operators.h"
+ #include "base/strings/utf_string_conversions.h"
+-#include "base/trace_event/trace_event.h"
+ 
+ #if BUILDFLAG(IS_APPLE)
+ #include "base/apple/scoped_cftyperef.h"
+@@ -1603,10 +1602,6 @@ FilePath FilePath::NormalizePathSeparato
+   return NormalizePathSeparatorsTo(kSeparators[0]);
+ }
+ 
+-void FilePath::WriteIntoTrace(perfetto::TracedValue context) const {
+-  perfetto::WriteIntoTracedValue(std::move(context), value());
+-}
+-
+ FilePath FilePath::NormalizePathSeparatorsTo(CharType separator) const {
+ #if defined(FILE_PATH_USES_WIN_SEPARATORS)
+   DCHECK_NE(kSeparators + kSeparatorsLength,
+--- a/base/files/file_path.h
++++ b/base/files/file_path.h
+@@ -110,7 +110,6 @@
+ 
+ #include "base/base_export.h"
+ #include "base/compiler_specific.h"
+-#include "base/trace_event/base_tracing_forward.h"
+ #include "build/build_config.h"
+ 
+ // Windows-style drive letter support and pathname separator characters can be
+@@ -491,9 +490,6 @@ class BASE_EXPORT FilePath {
+     return CompareIgnoreCase(string1, string2) < 0;
+   }
+ 
+-  // Serialise this object into a trace.
+-  void WriteIntoTrace(perfetto::TracedValue context) const;
+-
+ #if BUILDFLAG(IS_APPLE)
+   // Returns the string in the special canonical decomposed form as defined for
+   // HFS, which is close to, but not quite, decomposition form D. See

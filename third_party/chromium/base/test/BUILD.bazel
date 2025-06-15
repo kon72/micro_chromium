@@ -19,6 +19,15 @@ chromium_cc_library(
     ],
 )
 
+chromium_cc_library(
+    name = "scoped_locale",
+    testonly = True,
+    srcs = ["scoped_locale.cc"],
+    hdrs = ["scoped_locale.h"],
+    visibility = ["//third_party/chromium:__subpackages__"],
+    deps = ["//third_party/chromium/testing/gtest"],
+)
+
 cc_test(
     name = "gmock_expected_support_unittest",
     size = "small",

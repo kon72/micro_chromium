@@ -1,0 +1,16 @@
+load(
+    "//third_party/chromium:build_defs.bzl",
+    "chromium_objc_library",
+)
+
+chromium_objc_library(
+    name = "platform_test",
+    testonly = True,
+    srcs = select({
+        "@platforms//os:macos": ["platform_test_mac.mm"],
+        "//conditions:default": [],
+    }),
+    hdrs = ["platform_test.h"],
+    visibility = ["//visibility:public"],
+    deps = ["@googletest//:gtest"],
+)

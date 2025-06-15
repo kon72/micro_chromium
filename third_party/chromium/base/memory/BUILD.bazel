@@ -8,3 +8,9 @@ chromium_cc_library(
     hdrs = ["raw_ptr_exclusion.h"],
     visibility = ["//third_party/chromium:__subpackages__"],
 )
+
+chromium_cc_library(
+    name = "scoped_policy",
+    hdrs = ["scoped_policy.h"],
+    visibility = ["//third_party/chromium:__subpackages__"],
+)
