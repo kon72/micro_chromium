@@ -107,7 +107,7 @@ files=(
   'base/strings/sys_string_conversions_win.cc'
   'base/strings/to_string.cc'
   'base/strings/to_string.h'
-  # 'base/strings/to_string_unittest.cc'
+  'base/strings/to_string_unittest.cc'
   'base/strings/utf_ostream_operators.cc'
   'base/strings/utf_ostream_operators.h'
   'base/strings/utf_string_conversion_utils.cc'

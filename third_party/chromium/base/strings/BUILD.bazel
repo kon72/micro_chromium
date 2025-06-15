@@ -334,6 +334,18 @@ chromium_objc_library(
 )
 
 cc_test(
+    name = "to_string_unittest",
+    size = "small",
+    srcs = ["to_string_unittest.cc"],
+    deps = [
+        ":string_number_conversions",
+        ":to_string",
+        "//third_party/chromium/build:build_config",
+        "//third_party/chromium/testing/gtest",
+    ],
+)
+
+cc_test(
     name = "utf_string_conversions_unittest",
     size = "small",
     srcs = ["utf_string_conversions_unittest.cc"],
