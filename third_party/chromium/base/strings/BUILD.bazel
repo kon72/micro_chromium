@@ -104,7 +104,7 @@ chromium_objc_library(
         "//third_party/chromium/base:base_export",
         "//third_party/chromium/base/apple:bridging",
         "//third_party/chromium/base/apple:scoped_cftyperef",
-        "//third_party/chromium/base/numerics:safe_conversions",
+        "//third_party/chromium/base/numerics:safe_math",
         "//third_party/chromium/build:build_config",
     ],
 )

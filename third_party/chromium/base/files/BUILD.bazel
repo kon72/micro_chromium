@@ -23,7 +23,7 @@ chromium_cc_library(
         "//third_party/chromium/base:base_export",
         "//third_party/chromium/base:check_op",
         "//third_party/chromium/base:compiler_specific",
-        "//third_party/chromium/base/numerics:safe_conversions",
+        "//third_party/chromium/base/numerics:safe_math",
         "//third_party/chromium/base/strings",
         "//third_party/chromium/base/strings:strcat",
         "//third_party/chromium/base/strings:sys_string_conversions",

@@ -32,7 +32,7 @@ chromium_cc_library(
         "//third_party/chromium/base:check",
         "//third_party/chromium/base:compiler_specific",
         "//third_party/chromium/base/numerics:integral_constant_like",
-        "//third_party/chromium/base/numerics:safe_conversions",
+        "//third_party/chromium/base/numerics:safe_math",
         "//third_party/chromium/base/types:to_address",
     ],
 )
