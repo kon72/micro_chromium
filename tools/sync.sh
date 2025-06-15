@@ -98,6 +98,8 @@ files=(
   'base/strings/utf_string_conversions.h'
   # 'base/strings/utf_string_conversions_fuzzer.cc'
   'base/strings/utf_string_conversions_unittest.cc'
+  'base/third_party/icu/LICENSE'
+  'base/third_party/icu/README.chromium'
   'base/third_party/icu/icu_utf.h'
   'base/test/gmock_expected_support.h'
   'base/test/gmock_expected_support_unittest.cc'
