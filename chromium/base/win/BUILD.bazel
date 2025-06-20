@@ -1,0 +1,13 @@
+load("//chromium:build_defs.bzl", "chromium_cc_library")
+
+chromium_cc_library(
+    name = "win_util",
+    srcs = ["win_util.cc"],
+    hdrs = ["win_util.h"],
+    target_compatible_with = select({
+        "@platforms//os:windows": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    visibility = ["//visibility:public"],
+    deps = ["//chromium/base:base_export"],
+)

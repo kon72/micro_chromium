@@ -1,0 +1,69 @@
+load("@rules_cc//cc:cc_test.bzl", "cc_test")
+load("//chromium:build_defs.bzl", "chromium_cc_library", "chromium_objc_library")
+
+chromium_objc_library(
+    name = "bridging",
+    hdrs = ["bridging.h"],
+    target_compatible_with = select({
+        "@platforms//os:macos": [],
+        "@platforms//os:ios": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    visibility = ["//visibility:public"],
+    deps = [
+        ":scoped_cftyperef",
+        "//chromium/base:base_export",
+        "//chromium/base:check",
+        "//chromium/base/types:always_false",
+        "//chromium/build:build_config",
+    ],
+)
+
+chromium_cc_library(
+    name = "scoped_cftyperef",
+    hdrs = ["scoped_cftyperef.h"],
+    linkopts = select({
+        "@platforms//os:macos": ["-Wl,-framework,CoreFoundation"],
+        "@platforms//os:ios": ["-Wl,-framework,CoreFoundation"],
+        "//conditions:default": [],
+    }),
+    target_compatible_with = select({
+        "@platforms//os:macos": [],
+        "@platforms//os:ios": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    visibility = ["//visibility:public"],
+    deps = [":scoped_typeref"],
+)
+
+chromium_cc_library(
+    name = "scoped_typeref",
+    hdrs = ["scoped_typeref.h"],
+    target_compatible_with = select({
+        "@platforms//os:macos": [],
+        "@platforms//os:ios": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    visibility = ["//visibility:public"],
+    deps = [
+        "//chromium/base:check_op",
+        "//chromium/base/memory:scoped_policy",
+    ],
+)
+
+cc_test(
+    name = "scoped_cftyperef_unittest",
+    size = "small",
+    srcs = ["scoped_cftyperef_unittest.cc"],
+    linkopts = ["-Wl,-framework,CoreFoundation"],
+    target_compatible_with = select({
+        "@platforms//os:macos": [],
+        "@platforms//os:ios": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        ":scoped_cftyperef",
+        "//chromium/base/memory:scoped_policy",
+        "//chromium/testing/gtest",
+    ],
+)

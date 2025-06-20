@@ -1,0 +1,363 @@
+load("@rules_cc//cc:cc_test.bzl", "cc_test")
+load("//chromium:build_defs.bzl", "chromium_cc_library", "chromium_objc_library")
+
+chromium_cc_library(
+    name = "span_printf",
+    hdrs = ["span_printf.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":strings",
+        "//chromium/base:compiler_specific",
+        "//chromium/base/containers:span",
+    ],
+)
+
+chromium_cc_library(
+    name = "strcat",
+    srcs = [
+        "strcat.cc",
+        "strcat_internal.h",
+    ] + select({
+        "@platforms//os:windows": [
+            "strcat_win.cc",
+            "strcat_win.h",
+        ],
+        "//conditions:default": [],
+    }),
+    hdrs = ["strcat.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//chromium/base:base_export",
+        "//chromium/base:compiler_specific",
+        "//chromium/base/containers:span",
+        "//chromium/build:build_config",
+    ],
+)
+
+chromium_cc_library(
+    name = "string_number_conversions",
+    srcs = [
+        "string_number_conversions.cc",
+        "string_number_conversions_internal.h",
+    ] + select({
+        "@platforms//os:windows": [
+            "string_number_conversions_win.cc",
+            "string_number_conversions_win.h",
+        ],
+        "//conditions:default": [],
+    }),
+    hdrs = ["string_number_conversions.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":strings",
+        "//chromium/base:base_export",
+        "//chromium/base:check",
+        "//chromium/base:compiler_specific",
+        "//chromium/base:logging",
+        "//chromium/base/containers:span",
+        "//chromium/base/numerics:safe_math",
+        "//chromium/base/third_party/double_conversion",
+        "//chromium/build:build_config",
+    ],
+)
+
+chromium_cc_library(
+    name = "string_view_util",
+    hdrs = ["string_view_util.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//chromium/base:compiler_specific",
+        "//chromium/base/containers:span",
+    ],
+)
+
+chromium_cc_library(
+    name = "stringprintf",
+    srcs = ["stringprintf.cc"],
+    hdrs = ["stringprintf.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":span_printf",
+        ":strings",
+        "//chromium/base:base_export",
+        "//chromium/base:check",
+        "//chromium/base:compiler_specific",
+        "//chromium/base:logging",
+        "//chromium/base:scoped_clear_last_error",
+        "//chromium/build:build_config",
+        "@abseil-cpp//absl/strings:str_format",
+    ],
+)
+
+chromium_cc_library(
+    name = "strings",
+    srcs = [
+        "string_util.cc",
+        "string_util_constants.cc",
+        "string_util_impl_helpers.h",
+        "string_util_internal.h",
+        "utf_ostream_operators.cc",
+        "utf_string_conversions.cc",
+    ] + select({
+        "@platforms//os:windows": [
+            "string_util_win.cc",
+            "string_util_win.h",
+        ],
+        "//conditions:default": ["string_util_posix.h"],
+    }),
+    hdrs = [
+        "string_util.h",
+        "utf_ostream_operators.h",
+        "utf_string_conversions.h",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":utf_string_conversion_utils",
+        "//chromium/base:base_export",
+        "//chromium/base:check",
+        "//chromium/base:check_op",
+        "//chromium/base:compiler_specific",
+        "//chromium/base:logging",
+        "//chromium/base:no_destructor",
+        "//chromium/base/containers:span",
+        "//chromium/base/third_party/icu",
+        "//chromium/base/types:always_false",
+        "//chromium/base/types:supports_ostream_operator",
+        "//chromium/base/types:to_address",
+        "//chromium/build:build_config",
+    ],
+)
+
+alias(
+    name = "sys_string_conversions",
+    actual = select({
+        "@platforms//os:macos": ":sys_string_conversions_apple",
+        "@platforms//os:ios": ":sys_string_conversions_apple",
+        "@platforms//os:windows": ":sys_string_conversions_win",
+        "//conditions:default": ":sys_string_conversions_posix",
+    }),
+    visibility = ["//visibility:public"],
+)
+
+chromium_objc_library(
+    name = "sys_string_conversions_apple",
+    srcs = ["sys_string_conversions_apple.mm"],
+    hdrs = ["sys_string_conversions.h"],
+    linkopts = [
+        "-Wl,-framework,CoreFoundation",
+        "-Wl,-framework,Foundation",
+    ],
+    target_compatible_with = select({
+        "@platforms//os:macos": [],
+        "@platforms//os:ios": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//chromium/base:base_export",
+        "//chromium/base/apple:bridging",
+        "//chromium/base/apple:scoped_cftyperef",
+        "//chromium/base/numerics:safe_math",
+        "//chromium/build:build_config",
+    ],
+)
+
+chromium_cc_library(
+    name = "sys_string_conversions_posix",
+    srcs = ["sys_string_conversions_posix.cc"],
+    hdrs = ["sys_string_conversions.h"],
+    target_compatible_with = select({
+        "@platforms//os:macos": ["@platforms//:incompatible"],
+        "@platforms//os:ios": ["@platforms//:incompatible"],
+        "@platforms//os:windows": ["@platforms//:incompatible"],
+        "//conditions:default": [],
+    }),
+    deps = [
+        ":strings",
+        "//chromium/base:base_export",
+        "//chromium/base:compiler_specific",
+        "//chromium/build:build_config",
+    ],
+)
+
+chromium_cc_library(
+    name = "sys_string_conversions_win",
+    srcs = ["sys_string_conversions_win.cc"],
+    hdrs = ["sys_string_conversions.h"],
+    target_compatible_with = ["@platforms//os:windows"],
+    deps = [
+        "//chromium/base:base_export",
+        "//chromium/build:build_config",
+    ],
+)
+
+chromium_cc_library(
+    name = "to_string",
+    srcs = ["to_string.cc"],
+    hdrs = ["to_string.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":string_view_util",
+        ":strings",
+        "//chromium/base:base_export",
+        "//chromium/base/containers:span",
+        "//chromium/base/types:supports_ostream_operator",
+        "//chromium/base/types:supports_to_string",
+    ],
+)
+
+chromium_cc_library(
+    name = "utf_string_conversion_utils",
+    srcs = ["utf_string_conversion_utils.cc"],
+    hdrs = ["utf_string_conversion_utils.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//chromium/base:base_export",
+        "//chromium/base/third_party/icu",
+        "//chromium/build:build_config",
+    ],
+)
+
+cc_test(
+    name = "span_printf_unittest",
+    size = "small",
+    srcs = ["span_printf_unittest.cc"],
+    deps = [
+        ":span_printf",
+        "//chromium/testing/gmock",
+        "//chromium/testing/gtest",
+    ],
+)
+
+cc_test(
+    name = "strcat_unittest",
+    size = "small",
+    srcs = ["strcat_unittest.cc"],
+    deps = [
+        ":strcat",
+        ":strings",
+        "//chromium/testing/gtest",
+    ],
+)
+
+cc_test(
+    name = "string_number_conversions_unittest",
+    size = "small",
+    srcs = ["string_number_conversions_unittest.cc"],
+    deps = [
+        ":string_number_conversions",
+        ":stringprintf",
+        ":strings",
+        "//chromium/base:bit_cast",
+        "//chromium/base:format_macros",
+        "//chromium/testing/gtest",
+    ],
+)
+
+cc_test(
+    name = "string_util_unittest",
+    size = "small",
+    srcs = ["string_util_unittest.cc"],
+    deps = [
+        ":strings",
+        "//chromium/base:bits",
+        "//chromium/build:build_config",
+        "//chromium/testing/gmock",
+        "//chromium/testing/gtest",
+    ],
+)
+
+cc_test(
+    name = "string_view_util_unittest",
+    size = "small",
+    srcs = ["string_view_util_unittest.cc"],
+    deps = [
+        ":string_view_util",
+        "//chromium/base/containers:span",
+        "//chromium/testing/gtest",
+    ],
+)
+
+cc_test(
+    name = "stringprintf_unittest",
+    size = "small",
+    srcs = ["stringprintf_unittest.cc"],
+    deps = [
+        ":stringprintf",
+        "//chromium/build:build_config",
+        "//chromium/testing/gtest",
+    ],
+)
+
+cc_test(
+    name = "sys_string_conversions_unittest",
+    size = "small",
+    srcs = ["sys_string_conversions_unittest.cc"],
+    deps = [
+        ":strings",
+        ":sys_string_conversions",
+        "//chromium/base/test:scoped_locale",
+        "//chromium/build:build_config",
+        "//chromium/testing/gtest",
+    ],
+)
+
+cc_test(
+    name = "sys_string_conversions_apple_unittest",
+    size = "small",
+    target_compatible_with = select({
+        "@platforms//os:macos": [],
+        "@platforms//os:ios": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [":sys_string_conversions_apple_unittest_lib"],
+)
+
+chromium_objc_library(
+    name = "sys_string_conversions_apple_unittest_lib",
+    testonly = True,
+    srcs = ["sys_string_conversions_apple_unittest.mm"],
+    linkopts = ["-Wl,-framework,Foundation"],
+    target_compatible_with = select({
+        "@platforms//os:macos": [],
+        "@platforms//os:ios": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        ":strings",
+        ":sys_string_conversions",
+        "//chromium/testing/gtest",
+    ],
+)
+
+cc_test(
+    name = "to_string_unittest",
+    size = "small",
+    srcs = ["to_string_unittest.cc"],
+    deps = [
+        ":string_number_conversions",
+        ":to_string",
+        "//chromium/build:build_config",
+        "//chromium/testing/gtest",
+    ],
+)
+
+cc_test(
+    name = "utf_string_conversions_unittest",
+    size = "small",
+    srcs = ["utf_string_conversions_unittest.cc"],
+    deps = [
+        ":strings",
+        "//chromium/build:build_config",
+        "//chromium/testing/gtest",
+    ],
+)
+
+cc_test(
+    name = "utf_string_conversion_utils_unittest",
+    size = "small",
+    srcs = ["utf_string_conversion_utils_unittest.cc"],
+    deps = [
+        ":utf_string_conversion_utils",
+        "//chromium/testing/gtest",
+    ],
+)

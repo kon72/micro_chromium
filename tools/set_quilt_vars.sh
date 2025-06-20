@@ -4,8 +4,8 @@
 # Make sure to run this with the shell command "source" in order to inherit the variables into the interactive environment
 
 quilt() {
-  if [[ "$(pwd -P || true)" != */third_party/chromium ]]; then
-    echo "Error: This script must be run from the 'third_party/chromium' directory." >&2
+  if [[ "$(pwd -P || true)" != */chromium ]]; then
+    echo "Error: This script must be run from the 'chromium' directory." >&2
     return 1
   fi
 
@@ -17,7 +17,7 @@ quilt() {
 }
 
 # Assume this script lives within the repository
-REPO_ROOT=../..
+REPO_ROOT=..
 
 export QUILT_PATCHES="${REPO_ROOT}/patches"
 #export QUILT_SERIES=$(readlink -f "$REPO_ROOT/patches/series")

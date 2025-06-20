@@ -1,0 +1,77 @@
+load("@rules_cc//cc:cc_test.bzl", "cc_test")
+load("//chromium:build_defs.bzl", "chromium_cc_library")
+
+chromium_cc_library(
+    name = "checked_iterators",
+    srcs = ["span_forward_internal.h"],
+    hdrs = ["checked_iterators.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//chromium/base:check",
+        "//chromium/base:compiler_specific",
+        "//chromium/base/memory:raw_ptr_exclusion",
+        "//chromium/build:build_config",
+    ],
+)
+
+chromium_cc_library(
+    name = "contains",
+    hdrs = ["contains.h"],
+    visibility = ["//visibility:public"],
+)
+
+chromium_cc_library(
+    name = "flat_map",
+    hdrs = ["flat_map.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":flat_tree",
+        "//chromium/base:check",
+    ],
+)
+
+chromium_cc_library(
+    name = "flat_tree",
+    hdrs = ["flat_tree.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":span",
+        "//chromium/base:check",
+        "//chromium/base:compiler_specific",
+        "//chromium/base/memory:raw_ptr_exclusion",
+    ],
+)
+
+chromium_cc_library(
+    name = "map_util",
+    hdrs = ["map_util.h"],
+    visibility = ["//visibility:public"],
+    deps = ["//chromium/base/types:to_address"],
+)
+
+chromium_cc_library(
+    name = "span",
+    srcs = ["span_forward_internal.h"],
+    hdrs = ["span.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":checked_iterators",
+        "//chromium/base:check",
+        "//chromium/base:compiler_specific",
+        "//chromium/base/numerics:integral_constant_like",
+        "//chromium/base/numerics:safe_math",
+        "//chromium/base/types:to_address",
+    ],
+)
+
+cc_test(
+    name = "map_util_unittest",
+    size = "small",
+    srcs = ["map_util_unittest.cc"],
+    deps = [
+        ":flat_map",
+        ":map_util",
+        "//chromium/testing/gmock",
+        "//chromium/testing/gtest",
+    ],
+)

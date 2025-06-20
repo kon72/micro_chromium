@@ -1,0 +1,7 @@
+load("//chromium:build_defs.bzl", "chromium_cc_library")
+
+chromium_cc_library(
+    name = "icu",
+    hdrs = ["icu_utf.h"],
+    visibility = ["//chromium/base:__subpackages__"],
+)

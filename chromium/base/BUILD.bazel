@@ -1,0 +1,261 @@
+load("@rules_cc//cc:cc_test.bzl", "cc_test")
+load("//chromium:build_defs.bzl", "chromium_cc_library")
+
+chromium_cc_library(
+    name = "base_export",
+    hdrs = ["base_export.h"],
+    visibility = ["//chromium:__subpackages__"],
+)
+
+chromium_cc_library(
+    name = "bits",
+    hdrs = ["bits.h"],
+    visibility = ["//visibility:public"],
+    deps = [":check"],
+)
+
+chromium_cc_library(
+    name = "bit_cast",
+    hdrs = ["bit_cast.h"],
+    visibility = ["//visibility:public"],
+)
+
+chromium_cc_library(
+    name = "check",
+    hdrs = ["check.h"],
+    visibility = ["//chromium:__subpackages__"],
+    deps = ["@abseil-cpp//absl/log:absl_check"],
+)
+
+chromium_cc_library(
+    name = "check_op",
+    hdrs = ["check_op.h"],
+    visibility = ["//chromium:__subpackages__"],
+    deps = ["@abseil-cpp//absl/log:absl_check"],
+)
+
+chromium_cc_library(
+    name = "compiler_specific",
+    hdrs = ["compiler_specific.h"],
+    visibility = ["//visibility:public"],
+    deps = ["//chromium/build:build_config"],
+)
+
+chromium_cc_library(
+    name = "format_macros",
+    hdrs = ["format_macros.h"],
+    visibility = ["//visibility:public"],
+    deps = ["//chromium/build:build_config"],
+)
+
+chromium_cc_library(
+    name = "fuzzing_buildflags",
+    hdrs = ["fuzzing_buildflags.h"],
+    visibility = ["//visibility:public"],
+    deps = ["//chromium/build:buildflag"],
+)
+
+chromium_cc_library(
+    name = "gtest_prod_util",
+    hdrs = ["gtest_prod_util.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":base_export",
+        "//chromium/testing/gtest:gtest_prod",
+    ],
+)
+
+chromium_cc_library(
+    name = "immediate_crash",
+    hdrs = ["immediate_crash.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":fuzzing_buildflags",
+        "//chromium/build:build_config",
+    ],
+)
+
+chromium_cc_library(
+    name = "logging",
+    hdrs = ["logging.h"],
+    visibility = ["//chromium:__subpackages__"],
+    deps = [
+        "//chromium/build:build_config",
+        "@abseil-cpp//absl/log:absl_log",
+    ],
+)
+
+chromium_cc_library(
+    name = "no_destructor",
+    hdrs = ["no_destructor.h"],
+    visibility = ["//visibility:public"],
+)
+
+chromium_cc_library(
+    name = "notreached",
+    hdrs = ["notreached.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":compiler_specific",
+        ":immediate_crash",
+        "@abseil-cpp//absl/log:absl_check",
+    ],
+)
+
+chromium_cc_library(
+    name = "scoped_clear_last_error",
+    srcs = select({
+        "@platforms//os:windows": ["scoped_clear_last_error_win.cc"],
+        "//conditions:default": [],
+    }),
+    hdrs = ["scoped_clear_last_error.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":base_export",
+        "//chromium/build:build_config",
+    ],
+)
+
+chromium_cc_library(
+    name = "scoped_generic",
+    hdrs = ["scoped_generic.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":check",
+        ":compiler_specific",
+    ],
+)
+
+chromium_cc_library(
+    name = "values",
+    srcs = [
+        "json/json_common.h",
+        "json/json_parser.cc",
+        "json/json_reader.cc",
+        "json/json_writer.cc",
+        "json/string_escape.cc",
+        "value_iterators.cc",
+        "values.cc",
+    ],
+    hdrs = [
+        "json/json_parser.h",
+        "json/json_reader.h",
+        "json/json_writer.h",
+        "json/string_escape.h",
+        "value_iterators.h",
+        "values.h",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":base_export",
+        ":bit_cast",
+        ":check",
+        ":check_op",
+        ":compiler_specific",
+        ":gtest_prod_util",
+        ":logging",
+        ":notreached",
+        "//chromium/base/containers:checked_iterators",
+        "//chromium/base/containers:flat_map",
+        "//chromium/base/containers:map_util",
+        "//chromium/base/containers:span",
+        "//chromium/base/memory:ptr_util",
+        "//chromium/base/numerics:safe_math",
+        "//chromium/base/strings",
+        "//chromium/base/strings:strcat",
+        "//chromium/base/strings:string_number_conversions",
+        "//chromium/base/strings:stringprintf",
+        "//chromium/base/strings:to_string",
+        "//chromium/base/strings:utf_string_conversion_utils",
+        "//chromium/base/third_party/icu",
+        "//chromium/base/types:expected",
+        "//chromium/base/types:pass_key",
+        "//chromium/base/types:to_address",
+        "//chromium/build:build_config",
+    ],
+)
+
+cc_test(
+    name = "bit_cast_unittest",
+    size = "small",
+    srcs = ["bit_cast_unittest.cc"],
+    deps = [
+        ":bit_cast",
+        "//chromium/testing/gtest",
+    ],
+)
+
+cc_test(
+    name = "json/json_parser_unittest",
+    size = "small",
+    srcs = ["json/json_parser_unittest.cc"],
+    deps = [
+        ":values",
+        "//chromium/base/memory:ptr_util",
+        "//chromium/testing/gtest",
+    ],
+)
+
+cc_test(
+    name = "json/json_writer_unittest",
+    size = "small",
+    srcs = ["json/json_writer_unittest.cc"],
+    deps = [
+        ":values",
+        "//chromium/base/containers:span",
+        "//chromium/base/strings:stringprintf",
+        "//chromium/base/test:gmock_expected_support",
+        "//chromium/build:build_config",
+        "//chromium/testing/gtest",
+    ] + select({
+        "@platforms//os:windows": ["//chromium/base/strings"],
+        "//conditions:default": [],
+    }),
+)
+
+cc_test(
+    name = "json/string_escape_unittest",
+    size = "small",
+    srcs = ["json/string_escape_unittest.cc"],
+    deps = [
+        ":values",
+        "//chromium/base/strings",
+        "//chromium/testing/gtest",
+    ],
+)
+
+cc_test(
+    name = "scoped_clear_last_error_unittest",
+    size = "small",
+    srcs = ["scoped_clear_last_error_unittest.cc"],
+    deps = [
+        ":logging",
+        ":scoped_clear_last_error",
+        "//chromium/build:build_config",
+        "//chromium/testing/gtest",
+    ],
+)
+
+cc_test(
+    name = "scoped_generic_unittest",
+    size = "small",
+    srcs = ["scoped_generic_unittest.cc"],
+    deps = [
+        ":scoped_generic",
+        "//chromium/base/containers:contains",
+        "//chromium/build:build_config",
+        "//chromium/testing/gtest",
+    ],
+)
+
+cc_test(
+    name = "value_iterators_unittest",
+    size = "small",
+    srcs = ["value_iterators_unittest.cc"],
+    deps = [
+        ":values",
+        "//chromium/base/memory:ptr_util",
+        "//chromium/testing/gmock",
+        "//chromium/testing/gtest",
+    ],
+)

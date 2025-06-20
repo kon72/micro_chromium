@@ -1,0 +1,9 @@
+load("//chromium:build_defs.bzl", "chromium_cc_library")
+
+chromium_cc_library(
+    name = "gmock",
+    testonly = True,
+    hdrs = ["include/gmock/gmock.h"],
+    visibility = ["//visibility:public"],
+    deps = ["@googletest//:gtest"],
+)

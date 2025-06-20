@@ -1,0 +1,143 @@
+load("@bazel_skylib//rules:build_test.bzl", "build_test")
+load("@rules_cc//cc:cc_test.bzl", "cc_test")
+load("//chromium:build_defs.bzl", "chromium_cc_library")
+
+chromium_cc_library(
+    name = "always_false",
+    hdrs = ["always_false.h"],
+    visibility = ["//visibility:public"],
+)
+
+chromium_cc_library(
+    name = "expected",
+    srcs = ["expected_internal.h"],
+    hdrs = ["expected.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//chromium/base:check",
+        "//chromium/base/strings:strcat",
+        "//chromium/base/strings:to_string",
+    ],
+)
+
+chromium_cc_library(
+    name = "expected_macros",
+    hdrs = ["expected_macros.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":expected",
+        ":is_instantiation",
+        "//chromium/base:compiler_specific",
+        "//chromium/base/macros:concat",
+        "//chromium/base/macros:if",
+        "//chromium/base/macros:is_empty",
+        "//chromium/base/macros:remove_parens",
+        "//chromium/base/macros:uniquify",
+        "//chromium/base/memory:raw_ptr_exclusion",
+    ],
+)
+
+chromium_cc_library(
+    name = "is_instantiation",
+    hdrs = ["is_instantiation.h"],
+    visibility = ["//visibility:public"],
+)
+
+chromium_cc_library(
+    name = "pass_key",
+    hdrs = ["pass_key.h"],
+    visibility = ["//visibility:public"],
+)
+
+chromium_cc_library(
+    name = "supports_ostream_operator",
+    hdrs = ["supports_ostream_operator.h"],
+    visibility = ["//visibility:public"],
+)
+
+chromium_cc_library(
+    name = "supports_to_string",
+    hdrs = ["supports_to_string.h"],
+    visibility = ["//visibility:public"],
+)
+
+chromium_cc_library(
+    name = "to_address",
+    hdrs = ["to_address.h"],
+    visibility = ["//visibility:public"],
+)
+
+cc_test(
+    name = "expected_unittest",
+    size = "small",
+    srcs = ["expected_unittest.cc"],
+    deps = [
+        ":expected",
+        "//chromium/base/containers:contains",
+        "//chromium/base/strings:to_string",
+        "//chromium/base/test:gmock_expected_support",
+        "//chromium/testing/gmock",
+        "//chromium/testing/gtest",
+    ],
+)
+
+cc_test(
+    name = "expected_macros_unittest",
+    size = "small",
+    srcs = ["expected_macros_unittest.cc"],
+    deps = [
+        ":expected",
+        ":expected_macros",
+        "//chromium/base/test:gmock_expected_support",
+        "//chromium/testing/gmock",
+        "//chromium/testing/gtest",
+    ],
+)
+
+build_test(
+    name = "is_instantiation_unittest",
+    targets = [":is_instantiation_unittest_lib"],
+)
+
+chromium_cc_library(
+    name = "is_instantiation_unittest_lib",
+    testonly = True,
+    srcs = ["is_instantiation_unittest.cc"],
+    deps = [":is_instantiation"],
+)
+
+build_test(
+    name = "pass_key_unittest",
+    targets = [":pass_key_unittest_lib"],
+)
+
+chromium_cc_library(
+    name = "pass_key_unittest_lib",
+    testonly = True,
+    srcs = ["pass_key_unittest.cc"],
+    deps = [":pass_key"],
+)
+
+build_test(
+    name = "supports_ostream_operator_unittest",
+    targets = [":supports_ostream_operator_unittest_lib"],
+)
+
+chromium_cc_library(
+    name = "supports_ostream_operator_unittest_lib",
+    testonly = True,
+    srcs = ["supports_ostream_operator_unittest.cc"],
+    deps = [":supports_ostream_operator"],
+)
+
+build_test(
+    name = "to_address_unittest",
+    targets = [":to_address_unittest_lib"],
+)
+
+chromium_cc_library(
+    name = "to_address_unittest_lib",
+    testonly = True,
+    srcs = ["to_address_unittest.cc"],
+    deps = [":to_address"],
+)

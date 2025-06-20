@@ -1,0 +1,52 @@
+load("@rules_cc//cc:cc_test.bzl", "cc_test")
+load("//chromium:build_defs.bzl", "chromium_cc_library")
+
+chromium_cc_library(
+    name = "file_path",
+    srcs = [
+        "file_path.cc",
+        "safe_base_name.cc",
+    ],
+    hdrs = [
+        "file_path.h",
+        "safe_base_name.h",
+    ],
+    linkopts = select({
+        "@platforms//os:windows": ["user32.lib"],
+        "//conditions:default": [],
+    }),
+    visibility = ["//visibility:public"],
+    deps = [
+        "//chromium/base:base_export",
+        "//chromium/base:check_op",
+        "//chromium/base:compiler_specific",
+        "//chromium/base/numerics:safe_math",
+        "//chromium/base/strings",
+        "//chromium/base/strings:strcat",
+        "//chromium/base/strings:sys_string_conversions",
+        "//chromium/build:build_config",
+    ] + select({
+        "@platforms//os:macos": [
+            "//chromium/base/apple:scoped_cftyperef",
+            "//chromium/base/third_party/icu",
+        ],
+        "@platforms//os:ios": [
+            "//chromium/base/apple:scoped_cftyperef",
+            "//chromium/base/third_party/icu",
+        ],
+        "@platforms//os:windows": [
+            "//chromium/base/win:win_util",
+        ],
+        "//conditions:default": [],
+    }),
+)
+
+cc_test(
+    name = "safe_base_name_unittest",
+    size = "small",
+    srcs = ["safe_base_name_unittest.cc"],
+    deps = [
+        ":file_path",
+        "//chromium/testing/gtest",
+    ],
+)

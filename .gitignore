@@ -4,4 +4,4 @@
 /external
 /compile_commands.json
 /.cache/
-/third_party/chromium/.pc/
+/chromium/.pc/

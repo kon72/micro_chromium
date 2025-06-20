@@ -208,7 +208,7 @@ files=(
 )
 
 upstream_dir='third_party/chromium-upstream'
-out_dir='third_party/chromium'
+out_dir='chromium'
 
 git -C "${upstream_dir}" rev-parse --is-inside-work-tree > /dev/null 2>&1 || {
   git clone --sparse --depth=1 --revision="${revision}" \
