@@ -6,8 +6,19 @@
 #define BASE_LOGGING_H_
 
 #include "absl/log/absl_log.h"
+#include "build/build_config.h"
+
+namespace logging {
 
 #define DLOG(severity) ABSL_LOG(severity)
 #define DLOG_IF(severity, condition) ABSL_LOG_IF(severity, condition)
+
+#if BUILDFLAG(IS_WIN)
+typedef unsigned long SystemErrorCode;
+#elif BUILDFLAG(IS_POSIX) || BUILDFLAG(IS_FUCHSIA)
+typedef int SystemErrorCode;
+#endif
+
+}  // namespace logging
 
 #endif  // BASE_LOGGING_H_
