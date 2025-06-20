@@ -12,4 +12,5 @@ remove-feature-switch.patch
 no-pickle.patch
 remove-unused-include.patch
 add-missing-header-for-ostream-operators.patch
+add-support-for-msvc-stl.patch
 use-cxx-json-reader.patch
