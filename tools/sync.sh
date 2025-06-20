@@ -3,7 +3,7 @@
 set -euo pipefail
 
 upstream_url='https://chromium.googlesource.com/chromium/src'
-revision='ba5e91c3c31fb669ddb0eaaaf8d9c356f6cade70'
+revision='6788c08e33dab924a7b8c3d40547e65c5313adeb'
 checkout_dirs=(
   'base'
   'build'
@@ -214,6 +214,10 @@ git -C "${upstream_dir}" rev-parse --is-inside-work-tree > /dev/null 2>&1 || {
   git clone --sparse --depth=1 --revision="${revision}" \
     "${upstream_url}" "${upstream_dir}"
   git -C "${upstream_dir}" sparse-checkout set "${checkout_dirs[@]}"
+}
+git -C "${upstream_dir}" fetch --depth=1 origin "${revision}" || {
+  echo "Failed to fetch revision ${revision} from ${upstream_url}" >&2
+  exit 1
 }
 git -C "${upstream_dir}" checkout "${revision}" || {
   echo "Failed to checkout revision ${revision} in ${upstream_dir}" >&2
