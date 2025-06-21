@@ -1,6 +1,17 @@
 load("//chromium:build_defs.bzl", "chromium_cc_library")
 
 chromium_cc_library(
+    name = "win_handle_types",
+    hdrs = ["win_handle_types.h"],
+    target_compatible_with = select({
+        "@platforms//os:windows": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    textual_hdrs = ["win_handle_types_list.inc"],
+    visibility = ["//visibility:public"],
+)
+
+chromium_cc_library(
     name = "win_util",
     srcs = ["win_util.cc"],
     hdrs = ["win_util.h"],
@@ -9,5 +20,20 @@ chromium_cc_library(
         "//conditions:default": ["@platforms//:incompatible"],
     }),
     visibility = ["//visibility:public"],
-    deps = ["//chromium/base:base_export"],
+    deps = [
+        ":windows_types",
+        "//chromium/base:base_export",
+        "//chromium/base:check",
+    ],
+)
+
+chromium_cc_library(
+    name = "windows_types",
+    hdrs = ["windows_types.h"],
+    target_compatible_with = select({
+        "@platforms//os:windows": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    visibility = ["//visibility:public"],
+    deps = [":win_handle_types"],
 )

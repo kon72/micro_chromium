@@ -198,6 +198,9 @@ files=(
   'base/values.h'
   # 'base/values_nocompile.nc'
   # 'base/values_unittest.cc'
+  'base/win/win_handle_types.h'
+  'base/win/win_handle_types_list.inc'
+  'base/win/windows_types.h'
   'build/build_config.h'
   'build/buildflag.h'
   'testing/gmock/include/gmock/gmock.h'
@@ -215,14 +218,17 @@ git -C "${upstream_dir}" rev-parse --is-inside-work-tree > /dev/null 2>&1 || {
     "${upstream_url}" "${upstream_dir}"
   git -C "${upstream_dir}" sparse-checkout set "${checkout_dirs[@]}"
 }
-git -C "${upstream_dir}" fetch --depth=1 origin "${revision}" || {
-  echo "Failed to fetch revision ${revision} from ${upstream_url}" >&2
-  exit 1
-}
-git -C "${upstream_dir}" checkout "${revision}" || {
-  echo "Failed to checkout revision ${revision} in ${upstream_dir}" >&2
-  exit 1
-}
+current_revision=$(git -C "${upstream_dir}" rev-parse HEAD)
+if [[ ${current_revision} != "${revision}" ]]; then
+  git -C "${upstream_dir}" fetch --depth=1 origin "${revision}" || {
+    echo "Failed to fetch revision ${revision} from ${upstream_url}" >&2
+    exit 1
+  }
+  git -C "${upstream_dir}" checkout "${revision}" || {
+    echo "Failed to checkout revision ${revision} in ${upstream_dir}" >&2
+    exit 1
+  }
+fi
 if ! git -C "${upstream_dir}" diff --quiet; then
   echo "The repository ${upstream_dir} is dirty" >&2
   exit 1

@@ -5,7 +5,10 @@
 #ifndef BASE_WIN_WIN_UTIL_H_
 #define BASE_WIN_WIN_UTIL_H_
 
+#include <string>
+
 #include "base/base_export.h"
+#include "base/win/windows_types.h"
 
 namespace base {
 namespace win {
@@ -24,6 +27,9 @@ namespace win {
 // did not work, so adding calls to this method to guard them simply avoids
 // unnecessary method calls.
 BASE_EXPORT bool IsUser32AndGdi32Available();
+
+// Returns a string representation of |rguid|.
+BASE_EXPORT std::wstring WStringFromGUID(const ::GUID& rguid);
 
 }  // namespace win
 }  // namespace base
