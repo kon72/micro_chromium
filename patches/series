@@ -5,6 +5,7 @@ add-notreached.patch
 add-win-util.patch
 fix-googletest-include.patch
 fix-abseil-cpp-include.patch
+disable-scoped-handle-verifier.patch
 disable-raw-ptr-exclusion-annotation.patch
 replace-raw_ptr-with-raw-pointer.patch
 remove-tracing.patch

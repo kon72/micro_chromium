@@ -1,0 +1,176 @@
+--- a/base/win/scoped_handle.cc
++++ b/base/win/scoped_handle.cc
+@@ -4,18 +4,14 @@
+ 
+ #include "base/win/scoped_handle.h"
+ 
+-#include <string>
++#include <windows.h>
+ 
+-#include "base/check_op.h"
+-#include "base/debug/alias.h"
+-#include "base/logging.h"
+-#include "base/win/scoped_handle_verifier.h"
+-#include "base/win/win_util.h"
+-#include "base/win/windows_types.h"
++#include "base/check.h"
+ 
+ namespace base {
+ namespace win {
+ 
++#if 0
+ using base::win::internal::ScopedHandleVerifier;
+ 
+ std::ostream& operator<<(std::ostream& os, HandleOperation operation) {
+@@ -32,12 +28,15 @@ std::ostream& operator<<(std::ostream& o
+       return os << "DuplicateHandleHook validation failure";
+   }
+ }
++#endif
+ 
+ // Static.
+ bool HandleTraits::CloseHandle(HANDLE handle) {
+-  return ScopedHandleVerifier::Get()->CloseHandle(handle);
++  CHECK(::CloseHandle(handle)) << "CloseHandle failed";
++  return true;
+ }
+ 
++#if 0
+ // Static.
+ void VerifierTraits::StartTracking(HANDLE handle,
+                                    const void* owner,
+@@ -77,6 +76,7 @@ expected<ScopedHandle, NTSTATUS> TakeHan
+   CHECK_EQ(*type_name, object_type_name);
+   return ScopedHandle(handle);  // Ownership of `handle` goes to the caller.
+ }
++#endif
+ 
+ }  // namespace win
+ }  // namespace base
+--- a/base/win/scoped_handle.h
++++ b/base/win/scoped_handle.h
+@@ -5,19 +5,14 @@
+ #ifndef BASE_WIN_SCOPED_HANDLE_H_
+ #define BASE_WIN_SCOPED_HANDLE_H_
+ 
+-#include <ostream>
+-#include <string_view>
+-
+ #include "base/base_export.h"
+ #include "base/check_op.h"
+-#include "base/dcheck_is_on.h"
+ #include "base/gtest_prod_util.h"
+-#include "base/location.h"
+-#include "base/types/expected.h"
+ #include "base/win/windows_handle_util.h"
+ #include "base/win/windows_types.h"
+ #include "build/build_config.h"
+ 
++#if 0
+ // TODO(rvargas): remove this with the rest of the verifier.
+ #if defined(COMPILER_MSVC)
+ #include <intrin.h>
+@@ -26,10 +21,12 @@
+ #define BASE_WIN_GET_CALLER \
+   __builtin_extract_return_addr(__builtin_return_address(0))
+ #endif
++#endif
+ 
+ namespace base {
+ namespace win {
+ 
++#if 0
+ enum class HandleOperation {
+   kHandleAlreadyTracked,
+   kCloseHandleNotTracked,
+@@ -39,6 +36,7 @@ enum class HandleOperation {
+ };
+ 
+ std::ostream& operator<<(std::ostream& os, HandleOperation operation);
++#endif
+ 
+ // Generic wrapper for raw handles that takes care of closing handles
+ // automatically. The class interface follows the style of
+@@ -89,8 +87,10 @@ class GenericScopedHandle {
+ 
+       if (Traits::IsHandleValid(handle)) {
+         handle_ = handle;
++#if 0
+         Verifier::StartTracking(handle, this, BASE_WIN_GET_CALLER,
+                                 GetProgramCounter());
++#endif
+       }
+       ::SetLastError(last_error);
+     }
+@@ -105,10 +105,12 @@ class GenericScopedHandle {
+   [[nodiscard]] Handle release() {
+     Handle temp = handle_;
+     handle_ = Traits::NullHandle();
++#if 0
+     if (Traits::IsHandleValid(temp)) {
+       Verifier::StopTracking(temp, this, BASE_WIN_GET_CALLER,
+                              GetProgramCounter());
+     }
++#endif
+     return temp;
+   }
+ 
+@@ -118,8 +120,10 @@ class GenericScopedHandle {
+   // Explicitly closes the owned handle.
+   void Close() {
+     if (Traits::IsHandleValid(handle_)) {
++#if 0
+       Verifier::StopTracking(handle_, this, BASE_WIN_GET_CALLER,
+-                             GetProgramCounter());
++        GetProgramCounter());
++#endif
+ 
+       Traits::CloseHandle(handle_);
+       handle_ = Traits::NullHandle();
+@@ -133,7 +137,9 @@ class GenericScopedHandle {
+   Handle handle_;
+ };
+ 
++#if 0
+ #undef BASE_WIN_GET_CALLER
++#endif
+ 
+ // The traits class for Win32 handles that can be closed via CloseHandle() API.
+ class HandleTraits {
+@@ -180,6 +186,7 @@ class DummyVerifierTraits {
+                            const void* pc2) {}
+ };
+ 
++#if 0
+ // Performs actual run-time tracking.
+ class BASE_EXPORT VerifierTraits {
+  public:
+@@ -198,17 +205,18 @@ class BASE_EXPORT VerifierTraits {
+                            const void* pc1,
+                            const void* pc2);
+ };
++#endif
+ 
+ using UncheckedScopedHandle =
+     GenericScopedHandle<HandleTraits, DummyVerifierTraits>;
+-using CheckedScopedHandle = GenericScopedHandle<HandleTraits, VerifierTraits>;
+ 
+-#if DCHECK_IS_ON()
++#if 0
+ using ScopedHandle = CheckedScopedHandle;
+ #else
+ using ScopedHandle = UncheckedScopedHandle;
+ #endif
+ 
++#if 0
+ // This function may be called by the embedder to disable the use of
+ // VerifierTraits at runtime. It has no effect if DummyVerifierTraits is used
+ // for ScopedHandle.
+@@ -228,6 +236,7 @@ BASE_EXPORT void OnHandleBeingClosed(HAN
+ BASE_EXPORT expected<ScopedHandle, NTSTATUS> TakeHandleOfType(
+     HANDLE handle,
+     std::wstring_view object_type_name);
++#endif
+ 
+ }  // namespace win
+ }  // namespace base
