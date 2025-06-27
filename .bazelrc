@@ -36,6 +36,10 @@ build:windows --copt=-DWIN32_LEAN_AND_MEAN
 build:windows --host_copt=-DWIN32_LEAN_AND_MEAN
 build:windows --copt=-DNOGDI
 build:windows --host_copt=-DNOGDI
+build:windows --copt=-D_UNICODE
+build:windows --host_copt=-D_UNICODE
+build:windows --copt=-DUNICODE
+build:windows --host_copt=-DUNICODE
 build:windows --config=win_clang
 
 # macOS
