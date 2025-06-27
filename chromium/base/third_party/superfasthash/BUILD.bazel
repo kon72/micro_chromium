@@ -1,0 +1,7 @@
+load("//chromium:build_defs.bzl", "chromium_cc_library")
+
+chromium_cc_library(
+    name = "superfasthash",
+    srcs = ["superfasthash.c"],
+    visibility = ["//chromium/base:__subpackages__"],
+)

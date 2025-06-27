@@ -42,6 +42,13 @@ chromium_cc_library(
 )
 
 chromium_cc_library(
+    name = "dcheck_is_on",
+    hdrs = ["dcheck_is_on.h"],
+    visibility = ["//visibility:public"],
+    deps = ["//chromium/base/debug:debugging_buildflags"],
+)
+
+chromium_cc_library(
     name = "format_macros",
     hdrs = ["format_macros.h"],
     visibility = ["//visibility:public"],
@@ -98,7 +105,7 @@ chromium_cc_library(
     deps = [
         ":compiler_specific",
         ":immediate_crash",
-        "@abseil-cpp//absl/log:absl_check",
+        "@abseil-cpp//absl/log:absl_log",
     ],
 )
 

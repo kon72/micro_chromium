@@ -4,7 +4,7 @@
 #ifndef BASE_FUZZING_BUILDFLAGS_H_
 #define BASE_FUZZING_BUILDFLAGS_H_
 
-#include "build/buildflag.h"  // IWYU pragma: export
+#include "build/buildflag.h" // IWYU pragma: export
 
 // IWYU pragma: always_keep
 

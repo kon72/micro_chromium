@@ -1,0 +1,29 @@
+load("@rules_cc//cc:cc_test.bzl", "cc_test")
+load("//chromium:build_defs.bzl", "chromium_cc_library")
+
+chromium_cc_library(
+    name = "hash",
+    srcs = ["hash.cc"],
+    hdrs = ["hash.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//chromium/base:base_export",
+        "//chromium/base:dcheck_is_on",
+        "//chromium/base:notreached",
+        "//chromium/base/containers:span",
+        "//chromium/base/numerics:safe_math",
+        "//chromium/base/third_party/cityhash",
+        "//chromium/base/third_party/superfasthash",
+    ],
+)
+
+cc_test(
+    name = "hash_unittest",
+    size = "small",
+    srcs = ["hash_unittest.cc"],
+    deps = [
+        ":hash",
+        "//chromium/base/containers:span",
+        "//chromium/testing/gtest",
+    ],
+)

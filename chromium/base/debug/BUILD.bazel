@@ -1,0 +1,8 @@
+load("//chromium:build_defs.bzl", "chromium_cc_library")
+
+chromium_cc_library(
+    name = "debugging_buildflags",
+    hdrs = ["debugging_buildflags.h"],
+    visibility = ["//visibility:public"],
+    deps = ["//chromium/build:buildflag"],
+)

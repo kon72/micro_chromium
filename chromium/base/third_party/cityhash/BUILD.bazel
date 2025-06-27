@@ -1,0 +1,8 @@
+load("//chromium:build_defs.bzl", "chromium_cc_library")
+
+chromium_cc_library(
+    name = "cityhash",
+    srcs = ["city.cc"],
+    hdrs = ["city.h"],
+    visibility = ["//chromium/base:__subpackages__"],
+)
