@@ -21,6 +21,7 @@ def chromium_cc_library(
         copts = [],
         linkopts = [],
         target_compatible_with = [],
+        textual_hdrs = [],
         visibility = None,
         deps = []):
     cc_library(
@@ -31,6 +32,7 @@ def chromium_cc_library(
         copts = chromium_cc_opts() + copts,
         linkopts = linkopts,
         target_compatible_with = target_compatible_with,
+        textual_hdrs = textual_hdrs,
         visibility = visibility,
         deps = deps + ["//chromium:defs"],
     )
@@ -43,6 +45,7 @@ def chromium_objc_library(
         copts = [],
         linkopts = [],
         target_compatible_with = [],
+        textual_hdrs = [],
         visibility = None,
         deps = []):
     objc_library(
@@ -53,6 +56,7 @@ def chromium_objc_library(
         copts = chromium_cc_opts() + copts,
         linkopts = linkopts,
         target_compatible_with = target_compatible_with,
+        textual_hdrs = textual_hdrs,
         visibility = visibility,
         deps = deps + ["//chromium:defs"],
     )
