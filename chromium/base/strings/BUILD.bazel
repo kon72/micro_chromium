@@ -62,6 +62,30 @@ chromium_cc_library(
 )
 
 chromium_cc_library(
+    name = "string_split",
+    srcs = [
+        "string_split.cc",
+        "string_split_internal.h",
+    ] + select({
+        "@platforms//os:windows": [
+            "string_split_win.cc",
+            "string_split_win.h",
+        ],
+        "//conditions:default": [],
+    }),
+    hdrs = ["string_split.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":strings",
+        "//chromium/base:base_export",
+        "//chromium/base:compiler_specific",
+        "//chromium/base:logging",
+        "//chromium/base/third_party/icu",
+        "//chromium/build:build_config",
+    ],
+)
+
+chromium_cc_library(
     name = "string_view_util",
     hdrs = ["string_view_util.h"],
     visibility = ["//visibility:public"],
@@ -249,6 +273,19 @@ cc_test(
         ":strings",
         "//chromium/base:bit_cast",
         "//chromium/base:format_macros",
+        "//chromium/testing/gtest",
+    ],
+)
+
+cc_test(
+    name = "string_split_unittest",
+    size = "small",
+    srcs = ["string_split_unittest.cc"],
+    deps = [
+        ":string_split",
+        ":string_view_util",
+        ":strings",
+        "//chromium/testing/gmock",
         "//chromium/testing/gtest",
     ],
 )
