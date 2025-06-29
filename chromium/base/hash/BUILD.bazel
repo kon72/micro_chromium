@@ -1,5 +1,4 @@
-load("@rules_cc//cc:cc_test.bzl", "cc_test")
-load("//chromium:build_defs.bzl", "chromium_cc_library")
+load("//chromium:build_defs.bzl", "chromium_cc_library", "chromium_cc_test")
 
 chromium_cc_library(
     name = "hash",
@@ -17,7 +16,7 @@ chromium_cc_library(
     ],
 )
 
-cc_test(
+chromium_cc_test(
     name = "hash_unittest",
     size = "small",
     srcs = ["hash_unittest.cc"],

@@ -1,5 +1,4 @@
-load("@rules_cc//cc:cc_test.bzl", "cc_test")
-load("//chromium:build_defs.bzl", "chromium_cc_library")
+load("//chromium:build_defs.bzl", "chromium_cc_library", "chromium_cc_test")
 
 chromium_cc_library(
     name = "base_export",
@@ -196,7 +195,7 @@ chromium_cc_library(
     ],
 )
 
-cc_test(
+chromium_cc_test(
     name = "bit_cast_unittest",
     size = "small",
     srcs = ["bit_cast_unittest.cc"],
@@ -206,7 +205,7 @@ cc_test(
     ],
 )
 
-cc_test(
+chromium_cc_test(
     name = "json/json_parser_unittest",
     size = "small",
     srcs = ["json/json_parser_unittest.cc"],
@@ -217,7 +216,7 @@ cc_test(
     ],
 )
 
-cc_test(
+chromium_cc_test(
     name = "json/json_writer_unittest",
     size = "small",
     srcs = ["json/json_writer_unittest.cc"],
@@ -234,7 +233,7 @@ cc_test(
     }),
 )
 
-cc_test(
+chromium_cc_test(
     name = "json/string_escape_unittest",
     size = "small",
     srcs = ["json/string_escape_unittest.cc"],
@@ -245,7 +244,7 @@ cc_test(
     ],
 )
 
-cc_test(
+chromium_cc_test(
     name = "scoped_clear_last_error_unittest",
     size = "small",
     srcs = ["scoped_clear_last_error_unittest.cc"],
@@ -257,7 +256,7 @@ cc_test(
     ],
 )
 
-cc_test(
+chromium_cc_test(
     name = "scoped_generic_unittest",
     size = "small",
     srcs = ["scoped_generic_unittest.cc"],
@@ -269,7 +268,7 @@ cc_test(
     ],
 )
 
-cc_test(
+chromium_cc_test(
     name = "value_iterators_unittest",
     size = "small",
     srcs = ["value_iterators_unittest.cc"],
@@ -281,7 +280,7 @@ cc_test(
     ],
 )
 
-cc_test(
+chromium_cc_test(
     name = "version_unittest",
     size = "small",
     srcs = ["version_unittest.cc"],

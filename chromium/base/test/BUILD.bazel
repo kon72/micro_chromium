@@ -1,5 +1,4 @@
-load("@rules_cc//cc:cc_test.bzl", "cc_test")
-load("//chromium:build_defs.bzl", "chromium_cc_library")
+load("//chromium:build_defs.bzl", "chromium_cc_library", "chromium_cc_test")
 
 chromium_cc_library(
     name = "gmock_expected_support",
@@ -36,7 +35,7 @@ chromium_cc_library(
     deps = ["//chromium/testing/gtest"],
 )
 
-cc_test(
+chromium_cc_test(
     name = "gmock_expected_support_unittest",
     size = "small",
     srcs = ["gmock_expected_support_unittest.cc"],

@@ -1,5 +1,4 @@
-load("@rules_cc//cc:cc_test.bzl", "cc_test")
-load("//chromium:build_defs.bzl", "chromium_cc_library", "chromium_objc_library")
+load("//chromium:build_defs.bzl", "chromium_cc_library", "chromium_cc_test", "chromium_objc_library")
 
 chromium_cc_library(
     name = "span_printf",
@@ -241,7 +240,7 @@ chromium_cc_library(
     ],
 )
 
-cc_test(
+chromium_cc_test(
     name = "span_printf_unittest",
     size = "small",
     srcs = ["span_printf_unittest.cc"],
@@ -252,7 +251,7 @@ cc_test(
     ],
 )
 
-cc_test(
+chromium_cc_test(
     name = "strcat_unittest",
     size = "small",
     srcs = ["strcat_unittest.cc"],
@@ -263,7 +262,7 @@ cc_test(
     ],
 )
 
-cc_test(
+chromium_cc_test(
     name = "string_number_conversions_unittest",
     size = "small",
     srcs = ["string_number_conversions_unittest.cc"],
@@ -277,7 +276,7 @@ cc_test(
     ],
 )
 
-cc_test(
+chromium_cc_test(
     name = "string_split_unittest",
     size = "small",
     srcs = ["string_split_unittest.cc"],
@@ -290,7 +289,7 @@ cc_test(
     ],
 )
 
-cc_test(
+chromium_cc_test(
     name = "string_util_unittest",
     size = "small",
     srcs = ["string_util_unittest.cc"],
@@ -303,7 +302,7 @@ cc_test(
     ],
 )
 
-cc_test(
+chromium_cc_test(
     name = "string_view_util_unittest",
     size = "small",
     srcs = ["string_view_util_unittest.cc"],
@@ -314,7 +313,7 @@ cc_test(
     ],
 )
 
-cc_test(
+chromium_cc_test(
     name = "stringprintf_unittest",
     size = "small",
     srcs = ["stringprintf_unittest.cc"],
@@ -325,7 +324,7 @@ cc_test(
     ],
 )
 
-cc_test(
+chromium_cc_test(
     name = "sys_string_conversions_unittest",
     size = "small",
     srcs = ["sys_string_conversions_unittest.cc"],
@@ -338,7 +337,7 @@ cc_test(
     ],
 )
 
-cc_test(
+chromium_cc_test(
     name = "sys_string_conversions_apple_unittest",
     size = "small",
     target_compatible_with = select({
@@ -366,7 +365,7 @@ chromium_objc_library(
     ],
 )
 
-cc_test(
+chromium_cc_test(
     name = "to_string_unittest",
     size = "small",
     srcs = ["to_string_unittest.cc"],
@@ -378,7 +377,7 @@ cc_test(
     ],
 )
 
-cc_test(
+chromium_cc_test(
     name = "utf_string_conversions_unittest",
     size = "small",
     srcs = ["utf_string_conversions_unittest.cc"],
@@ -389,7 +388,7 @@ cc_test(
     ],
 )
 
-cc_test(
+chromium_cc_test(
     name = "utf_string_conversion_utils_unittest",
     size = "small",
     srcs = ["utf_string_conversion_utils_unittest.cc"],

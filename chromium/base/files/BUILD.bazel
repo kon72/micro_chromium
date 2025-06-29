@@ -1,5 +1,4 @@
-load("@rules_cc//cc:cc_test.bzl", "cc_test")
-load("//chromium:build_defs.bzl", "chromium_cc_library")
+load("//chromium:build_defs.bzl", "chromium_cc_library", "chromium_cc_test")
 
 chromium_cc_library(
     name = "file_path",
@@ -41,7 +40,7 @@ chromium_cc_library(
     }),
 )
 
-cc_test(
+chromium_cc_test(
     name = "safe_base_name_unittest",
     size = "small",
     srcs = ["safe_base_name_unittest.cc"],

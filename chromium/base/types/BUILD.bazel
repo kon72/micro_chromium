@@ -1,6 +1,5 @@
 load("@bazel_skylib//rules:build_test.bzl", "build_test")
-load("@rules_cc//cc:cc_test.bzl", "cc_test")
-load("//chromium:build_defs.bzl", "chromium_cc_library")
+load("//chromium:build_defs.bzl", "chromium_cc_library", "chromium_cc_test")
 
 chromium_cc_library(
     name = "always_false",
@@ -67,7 +66,7 @@ chromium_cc_library(
     visibility = ["//visibility:public"],
 )
 
-cc_test(
+chromium_cc_test(
     name = "expected_unittest",
     size = "small",
     srcs = ["expected_unittest.cc"],
@@ -81,7 +80,7 @@ cc_test(
     ],
 )
 
-cc_test(
+chromium_cc_test(
     name = "expected_macros_unittest",
     size = "small",
     srcs = ["expected_macros_unittest.cc"],

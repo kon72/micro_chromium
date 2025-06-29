@@ -1,4 +1,5 @@
 load("@rules_cc//cc:cc_library.bzl", "cc_library")
+load("@rules_cc//cc:cc_test.bzl", "cc_test")
 load("@rules_cc//cc:objc_library.bzl", "objc_library")
 
 def chromium_cc_opts():
@@ -57,6 +58,26 @@ def chromium_objc_library(
         linkopts = linkopts,
         target_compatible_with = target_compatible_with,
         textual_hdrs = textual_hdrs,
+        visibility = visibility,
+        deps = deps + ["//chromium:defs"],
+    )
+
+def chromium_cc_test(
+        name,
+        size = "medium",
+        srcs = [],
+        copts = [],
+        linkopts = [],
+        target_compatible_with = [],
+        visibility = None,
+        deps = []):
+    cc_test(
+        name = name,
+        size = size,
+        srcs = srcs,
+        copts = chromium_cc_opts() + copts,
+        linkopts = linkopts,
+        target_compatible_with = target_compatible_with,
         visibility = visibility,
         deps = deps + ["//chromium:defs"],
     )
