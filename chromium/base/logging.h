@@ -10,10 +10,17 @@
 
 namespace logging {
 
-#define DLOG(severity) ABSL_DLOG(severity)
-#define DLOG_IF(severity, condition) ABSL_DLOG_IF(severity, condition)
+#define DLOG(severity) ABSL_LOG_INTERNAL_DLOG_IMPL(_##severity)
+#define DLOG_IF(severity, condition) \
+  ABSL_LOG_INTERNAL_DLOG_IF_IMPL(_##severity, condition)
 
-#define DVLOG(severity) ABSL_DVLOG(severity)
+#ifndef NDEBUG
+#define DPLOG(severity) ABSL_LOG_INTERNAL_PLOG_IMPL(_##severity)
+#else
+#define DPLOG(severity) ABSL_LOG_INTERNAL_PLOG_IF_IMPL(_##severity, condition)
+#endif  // NDEBUG
+
+#define DVLOG(verbose_level) ABSL_LOG_INTERNAL_DVLOG_IMPL(verbose_level)
 
 #if BUILDFLAG(IS_WIN)
 typedef unsigned long SystemErrorCode;

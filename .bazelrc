@@ -34,8 +34,6 @@ build:windows --host_copt=/D_USE_MATH_DEFINES
 # Make sure to include as little of windows.h as possible
 build:windows --copt=-DWIN32_LEAN_AND_MEAN
 build:windows --host_copt=-DWIN32_LEAN_AND_MEAN
-build:windows --copt=-DNOGDI
-build:windows --host_copt=-DNOGDI
 build:windows --copt=-D_UNICODE
 build:windows --host_copt=-D_UNICODE
 build:windows --copt=-DUNICODE

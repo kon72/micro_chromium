@@ -74,6 +74,12 @@ chromium_cc_library(
     ],
 )
 
+chromium_cc_library(
+    name = "to_vector",
+    hdrs = ["to_vector.h"],
+    visibility = ["//visibility:public"],
+)
+
 chromium_cc_test(
     name = "heap_array_unittest",
     size = "small",
@@ -99,3 +105,16 @@ chromium_cc_test(
         "//chromium/testing/gtest",
     ],
 )
+
+# chromium_cc_test(
+#     name = "to_vector_unittest",
+#     size = "small",
+#     srcs = ["to_vector_unittest.cc"],
+#     deps = [
+#         ":adapters",
+#         ":flat_set",
+#         ":to_vector",
+#         "//chromium/testing/gmock",
+#         "//chromium/testing/gtest",
+#     ],
+# )

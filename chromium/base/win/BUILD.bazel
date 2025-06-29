@@ -1,4 +1,73 @@
-load("//chromium:build_defs.bzl", "chromium_cc_library")
+load("//chromium:build_defs.bzl", "chromium_cc_library", "chromium_cc_test")
+
+chromium_cc_library(
+    name = "access_control_list",
+    srcs = ["access_control_list.cc"],
+    hdrs = ["access_control_list.h"],
+    target_compatible_with = select({
+        "@platforms//os:windows": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    visibility = ["//visibility:public"],
+    deps = [
+        ":scoped_localalloc",
+        ":sid",
+        ":windows_types",
+        "//chromium/base:base_export",
+        "//chromium/base:check",
+        "//chromium/base:compiler_specific",
+        "//chromium/base:logging",
+        "//chromium/base:notreached",
+        "//chromium/base/containers:heap_array",
+        "//chromium/base/numerics:safe_math",
+    ],
+)
+
+chromium_cc_library(
+    name = "access_token",
+    srcs = ["access_token.cc"],
+    hdrs = ["access_token.h"],
+    target_compatible_with = select({
+        "@platforms//os:windows": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    visibility = ["//visibility:public"],
+    deps = [
+        ":access_control_list",
+        ":scoped_handle",
+        ":sid",
+        ":windows_types",
+        "//chromium/base:base_export",
+        "//chromium/base:compiler_specific",
+        "//chromium/base/containers:span",
+        "//chromium/base/numerics:safe_math",
+        "//chromium/base/strings",
+        "//chromium/base/strings:stringprintf",
+    ],
+)
+
+chromium_cc_library(
+    name = "atl",
+    srcs = [
+        "atl_throw.cc",
+        "atl_throw.h",
+        "windows_defines.inc",
+        "windows_undefines.inc",
+    ],
+    hdrs = ["atl.h"],
+    target_compatible_with = select({
+        "@platforms//os:windows": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    visibility = ["//visibility:public"],
+    deps = [
+        ":windows_types",
+        "//chromium/base:base_export",
+        "//chromium/base:compiler_specific",
+        "//chromium/base:immediate_crash",
+        "//chromium/base/debug:alias",
+    ],
+)
 
 chromium_cc_library(
     name = "scoped_handle",
@@ -21,13 +90,93 @@ chromium_cc_library(
 )
 
 chromium_cc_library(
+    name = "scoped_localalloc",
+    hdrs = ["scoped_localalloc.h"],
+    target_compatible_with = select({
+        "@platforms//os:windows": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    visibility = ["//visibility:public"],
+    deps = [":windows_types"],
+)
+
+chromium_cc_library(
+    name = "security_descriptor",
+    srcs = ["security_descriptor.cc"],
+    hdrs = ["security_descriptor.h"],
+    target_compatible_with = select({
+        "@platforms//os:windows": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    visibility = ["//visibility:public"],
+    deps = [
+        ":access_control_list",
+        ":access_token",
+        ":scoped_localalloc",
+        ":sid",
+        ":windows_types",
+        "//chromium/base:base_export",
+        "//chromium/base:compiler_specific",
+        "//chromium/base:logging",
+        "//chromium/base:notreached",
+        "//chromium/base/files:file_path",
+        "//chromium/base/numerics:safe_math",
+    ],
+)
+
+chromium_cc_library(
+    name = "security_util",
+    srcs = ["security_util.cc"],
+    hdrs = ["security_util.h"],
+    linkopts = ["ntdll.lib"],
+    target_compatible_with = select({
+        "@platforms//os:windows": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    visibility = ["//visibility:public"],
+    deps = [
+        ":access_control_list",
+        ":scoped_handle",
+        ":security_descriptor",
+        ":sid",
+        ":windows_types",
+        "//chromium/base:base_export",
+        "//chromium/base:check",
+        "//chromium/base:logging",
+        "//chromium/base/containers:to_vector",
+        "//chromium/base/files:file_path",
+    ],
+)
+
+chromium_cc_library(
+    name = "sid",
+    srcs = ["sid.cc"],
+    hdrs = ["sid.h"],
+    target_compatible_with = select({
+        "@platforms//os:windows": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    visibility = ["//visibility:public"],
+    deps = [
+        ":scoped_handle",
+        ":scoped_localalloc",
+        ":windows_types",
+        "//chromium/base:base_export",
+        "//chromium/base:check",
+        "//chromium/base:no_destructor",
+        "//chromium/base/strings",
+        "@boringssl//:crypto",
+    ],
+)
+
+chromium_cc_library(
     name = "win_handle_types",
+    srcs = ["win_handle_types_list.inc"],
     hdrs = ["win_handle_types.h"],
     target_compatible_with = select({
         "@platforms//os:windows": [],
         "//conditions:default": ["@platforms//:incompatible"],
     }),
-    textual_hdrs = ["win_handle_types_list.inc"],
     visibility = ["//visibility:public"],
 )
 
@@ -67,4 +216,89 @@ chromium_cc_library(
     }),
     visibility = ["//visibility:public"],
     deps = [":win_handle_types"],
+)
+
+chromium_cc_test(
+    name = "access_control_list_unittest",
+    size = "small",
+    srcs = ["access_control_list_unittest.cc"],
+    deps = [
+        ":access_control_list",
+        ":scoped_localalloc",
+        "//chromium/base:check",
+        "//chromium/base/strings:string_number_conversions",
+        "//chromium/testing/gtest",
+    ],
+)
+
+chromium_cc_test(
+    name = "access_token_unittest",
+    size = "small",
+    srcs = ["access_token_unittest.cc"],
+    deps = [
+        ":access_token",
+        ":atl",
+        ":scoped_handle",
+        ":security_util",
+        "//chromium/testing/gtest",
+    ],
+)
+
+chromium_cc_test(
+    name = "scoped_localalloc_unittest",
+    size = "small",
+    srcs = ["scoped_localalloc_unittest.cc"],
+    linkopts = ["shell32.lib"],
+    deps = [
+        ":scoped_localalloc",
+        "//chromium/testing/gtest",
+    ],
+)
+
+# chromium_cc_test(
+#     name = "security_descriptor_unittest",
+#     size = "small",
+#     srcs = ["security_descriptor_unittest.cc"],
+#     deps = [
+#         ":scoped_handle",
+#         ":scoped_localalloc",
+#         ":security_descriptor",
+#         "//chromium/base:unguessable_token",
+#         "//chromium/base/files:file_util",
+#         "//chromium/base/files:scoped_temp_dir",
+#         "//chromium/base/strings",
+#         "//chromium/base/strings:stringprintf",
+#         "//chromium/testing/gtest",
+#     ],
+# )
+
+# chromium_cc_test(
+#     name = "security_util_unittest",
+#     size = "small",
+#     srcs = ["security_util_unittest.cc"],
+#     deps = [
+#         ":scoped_handle",
+#         ":scoped_localalloc",
+#         ":security_util",
+#         ":sid",
+#         "//chromium/base/files:file_util",
+#         "//chromium/base/files:scoped_temp_dir",
+#         "//chromium/base/strings:string_number_conversions",
+#         "//chromium/base/test:test_file_util",
+#         "//chromium/testing/gtest",
+#     ],
+# )
+
+chromium_cc_test(
+    name = "sid_unittest",
+    size = "small",
+    srcs = ["sid_unittest.cc"],
+    deps = [
+        ":atl",
+        ":scoped_handle",
+        ":scoped_localalloc",
+        ":sid",
+        ":win_util",
+        "//chromium/testing/gtest",
+    ],
 )

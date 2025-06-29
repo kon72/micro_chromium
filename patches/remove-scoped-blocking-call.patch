@@ -1,0 +1,32 @@
+--- a/base/win/security_util.cc
++++ b/base/win/security_util.cc
+@@ -13,7 +13,6 @@
+ #include "base/containers/to_vector.h"
+ #include "base/files/file_path.h"
+ #include "base/logging.h"
+-#include "base/threading/scoped_blocking_call.h"
+ #include "base/win/access_control_list.h"
+ #include "base/win/scoped_handle.h"
+ #include "base/win/security_descriptor.h"
+@@ -33,8 +32,10 @@ bool AddACEToPath(const FilePath& path,
+   if (sids.empty()) {
+     return true;
+   }
++#if 0
+   base::ScopedBlockingCall scoped_blocking_call(FROM_HERE,
+                                                 base::BlockingType::MAY_BLOCK);
++#endif
+ 
+   std::optional<SecurityDescriptor> sd =
+       SecurityDescriptor::FromFile(path, DACL_SECURITY_INFORMATION);
+@@ -95,8 +96,10 @@ bool HasAccessToPath(const FilePath& pat
+   if (sids.empty()) {
+     return true;
+   }
++#if 0
+   base::ScopedBlockingCall scoped_blocking_call(FROM_HERE,
+                                                 base::BlockingType::MAY_BLOCK);
++#endif
+ 
+   std::optional<SecurityDescriptor> sd =
+       SecurityDescriptor::FromFile(path, DACL_SECURITY_INFORMATION);

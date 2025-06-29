@@ -1,0 +1,54 @@
+--- a/base/win/sid.cc
++++ b/base/win/sid.cc
+@@ -24,7 +24,6 @@
+ 
+ #include "base/check.h"
+ #include "base/no_destructor.h"
+-#include "base/rand_util.h"
+ #include "base/strings/string_util_win.h"
+ #include "base/win/scoped_handle.h"
+ #include "base/win/scoped_localalloc.h"
+@@ -229,12 +228,14 @@ std::optional<Sid> Sid::FromPSID(PSID si
+   return Sid(sid, ::GetLengthSid(sid));
+ }
+ 
++#if 0
+ Sid Sid::GenerateRandomSid() {
+   DWORD sub_authorities[4] = {};
+   RandBytes(as_writable_byte_span(sub_authorities));
+   return FromSubAuthorities(SECURITY_NULL_SID_AUTHORITY,
+                             std::size(sub_authorities), sub_authorities);
+ }
++#endif
+ 
+ Sid Sid::FromIntegrityLevel(DWORD integrity_level) {
+   return FromSubAuthorities(SECURITY_MANDATORY_LABEL_AUTHORITY, 1,
+--- a/base/win/sid.h
++++ b/base/win/sid.h
+@@ -80,8 +80,10 @@ class BASE_EXPORT Sid {
+   // Create a Sid from a PSID pointer.
+   static std::optional<Sid> FromPSID(const PSID sid);
+ 
++#if 0
+   // Generate a random SID value.
+   static Sid GenerateRandomSid();
++#endif
+ 
+   // Create a SID for an integrity level RID.
+   static Sid FromIntegrityLevel(DWORD integrity_level);
+--- a/base/win/sid_unittest.cc
++++ b/base/win/sid_unittest.cc
+@@ -256,11 +256,13 @@ TEST(SidTest, SddlString) {
+   ASSERT_FALSE(Sid::FromSddlString(L""));
+ }
+ 
++#if 0
+ TEST(SidTest, RandomSid) {
+   Sid sid1 = Sid::GenerateRandomSid();
+   Sid sid2 = Sid::GenerateRandomSid();
+   EXPECT_NE(sid1, sid2);
+ }
++#endif
+ 
+ TEST(SidTest, FromIntegrityLevel) {
+   ASSERT_TRUE(EqualSid(
