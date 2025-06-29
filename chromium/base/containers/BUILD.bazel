@@ -43,6 +43,17 @@ chromium_cc_library(
 )
 
 chromium_cc_library(
+    name = "heap_array",
+    hdrs = ["heap_array.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":span",
+        "//chromium/base:check_op",
+        "//chromium/base:compiler_specific",
+    ],
+)
+
+chromium_cc_library(
     name = "map_util",
     hdrs = ["map_util.h"],
     visibility = ["//visibility:public"],
@@ -61,6 +72,20 @@ chromium_cc_library(
         "//chromium/base/numerics:integral_constant_like",
         "//chromium/base/numerics:safe_math",
         "//chromium/base/types:to_address",
+    ],
+)
+
+cc_test(
+    name = "heap_array_unittest",
+    size = "small",
+    srcs = ["heap_array_unittest.cc"],
+    deps = [
+        ":heap_array",
+        ":span",
+        "//chromium/base/memory:raw_ptr_exclusion",
+        "//chromium/base/test:gtest_util",
+        "//chromium/testing/gmock",
+        "//chromium/testing/gtest",
     ],
 )
 

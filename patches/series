@@ -3,6 +3,7 @@ add-check-shim.patch
 add-logging-shim.patch
 add-notreached.patch
 add-win-util.patch
+add-gtest-util.patch
 fix-googletest-include.patch
 fix-abseil-cpp-include.patch
 disable-scoped-handle-verifier.patch

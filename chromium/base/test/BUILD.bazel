@@ -17,6 +17,17 @@ chromium_cc_library(
 )
 
 chromium_cc_library(
+    name = "gtest_util",
+    testonly = True,
+    hdrs = ["gtest_util.h"],
+    visibility = ["//chromium:__subpackages__"],
+    deps = [
+        "//chromium/build:build_config",
+        "//chromium/testing/gtest",
+    ],
+)
+
+chromium_cc_library(
     name = "scoped_locale",
     testonly = True,
     srcs = ["scoped_locale.cc"],
