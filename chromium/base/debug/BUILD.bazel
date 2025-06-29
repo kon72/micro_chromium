@@ -1,8 +1,31 @@
+load("@rules_cc//cc:cc_test.bzl", "cc_test")
 load("//chromium:build_defs.bzl", "chromium_cc_library")
+
+chromium_cc_library(
+    name = "alias",
+    srcs = ["alias.cc"],
+    hdrs = ["alias.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//chromium/base:base_export",
+        "//chromium/base:compiler_specific",
+        "//chromium/base/strings",
+    ],
+)
 
 chromium_cc_library(
     name = "debugging_buildflags",
     hdrs = ["debugging_buildflags.h"],
     visibility = ["//visibility:public"],
     deps = ["//chromium/build:buildflag"],
+)
+
+cc_test(
+    name = "alias_unittest",
+    size = "small",
+    srcs = ["alias_unittest.cc"],
+    deps = [
+        ":alias",
+        "//chromium/testing/gtest",
+    ],
 )
