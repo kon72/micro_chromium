@@ -170,6 +170,18 @@ chromium_cc_library(
 )
 
 chromium_cc_library(
+    name = "startup_information",
+    srcs = ["startup_information.cc"],
+    hdrs = ["startup_information.h"],
+    target_compatible_with = select({
+        "@platforms//os:windows": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    visibility = ["//visibility:public"],
+    deps = ["//chromium/base:base_export"],
+)
+
+chromium_cc_library(
     name = "win_handle_types",
     srcs = ["win_handle_types_list.inc"],
     hdrs = ["win_handle_types.h"],
