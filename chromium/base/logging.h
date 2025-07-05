@@ -6,6 +6,7 @@
 #define BASE_LOGGING_H_
 
 #include "absl/log/absl_log.h"
+#include "base/check.h"
 #include "build/build_config.h"
 
 namespace logging {

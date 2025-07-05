@@ -101,6 +101,22 @@ chromium_cc_library(
 )
 
 chromium_cc_library(
+    name = "scoped_process_information",
+    srcs = ["scoped_process_information.cc"],
+    hdrs = ["scoped_process_information.h"],
+    target_compatible_with = select({
+        "@platforms//os:windows": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    visibility = ["//visibility:public"],
+    deps = [
+        ":scoped_handle",
+        "//chromium/base:base_export",
+        "//chromium/base:logging",
+    ],
+)
+
+chromium_cc_library(
     name = "security_descriptor",
     srcs = ["security_descriptor.cc"],
     hdrs = ["security_descriptor.h"],

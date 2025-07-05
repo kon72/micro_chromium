@@ -86,6 +86,7 @@ chromium_cc_library(
     hdrs = ["logging.h"],
     visibility = ["//chromium:__subpackages__"],
     deps = [
+        ":check",
         "//chromium/build:build_config",
         "@abseil-cpp//absl/log:absl_log",
     ],
