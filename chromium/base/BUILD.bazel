@@ -137,7 +137,6 @@ chromium_cc_library(
     name = "values",
     srcs = [
         "json/json_common.h",
-        "json/json_parser.cc",
         "json/json_reader.cc",
         "json/json_writer.cc",
         "json/string_escape.cc",
@@ -145,7 +144,6 @@ chromium_cc_library(
         "values.cc",
     ],
     hdrs = [
-        "json/json_parser.h",
         "json/json_reader.h",
         "json/json_writer.h",
         "json/string_escape.h",
@@ -171,6 +169,7 @@ chromium_cc_library(
         "//chromium/base/strings",
         "//chromium/base/strings:strcat",
         "//chromium/base/strings:string_number_conversions",
+        "//chromium/base/strings:string_view_rust",
         "//chromium/base/strings:stringprintf",
         "//chromium/base/strings:to_string",
         "//chromium/base/strings:utf_string_conversion_utils",
@@ -179,6 +178,7 @@ chromium_cc_library(
         "//chromium/base/types:pass_key",
         "//chromium/base/types:to_address",
         "//chromium/build:build_config",
+        "//chromium/third_party/rust/serde_json_lenient/v0_2/wrapper",
     ],
 )
 
@@ -202,17 +202,6 @@ chromium_cc_test(
     srcs = ["bit_cast_unittest.cc"],
     deps = [
         ":bit_cast",
-        "//chromium/testing/gtest",
-    ],
-)
-
-chromium_cc_test(
-    name = "json/json_parser_unittest",
-    size = "small",
-    srcs = ["json/json_parser_unittest.cc"],
-    deps = [
-        ":values",
-        "//chromium/base/memory:ptr_util",
         "//chromium/testing/gtest",
     ],
 )

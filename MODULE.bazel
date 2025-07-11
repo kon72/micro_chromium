@@ -14,6 +14,7 @@ bazel_dep(name = "apple_support", version = "1.22.0")
 
 bazel_dep(name = "bazel_skylib", version = "1.7.1")
 bazel_dep(name = "rules_cc", version = "0.1.1")
+bazel_dep(name = "rules_rust", version = "0.62.0")
 
 bazel_dep(name = "abseil-cpp", version = "20250512.0")
 bazel_dep(name = "boringssl", version = "0.20250514.0")
@@ -29,6 +30,61 @@ git_override(
     patch_strip = 1,
     patches = ["//third_party:hedron_compile_commands_fixes.diff"],
 )
+
+rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
+rust.toolchain(
+    edition = "2024",
+    # supported versions from https://github.com/bazelbuild/rules_rust/blob/0.62.0/util/fetch_shas/fetch_shas_VERSIONS.txt
+    versions = ["1.87.0"],
+)
+use_repo(rust, "rust_toolchains")
+register_toolchains("@rust_toolchains//:all")
+
+crate = use_extension("@rules_rust//crate_universe:extensions.bzl", "crate")
+crate.spec(
+    package = "cxx",
+    version = "1.0.160",
+)
+crate.spec(
+    package = "serde",
+    version = "1.0.219",
+)
+crate.spec(
+    package = "serde_json_lenient",
+    version = "0.2.4",
+    features = ["float_roundtrip", "unbounded_depth"],
+)
+crate.annotation(
+    additive_build_file = "//third_party:BUILD.cxx.bazel",
+    crate = "cxx",
+    extra_aliased_targets = {"cxx_cc": "cxx_cc"},
+    gen_build_script = "off",
+)
+crate.from_specs()
+use_repo(crate, "crates")
+
+rust_host_tools = use_extension("@rules_rust//rust:extensions.bzl", "rust_host_tools")
+rust_host_tools.host_tools(
+    name = "rust_host_tools_nightly",
+    version = "nightly",
+)
+use_repo(rust_host_tools, "rust_host_tools_nightly")
+
+cargo_bindeps = use_extension("@rules_rust//crate_universe:extension.bzl", "crate")
+cargo_bindeps.spec(
+    artifact = "bin",
+    package = "cxxbridge-cmd",
+    version = "1.0.160",
+)
+cargo_bindeps.annotation(
+    crate = "cxxbridge-cmd",
+    gen_all_binaries = True,
+)
+cargo_bindeps.from_specs(
+    name = "cargo_bindeps",
+    host_tools = "@rust_host_tools_nightly",
+)
+use_repo(cargo_bindeps, "cargo_bindeps")
 
 cc_configure = use_extension("@rules_cc//cc:extensions.bzl", "cc_configure_extension", dev_dependency = True)
 use_repo(cc_configure, "local_config_cc")

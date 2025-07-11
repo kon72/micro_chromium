@@ -8,6 +8,7 @@ checkout_dirs=(
   'base'
   'build'
   'testing'
+  'third_party/rust'
 )
 files=(
   '.clang-format'
@@ -63,9 +64,6 @@ files=(
   'base/immediate_crash.h'
   # 'base/immediate_crash_unittest.cc'
   'base/json/json_common.h'
-  'base/json/json_parser.cc'
-  'base/json/json_parser.h'
-  'base/json/json_parser_unittest.cc'
   'base/json/json_reader.cc'
   'base/json/json_reader.h'
   # 'base/json/json_reader_fuzzer.cc'
@@ -140,6 +138,7 @@ files=(
   'base/strings/string_util_unittest.cc'
   'base/strings/string_util_win.cc'
   'base/strings/string_util_win.h'
+  'base/strings/string_view_rust.h'
   'base/strings/string_view_util.h'
   # 'base/strings/string_view_util_nocompile.nc'
   'base/strings/string_view_util_unittest.cc'
@@ -273,6 +272,10 @@ files=(
   'testing/gtest/include/gtest/gtest_prod.h'
   'testing/platform_test.h'
   'testing/platform_test_mac.mm'
+  'third_party/rust/serde_json_lenient/v0_2/README.chromium'
+  'third_party/rust/serde_json_lenient/v0_2/wrapper/functions.h'
+  'third_party/rust/serde_json_lenient/v0_2/wrapper/lib.rs'
+  'third_party/rust/serde_json_lenient/v0_2/wrapper/visitor.rs'
 )
 
 upstream_dir='third_party/chromium-upstream'

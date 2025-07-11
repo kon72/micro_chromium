@@ -1,0 +1,13 @@
+load("@rules_cc//cc:cc_library.bzl", "cc_library")
+
+cc_library(
+    name = "cxx_cc",
+    srcs = ["src/cxx.cc"],
+    hdrs = ["include/cxx.h"],
+    include_prefix = "third_party/rust/cxx/v1",
+    includes = ["include"],
+    linkstatic = True,
+    local_defines = ["RUST_CXX_NO_EXCEPTIONS"],
+    strip_include_prefix = "include",
+    visibility = ["//visibility:public"],
+)

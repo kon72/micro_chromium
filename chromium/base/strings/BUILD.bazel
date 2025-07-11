@@ -85,6 +85,16 @@ chromium_cc_library(
 )
 
 chromium_cc_library(
+    name = "string_view_rust",
+    hdrs = ["string_view_rust.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//chromium/build:build_config",
+        "@crates//:cxx_cc",
+    ],
+)
+
+chromium_cc_library(
     name = "string_view_util",
     hdrs = ["string_view_util.h"],
     visibility = ["//visibility:public"],

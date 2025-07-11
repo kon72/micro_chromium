@@ -1,0 +1,42 @@
+load("@rules_rust//rust:defs.bzl", "rust_static_library")
+load("//chromium:build_defs.bzl", "chromium_cc_library")
+load("//chromium:rust_cxx_bridge.bzl", "rust_cxx_bridge")
+
+chromium_cc_library(
+    name = "wrapper",
+    linkopts = select({
+        "@platforms//os:windows": ["ntdll.lib"],
+        "//conditions:default": [],
+    }),
+    visibility = ["//visibility:public"],
+    deps = [
+        ":wrapper_bridge",
+        ":wrapper_functions",
+        ":wrapper_rust",
+    ],
+)
+
+rust_static_library(
+    name = "wrapper_rust",
+    srcs = [
+        "lib.rs",
+        "visitor.rs",
+    ],
+    deps = [
+        "@crates//:cxx",
+        "@crates//:serde",
+        "@crates//:serde_json_lenient",
+    ],
+)
+
+rust_cxx_bridge(
+    name = "wrapper_bridge",
+    src = "lib.rs",
+    deps = [":wrapper_functions"],
+)
+
+chromium_cc_library(
+    name = "wrapper_functions",
+    hdrs = ["functions.h"],
+    deps = ["@crates//:cxx_cc"],
+)

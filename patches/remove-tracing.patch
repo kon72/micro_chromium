@@ -39,6 +39,44 @@
  #if BUILDFLAG(IS_APPLE)
    // Returns the string in the special canonical decomposed form as defined for
    // HFS, which is close to, but not quite, decomposition form D. See
+--- a/base/json/json_reader.cc
++++ b/base/json/json_reader.cc
+@@ -8,7 +8,6 @@
+ #include <utility>
+ 
+ #include "base/logging.h"
+-#include "base/metrics/histogram_macros.h"
+ #include "base/strings/strcat.h"
+ #include "base/strings/string_number_conversions.h"
+ #include "build/build_config.h"
+@@ -25,10 +24,6 @@
+ // run in-process there. Don't compile base::JSONReader on NaCL at all.
+ #if !BUILDFLAG(IS_NACL)
+ 
+-namespace {
+-const char kSecurityJsonParsingTime[] = "Security.JSONParser.ParsingTime";
+-}  // namespace
+-
+ // This namespace defines FFI-friendly functions that are be called from Rust in
+ // //third_party/rust/serde_json_lenient/v0_2/wrapper/.
+ namespace serde_json_lenient {
+@@ -148,8 +143,6 @@ std::optional<Value> JSONReader::Read(st
+   internal::JSONParser parser(options, max_depth);
+   return parser.Parse(json);
+ #else   // BUILDFLAG(IS_NACL)
+-  SCOPED_UMA_HISTOGRAM_TIMER_MICROS(kSecurityJsonParsingTime);
+-
+   JSONReader::Result result =
+       serde_json_lenient::DecodeJSONInRust(json, options, max_depth);
+   if (!result.has_value()) {
+@@ -198,7 +191,6 @@ JSONReader::Result JSONReader::ReadAndRe
+ 
+   return std::move(*value);
+ #else   // BUILDFLAG(IS_NACL)
+-  SCOPED_UMA_HISTOGRAM_TIMER_MICROS(kSecurityJsonParsingTime);
+   return serde_json_lenient::DecodeJSONInRust(json, options,
+                                               internal::kAbsoluteMaxDepth);
+ #endif  // BUILDFLAG(IS_NACL)
 --- a/base/values.cc
 +++ b/base/values.cc
 @@ -27,9 +27,6 @@
