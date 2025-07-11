@@ -14,6 +14,7 @@ chromium_cc_library(
     visibility = ["//visibility:public"],
     deps = [
         "//chromium/base:check",
+        "//chromium/base:notreached",
         "//chromium/base/strings:strcat",
         "//chromium/base/strings:to_string",
     ],

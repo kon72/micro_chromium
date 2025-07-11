@@ -3,7 +3,7 @@
 set -euo pipefail
 
 upstream_url='https://chromium.googlesource.com/chromium/src'
-revision='6788c08e33dab924a7b8c3d40547e65c5313adeb'
+revision='54a349ce38a4678281c4a0863824e8aeee30fc5f'
 checkout_dirs=(
   'base'
   'build'

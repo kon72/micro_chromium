@@ -113,7 +113,6 @@ chromium_cc_library(
         ":span_printf",
         ":strings",
         "//chromium/base:base_export",
-        "//chromium/base:check",
         "//chromium/base:compiler_specific",
         "//chromium/base:logging",
         "//chromium/base:scoped_clear_last_error",

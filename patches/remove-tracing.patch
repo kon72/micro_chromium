@@ -41,17 +41,18 @@
    // HFS, which is close to, but not quite, decomposition form D. See
 --- a/base/json/json_reader.cc
 +++ b/base/json/json_reader.cc
-@@ -8,7 +8,6 @@
+@@ -8,18 +8,13 @@
  #include <utility>
  
  #include "base/logging.h"
 -#include "base/metrics/histogram_macros.h"
  #include "base/strings/strcat.h"
  #include "base/strings/string_number_conversions.h"
- #include "build/build_config.h"
-@@ -25,10 +24,6 @@
- // run in-process there. Don't compile base::JSONReader on NaCL at all.
- #if !BUILDFLAG(IS_NACL)
+-#include "build/build_config.h"
+ #include "base/strings/string_view_rust.h"
++#include "build/build_config.h"
+ #include "third_party/rust/serde_json_lenient/v0_2/wrapper/functions.h"
+ #include "third_party/rust/serde_json_lenient/v0_2/wrapper/lib.rs.h"
  
 -namespace {
 -const char kSecurityJsonParsingTime[] = "Security.JSONParser.ParsingTime";
@@ -60,23 +61,23 @@
  // This namespace defines FFI-friendly functions that are be called from Rust in
  // //third_party/rust/serde_json_lenient/v0_2/wrapper/.
  namespace serde_json_lenient {
-@@ -148,8 +143,6 @@ std::optional<Value> JSONReader::Read(st
-   internal::JSONParser parser(options, max_depth);
-   return parser.Parse(json);
- #else   // BUILDFLAG(IS_NACL)
+@@ -133,8 +128,6 @@ std::string JSONReader::Error::ToString(
+ std::optional<Value> JSONReader::Read(std::string_view json,
+                                       int options,
+                                       size_t max_depth) {
 -  SCOPED_UMA_HISTOGRAM_TIMER_MICROS(kSecurityJsonParsingTime);
 -
    JSONReader::Result result =
        serde_json_lenient::DecodeJSONInRust(json, options, max_depth);
    if (!result.has_value()) {
-@@ -198,7 +191,6 @@ JSONReader::Result JSONReader::ReadAndRe
- 
-   return std::move(*value);
- #else   // BUILDFLAG(IS_NACL)
+@@ -169,7 +162,6 @@ std::optional<Value::List> JSONReader::R
+ JSONReader::Result JSONReader::ReadAndReturnValueWithError(
+     std::string_view json,
+     int options) {
 -  SCOPED_UMA_HISTOGRAM_TIMER_MICROS(kSecurityJsonParsingTime);
    return serde_json_lenient::DecodeJSONInRust(json, options,
                                                internal::kAbsoluteMaxDepth);
- #endif  // BUILDFLAG(IS_NACL)
+ }
 --- a/base/values.cc
 +++ b/base/values.cc
 @@ -27,9 +27,6 @@
@@ -209,7 +210,7 @@
   private:
    using ListStorage = std::vector<Value>;
  
-@@ -553,16 +545,9 @@ class BASE_EXPORT GSL_OWNER DictValue {
+@@ -540,16 +532,9 @@ class BASE_EXPORT GSL_OWNER DictValue {
  
    std::optional<Value> ExtractByDottedPath(std::string_view path);
  
@@ -226,7 +227,7 @@
   private:
    BASE_EXPORT friend bool operator==(const DictValue& lhs,
                                       const DictValue& rhs);
-@@ -834,8 +819,6 @@ class BASE_EXPORT GSL_OWNER Value {
+@@ -821,8 +806,6 @@ class BASE_EXPORT GSL_OWNER Value {
    Dict TakeDict() &&;
    List TakeList() &&;
  
@@ -235,7 +236,7 @@
    // Note: Do not add more types. See the file-level comment above for why.
  
    // Comparison operators so that Values can easily be used with standard
-@@ -865,16 +848,9 @@ class BASE_EXPORT GSL_OWNER Value {
+@@ -852,16 +835,9 @@ class BASE_EXPORT GSL_OWNER Value {
    bool operator==(const DictValue& rhs) const;
    bool operator==(const ListValue& rhs) const;
  
