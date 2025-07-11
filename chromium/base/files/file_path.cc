@@ -199,6 +199,7 @@ bool IsEmptyOrSpecialCase(const StringType& path) {
   return false;
 }
 
+#if 0
 // Splits `path` in 2 parts: the first component and the remainder of the path.
 // Leading separators are removed from the remainder of the path, unless
 // `can_be_drive_letter` is true. `can_be_drive_letter` indicates that a leading
@@ -269,7 +270,6 @@ ExtractFirstComponent(FilePath::StringViewType path, bool can_be_drive_letter) {
   return {first_component, remainder};
 }
 
-#if 0
 // State of the `FastFilePathIsParent` feature, to be updated after the feature
 // list is available.
 std::atomic_bool g_fast_file_path_is_parent{false};

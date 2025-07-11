@@ -8,11 +8,15 @@
  #include "base/files/safe_base_name.h"
  #include "base/numerics/safe_conversions.h"
  #include "base/pickle.h"
-@@ -271,12 +270,15 @@ ExtractFirstComponent(FilePath::StringVi
-   return {first_component, remainder};
+@@ -201,6 +200,7 @@ bool IsEmptyOrSpecialCase(const StringTy
+   return false;
  }
  
 +#if 0
+ // Splits `path` in 2 parts: the first component and the remainder of the path.
+ // Leading separators are removed from the remainder of the path, unless
+ // `can_be_drive_letter` is true. `can_be_drive_letter` indicates that a leading
+@@ -274,9 +274,11 @@ ExtractFirstComponent(FilePath::StringVi
  // State of the `FastFilePathIsParent` feature, to be updated after the feature
  // list is available.
  std::atomic_bool g_fast_file_path_is_parent{false};
