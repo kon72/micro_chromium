@@ -305,7 +305,7 @@ fi
 echo "Syncing upstream files to ${out_dir}..."
 fd --unrestricted --type=file \
   --exclude='**/BUILD.bazel' \
-  --exclude='build_defs.bzl' \
+  --exclude='**/*.bzl' \
   --exec rm -f {} \; \
   . "${out_dir}"
 find "${out_dir}" -type d -empty -delete
