@@ -1,6 +1,5 @@
 add-buildflags.patch
-add-check-shim.patch
-add-logging-shim.patch
+add-check-and-logging-shim.patch
 add-notreached.patch
 add-win-util.patch
 add-gtest-util.patch
