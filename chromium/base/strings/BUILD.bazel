@@ -1,6 +1,22 @@
 load("//chromium:build_defs.bzl", "chromium_cc_library", "chromium_cc_test", "chromium_objc_library")
 
 chromium_cc_library(
+    name = "cstring_view",
+    hdrs = ["cstring_view.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//chromium/base:check",
+        "//chromium/base:check_op",
+        "//chromium/base:compiler_specific",
+        "//chromium/base/containers:checked_iterators",
+        "//chromium/base/containers:span",
+        "//chromium/base/memory:raw_ptr_exclusion",
+        "//chromium/base/numerics:safe_math",
+        "//chromium/build:build_config",
+    ],
+)
+
+chromium_cc_library(
     name = "span_printf",
     hdrs = ["span_printf.h"],
     visibility = ["//visibility:public"],
@@ -81,6 +97,17 @@ chromium_cc_library(
         "//chromium/base:logging",
         "//chromium/base/third_party/icu",
         "//chromium/build:build_config",
+    ],
+)
+
+chromium_cc_library(
+    name = "string_tokenizer",
+    hdrs = ["string_tokenizer.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//chromium/base:check",
+        "//chromium/base:compiler_specific",
+        "//chromium/base/strings",
     ],
 )
 
@@ -250,6 +277,20 @@ chromium_cc_library(
 )
 
 chromium_cc_test(
+    name = "cstring_view_unittest",
+    size = "small",
+    srcs = ["cstring_view_unittest.cc"],
+    deps = [
+        ":cstring_view",
+        "//chromium/base/containers:span",
+        "//chromium/base/debug:alias",
+        "//chromium/base/strings:strcat",
+        "//chromium/base/test:gtest_util",
+        "//chromium/testing/gtest",
+    ],
+)
+
+chromium_cc_test(
     name = "span_printf_unittest",
     size = "small",
     srcs = ["span_printf_unittest.cc"],
@@ -293,6 +334,17 @@ chromium_cc_test(
         ":string_split",
         ":string_view_util",
         ":strings",
+        "//chromium/testing/gmock",
+        "//chromium/testing/gtest",
+    ],
+)
+
+chromium_cc_test(
+    name = "string_tokenizer_unittest",
+    size = "small",
+    srcs = ["string_tokenizer_unittest.cc"],
+    deps = [
+        ":string_tokenizer",
         "//chromium/testing/gmock",
         "//chromium/testing/gtest",
     ],

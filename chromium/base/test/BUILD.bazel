@@ -21,6 +21,7 @@ chromium_cc_library(
     hdrs = ["gtest_util.h"],
     visibility = ["//chromium:__subpackages__"],
     deps = [
+        "//chromium/base:dcheck_is_on",
         "//chromium/build:build_config",
         "//chromium/testing/gtest",
     ],

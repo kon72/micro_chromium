@@ -34,6 +34,30 @@ chromium_cc_library(
 )
 
 chromium_cc_library(
+    name = "command_line",
+    srcs = ["command_line.cc"],
+    hdrs = ["command_line.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":base_export",
+        ":check_op",
+        ":compiler_specific",
+        ":logging",
+        ":notreached",
+        "//chromium/base/containers:contains",
+        "//chromium/base/containers:span",
+        "//chromium/base/debug:debugging_buildflags",
+        "//chromium/base/files:file_path",
+        "//chromium/base/numerics:safe_math",
+        "//chromium/base/strings",
+        "//chromium/base/strings:strcat",
+        "//chromium/base/strings:string_split",
+        "//chromium/base/strings:string_tokenizer",
+        "//chromium/build:build_config",
+    ],
+)
+
+chromium_cc_library(
     name = "compiler_specific",
     hdrs = ["compiler_specific.h"],
     visibility = ["//visibility:public"],
@@ -45,6 +69,21 @@ chromium_cc_library(
     hdrs = ["dcheck_is_on.h"],
     visibility = ["//visibility:public"],
     deps = ["//chromium/base/debug:debugging_buildflags"],
+)
+
+chromium_cc_library(
+    name = "environment",
+    srcs = ["environment.cc"],
+    hdrs = ["environment.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":base_export",
+        "//chromium/base/containers:heap_array",
+        "//chromium/base/memory:ptr_util",
+        "//chromium/base/strings",
+        "//chromium/base/strings:cstring_view",
+        "//chromium/build:build_config",
+    ],
 )
 
 chromium_cc_library(
@@ -202,6 +241,36 @@ chromium_cc_test(
     srcs = ["bit_cast_unittest.cc"],
     deps = [
         ":bit_cast",
+        "//chromium/testing/gtest",
+    ],
+)
+
+chromium_cc_test(
+    name = "command_line_unittest",
+    size = "small",
+    srcs = ["command_line_unittest.cc"],
+    deps = [
+        ":command_line",
+        "//chromium/base/debug:debugging_buildflags",
+        "//chromium/base/files:file_path",
+        "//chromium/base/strings",
+        "//chromium/base/strings:strcat",
+        "//chromium/base/test:gtest_util",
+        "//chromium/build:build_config",
+        "//chromium/testing/gmock",
+        "//chromium/testing/gtest",
+    ],
+)
+
+chromium_cc_test(
+    name = "environment_unittest",
+    size = "small",
+    srcs = ["environment_unittest.cc"],
+    deps = [
+        ":environment",
+        "//chromium/build:build_config",
+        "//chromium/testing:platform_test",
+        "//chromium/testing/gmock",
         "//chromium/testing/gtest",
     ],
 )

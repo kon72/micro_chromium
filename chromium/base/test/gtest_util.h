@@ -5,8 +5,33 @@
 #ifndef BASE_TEST_GTEST_UTIL_H_
 #define BASE_TEST_GTEST_UTIL_H_
 
+#include "base/dcheck_is_on.h"
 #include "build/build_config.h"
 #include "testing/gtest/include/gtest/gtest.h"
+
+#if DCHECK_IS_ON() && defined(GTEST_HAS_DEATH_TEST) && !BUILDFLAG(IS_ANDROID)
+
+// EXPECT/ASSERT_DCHECK_DEATH tests verify that a DCHECK is hit ("Check failed"
+// is part of the error message). Optionally you may specify part of the message
+// to verify which DCHECK (or LOG(DFATAL)) is being hit.
+#define EXPECT_DCHECK_DEATH(statement) EXPECT_DEATH(statement, "Check failed")
+#define EXPECT_DCHECK_DEATH_WITH(statement, msg) EXPECT_DEATH(statement, msg)
+#define ASSERT_DCHECK_DEATH(statement) ASSERT_DEATH(statement, "Check failed")
+#define ASSERT_DCHECK_DEATH_WITH(statement, msg) ASSERT_DEATH(statement, msg)
+
+#else
+
+#define EXPECT_DCHECK_DEATH(statement) \
+  GTEST_UNSUPPORTED_DEATH_TEST(statement, "Check failed", )
+#define EXPECT_DCHECK_DEATH_WITH(statement, msg) \
+  GTEST_UNSUPPORTED_DEATH_TEST(statement, msg, )
+#define ASSERT_DCHECK_DEATH(statement) \
+  GTEST_UNSUPPORTED_DEATH_TEST(statement, "Check failed", return)
+#define ASSERT_DCHECK_DEATH_WITH(statement, msg) \
+  GTEST_UNSUPPORTED_DEATH_TEST(statement, msg, return)
+
+#endif  // DCHECK_IS_ON() && defined(GTEST_HAS_DEATH_TEST) &&
+        // !BUILDFLAG(IS_ANDROID)
 
 #if defined(GTEST_HAS_DEATH_TEST) && !BUILDFLAG(IS_ANDROID)
 
