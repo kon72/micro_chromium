@@ -17,8 +17,12 @@ namespace logging {
 
 #ifndef NDEBUG
 #define DPLOG(severity) ABSL_LOG_INTERNAL_PLOG_IMPL(_##severity)
+#define DPLOG_IF(severity, condition) \
+  ABSL_LOG_INTERNAL_PLOG_IF_IMPL(_##severity, condition)
 #else
-#define DPLOG(severity) ABSL_LOG_INTERNAL_PLOG_IF_IMPL(_##severity, condition)
+#define DPLOG(severity) ABSL_LOG_INTERNAL_PLOG_IF_IMPL(_##severity, false)
+#define DPLOG_IF(severity, condition) \
+  ABSL_LOG_INTERNAL_PLOG_IF_IMPL(_##severity, false && (condition))
 #endif  // NDEBUG
 
 #define DVLOG(verbose_level) ABSL_LOG_INTERNAL_DVLOG_IMPL(verbose_level)
