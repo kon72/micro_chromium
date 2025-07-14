@@ -1,4 +1,4 @@
-load("//chromium:build_defs.bzl", "chromium_cc_library", "chromium_cc_test", "chromium_objc_library")
+load("//chromium:build_defs.bzl", "chromium_cc_library", "chromium_cc_test", "chromium_objc_library", "chromium_objc_test")
 
 chromium_cc_library(
     name = "cstring_view",
@@ -398,20 +398,9 @@ chromium_cc_test(
     ],
 )
 
-chromium_cc_test(
+chromium_objc_test(
     name = "sys_string_conversions_apple_unittest",
     size = "small",
-    target_compatible_with = select({
-        "@platforms//os:macos": [],
-        "@platforms//os:ios": [],
-        "//conditions:default": ["@platforms//:incompatible"],
-    }),
-    deps = [":sys_string_conversions_apple_unittest_lib"],
-)
-
-chromium_objc_library(
-    name = "sys_string_conversions_apple_unittest_lib",
-    testonly = True,
     srcs = ["sys_string_conversions_apple_unittest.mm"],
     linkopts = ["-Wl,-framework,Foundation"],
     target_compatible_with = select({
