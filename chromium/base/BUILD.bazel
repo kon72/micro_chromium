@@ -37,6 +37,10 @@ chromium_cc_library(
     name = "command_line",
     srcs = ["command_line.cc"],
     hdrs = ["command_line.h"],
+    linkopts = select({
+        "@platforms//os:windows": ["shell32.lib"],
+        "//conditions:default": [],
+    }),
     visibility = ["//visibility:public"],
     deps = [
         ":base_export",
