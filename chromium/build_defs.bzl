@@ -8,6 +8,12 @@ def chromium_cc_opts():
             "-DWINVER=0x0A00",
             "-D_WIN32_WINNT=0x0A00",
         ],
+        "//conditions:default": [],
+    }) + select({
+        "@rules_cc//cc/compiler:clang-cl": [
+            "/EHs-c-",
+            "-D_HAS_EXCEPTIONS=0",
+        ],
         "//conditions:default": ["-fno-exceptions"],
     }) + select({
         "@rules_cc//cc/compiler:clang-cl": ["-Wno-macro-redefined"],
