@@ -1,10 +1,11 @@
 --- a/base/threading/platform_thread_handle.h
 +++ b/base/threading/platform_thread_handle.h
-@@ -11,18 +11,13 @@
+@@ -11,18 +11,14 @@
  
  #include <stddef.h>
  
 +#include <compare>
++#include <cstdint>
  #include <iosfwd>
 -#include <limits>
 -#include <optional>
@@ -21,7 +22,7 @@
  #include "build/build_config.h"
  
  #if BUILDFLAG(IS_WIN)
-@@ -34,10 +29,6 @@
+@@ -34,10 +30,6 @@
  #include <unistd.h>
  #endif
  
@@ -32,7 +33,7 @@
  namespace base {
  
  // Used for uniquely identifying a thread.
-@@ -107,8 +98,10 @@ class BASE_EXPORT PlatformThreadId {
+@@ -107,8 +99,10 @@ class BASE_EXPORT PlatformThreadId {
    constexpr friend bool operator==(const PlatformThreadId& lhs,
                                     const PlatformThreadId& rhs) = default;
  
@@ -43,28 +44,28 @@
  
   private:
    // TODO(crbug.com/393384253): Use a system-specific invalid value, which might
-@@ -148,6 +141,20 @@ class PlatformThreadHandle {
+@@ -148,6 +142,20 @@ class PlatformThreadHandle {
  
  static constexpr PlatformThreadId kInvalidThreadId = PlatformThreadId();
  
 +// Gets the current thread id, which may be useful for logging purposes.
-+static PlatformThreadId GetCurrentThreadId();
++PlatformThreadId GetCurrentThreadId();
 +
 +// Gets the current thread reference, which can be used to check if
 +// we're on the right thread quickly.
-+static PlatformThreadRef GetCurrentThreadRef();
++PlatformThreadRef GetCurrentThreadRef();
 +
 +// Get the handle representing the current thread. On Windows, this is a
 +// pseudo handle constant which will always represent the thread using it and
 +// hence should not be shared with other threads nor be used to differentiate
 +// the current thread from another.
-+static PlatformThreadHandle GetCurrentThreadHandle();
++PlatformThreadHandle GetCurrentThreadHandle();
 +
 +#if 0
  // Valid values for `thread_type` of Thread::Options, SimpleThread::Options,
  // and SetCurrentThreadType(), listed in increasing order of importance.
  //
-@@ -482,6 +489,7 @@ inline constexpr auto SetThreadType = Se
+@@ -482,6 +490,7 @@ inline constexpr auto SetThreadType = Se
  #endif
  
  }  // namespace internal
@@ -85,13 +86,14 @@
  #include <pthread.h>
  #include <sched.h>
  #include <stddef.h>
-@@ -16,21 +15,10 @@
+@@ -16,21 +15,11 @@
  #include <memory>
  #include <tuple>
  
 +#include "base/check_op.h"
  #include "base/compiler_specific.h"
 -#include "base/lazy_instance.h"
++#include "base/dcheck_is_on.h"
  #include "base/logging.h"
 -#include "base/memory/raw_ptr.h"
 -#include "base/notimplemented.h"
@@ -108,7 +110,7 @@
  
  #if BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS)
  #include <sys/syscall.h>
-@@ -46,18 +34,17 @@
+@@ -46,18 +35,21 @@
  #include <sys/resource.h>
  #endif
  
@@ -123,6 +125,10 @@
  void TerminateOnThread();
  size_t GetDefaultThreadStackSize(const pthread_attr_t& attributes);
 +#endif  // 0
++
++namespace internal {
++void InvalidateTidCache();
++}
  
  namespace {
  
@@ -130,7 +136,7 @@
  struct ThreadParams {
    ThreadParams() = default;
  
-@@ -163,6 +150,7 @@ bool CreateThread(size_t stack_size,
+@@ -163,6 +155,7 @@ bool CreateThread(size_t stack_size,
  
    return success;
  }
@@ -138,25 +144,27 @@
  
  #if BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS)
  
-@@ -212,7 +200,7 @@ void InvalidateTidCache() {
+@@ -211,8 +204,7 @@ void InvalidateTidCache() {
+ 
  #endif  // BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS)
  
- // static
+-// static
 -PlatformThreadId PlatformThreadBase::CurrentId() {
 +PlatformThreadId GetCurrentThreadId() {
    // Pthreads doesn't have the concept of a thread ID, so we have to reach down
    // into the kernel.
  #if BUILDFLAG(IS_APPLE)
-@@ -272,15 +260,16 @@ PlatformThreadId PlatformThreadBase::Cur
+@@ -271,16 +263,15 @@ PlatformThreadId PlatformThreadBase::Cur
+ #endif
  }
  
- // static
+-// static
 -PlatformThreadRef PlatformThreadBase::CurrentRef() {
 +PlatformThreadRef GetCurrentThreadRef() {
    return PlatformThreadRef(pthread_self());
  }
  
- // static
+-// static
 -PlatformThreadHandle PlatformThreadBase::CurrentHandle() {
 +PlatformThreadHandle GetCurrentThreadHandle() {
    return PlatformThreadHandle(pthread_self());
@@ -166,7 +174,7 @@
  #if !BUILDFLAG(IS_APPLE)
  // static
  void PlatformThreadBase::YieldCurrentThread() {
-@@ -415,5 +404,6 @@ size_t PlatformThreadBase::GetDefaultThr
+@@ -415,5 +406,6 @@ size_t PlatformThreadBase::GetDefaultThr
    pthread_attr_init(&attributes);
    return base::GetDefaultThreadStackSize(attributes);
  }
@@ -218,25 +226,25 @@
  namespace {
  
  // These values are sometimes returned by ::GetThreadPriority().
-@@ -234,22 +209,24 @@ void AssertMemoryPriority(HANDLE thread,
+@@ -234,22 +209,21 @@ void AssertMemoryPriority(HANDLE thread,
  }
  
  }  // namespace internal
 +#endif  // 0
  
- // static
+-// static
 -PlatformThreadId PlatformThread::CurrentId() {
 +PlatformThreadId GetCurrentThreadId() {
    return PlatformThreadId(::GetCurrentThreadId());
  }
  
- // static
+-// static
 -PlatformThreadRef PlatformThread::CurrentRef() {
 +PlatformThreadRef GetCurrentThreadRef() {
    return PlatformThreadRef(::GetCurrentThreadId());
  }
  
- // static
+-// static
 -PlatformThreadHandle PlatformThread::CurrentHandle() {
 +PlatformThreadHandle GetCurrentThreadHandle() {
    return PlatformThreadHandle(::GetCurrentThread());
@@ -246,7 +254,7 @@
  // static
  void PlatformThread::YieldCurrentThread() {
    ::Sleep(0);
-@@ -540,5 +517,6 @@ ThreadPriorityForTest PlatformThread::Ge
+@@ -540,5 +514,6 @@ ThreadPriorityForTest PlatformThread::Ge
  size_t PlatformThread::GetDefaultThreadStackSize() {
    return 0;
  }

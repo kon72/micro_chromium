@@ -21,6 +21,7 @@ chromium_cc_library(
         "//conditions:default": [
             "//chromium/base:check_op",
             "//chromium/base:compiler_specific",
+            "//chromium/base:dcheck_is_on",
             "//chromium/base:logging",
         ],
     }),

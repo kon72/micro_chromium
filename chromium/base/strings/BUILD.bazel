@@ -89,6 +89,7 @@ chromium_cc_library(
         "//conditions:default": [],
     }),
     hdrs = ["string_split.h"],
+    features = ["-parse_headers"],
     visibility = ["//visibility:public"],
     deps = [
         ":strings",
@@ -169,6 +170,7 @@ chromium_cc_library(
         "utf_ostream_operators.h",
         "utf_string_conversions.h",
     ],
+    features = ["-parse_headers"],
     visibility = ["//visibility:public"],
     deps = [
         ":utf_string_conversion_utils",

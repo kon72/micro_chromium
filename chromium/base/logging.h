@@ -5,6 +5,7 @@
 #ifndef BASE_LOGGING_H_
 #define BASE_LOGGING_H_
 
+#include "absl/base/internal/raw_logging.h"
 #include "absl/log/absl_log.h"
 #include "base/check.h"
 #include "build/build_config.h"
@@ -32,6 +33,16 @@ typedef unsigned long SystemErrorCode;
 #elif BUILDFLAG(IS_POSIX) || BUILDFLAG(IS_FUCHSIA)
 typedef int SystemErrorCode;
 #endif
+
+#define RAW_LOG(level, message)                                                \
+  do {                                                                         \
+    constexpr const char* absl_raw_log_internal_basename =                     \
+        ::absl::raw_log_internal::Basename(__FILE__, sizeof(__FILE__) - 1);    \
+    ::absl::raw_log_internal::RawLog(ABSL_RAW_LOG_INTERNAL_##level,            \
+                                     absl_raw_log_internal_basename, __LINE__, \
+                                     message);                                 \
+    ABSL_RAW_LOG_INTERNAL_MAYBE_UNREACHABLE_##level;                           \
+  } while (0)
 
 }  // namespace logging
 

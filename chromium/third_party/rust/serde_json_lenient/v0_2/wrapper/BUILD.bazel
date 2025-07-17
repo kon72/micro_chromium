@@ -4,6 +4,10 @@ load("//chromium:rust_cxx_bridge.bzl", "rust_cxx_bridge")
 
 chromium_cc_library(
     name = "wrapper",
+    hdrs = [
+        "functions.h",
+        "lib.rs.h",
+    ],
     linkopts = select({
         "@platforms//os:windows": ["ntdll.lib"],
         "//conditions:default": [],

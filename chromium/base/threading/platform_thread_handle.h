@@ -12,6 +12,7 @@
 #include <stddef.h>
 
 #include <compare>
+#include <cstdint>
 #include <iosfwd>
 #include <ostream>
 #include <type_traits>
@@ -142,17 +143,17 @@ class PlatformThreadHandle {
 static constexpr PlatformThreadId kInvalidThreadId = PlatformThreadId();
 
 // Gets the current thread id, which may be useful for logging purposes.
-static PlatformThreadId GetCurrentThreadId();
+PlatformThreadId GetCurrentThreadId();
 
 // Gets the current thread reference, which can be used to check if
 // we're on the right thread quickly.
-static PlatformThreadRef GetCurrentThreadRef();
+PlatformThreadRef GetCurrentThreadRef();
 
 // Get the handle representing the current thread. On Windows, this is a
 // pseudo handle constant which will always represent the thread using it and
 // hence should not be shared with other threads nor be used to differentiate
 // the current thread from another.
-static PlatformThreadHandle GetCurrentThreadHandle();
+PlatformThreadHandle GetCurrentThreadHandle();
 
 #if 0
 // Valid values for `thread_type` of Thread::Options, SimpleThread::Options,

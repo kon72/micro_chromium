@@ -17,6 +17,7 @@
 
 #include "base/check_op.h"
 #include "base/compiler_specific.h"
+#include "base/dcheck_is_on.h"
 #include "base/logging.h"
 #include "build/build_config.h"
 
@@ -41,6 +42,10 @@ void InitThreading();
 void TerminateOnThread();
 size_t GetDefaultThreadStackSize(const pthread_attr_t& attributes);
 #endif  // 0
+
+namespace internal {
+void InvalidateTidCache();
+}
 
 namespace {
 
@@ -199,7 +204,6 @@ void InvalidateTidCache() {
 
 #endif  // BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS)
 
-// static
 PlatformThreadId GetCurrentThreadId() {
   // Pthreads doesn't have the concept of a thread ID, so we have to reach down
   // into the kernel.
@@ -259,12 +263,10 @@ PlatformThreadId GetCurrentThreadId() {
 #endif
 }
 
-// static
 PlatformThreadRef GetCurrentThreadRef() {
   return PlatformThreadRef(pthread_self());
 }
 
-// static
 PlatformThreadHandle GetCurrentThreadHandle() {
   return PlatformThreadHandle(pthread_self());
 }

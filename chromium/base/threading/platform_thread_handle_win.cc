@@ -211,17 +211,14 @@ void AssertMemoryPriority(HANDLE thread, int memory_priority) {
 }  // namespace internal
 #endif  // 0
 
-// static
 PlatformThreadId GetCurrentThreadId() {
   return PlatformThreadId(::GetCurrentThreadId());
 }
 
-// static
 PlatformThreadRef GetCurrentThreadRef() {
   return PlatformThreadRef(::GetCurrentThreadId());
 }
 
-// static
 PlatformThreadHandle GetCurrentThreadHandle() {
   return PlatformThreadHandle(::GetCurrentThread());
 }
