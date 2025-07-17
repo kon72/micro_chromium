@@ -1,0 +1,24 @@
+load("//chromium:build_defs.bzl", "chromium_cc_library")
+
+chromium_cc_library(
+    name = "process_handle",
+    srcs = ["process_handle.cc"] + select({
+        # "@platforms//os:fuchsia": ["process_handle_fuchsia.cc"],
+        "@platforms//os:windows": ["process_handle_win.cc"],
+        "//conditions:default": ["process_handle_posix.cc"],
+    }),
+    hdrs = ["process_handle.h"],
+    target_compatible_with = select({
+        "@platforms//os:fuchsia": ["@platforms//:incompatible"],
+        "//conditions:default": [],
+    }),
+    visibility = ["//visibility:public"],
+    deps = [
+        "//chromium/base:base_export",
+        "//chromium/base:check",
+        "//chromium/build:build_config",
+    ] + select({
+        "@platforms//os:windows": ["//chromium/base/win:windows_types"],
+        "//conditions:default": [],
+    }),
+)
