@@ -1,6 +1,17 @@
 load("//chromium:build_defs.bzl", "chromium_cc_library", "chromium_cc_test")
 
 chromium_cc_library(
+    name = "adapters",
+    srcs = ["adapters_internal.h"],
+    hdrs = ["adapters.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//chromium/base:compiler_specific",
+        "//chromium/base/memory:raw_ptr_exclusion",
+    ],
+)
+
+chromium_cc_library(
     name = "checked_iterators",
     srcs = ["span_forward_internal.h"],
     hdrs = ["checked_iterators.h"],
@@ -27,6 +38,13 @@ chromium_cc_library(
         ":flat_tree",
         "//chromium/base:check",
     ],
+)
+
+chromium_cc_library(
+    name = "flat_set",
+    hdrs = ["flat_set.h"],
+    visibility = ["//visibility:public"],
+    deps = [":flat_tree"],
 )
 
 chromium_cc_library(
@@ -80,6 +98,45 @@ chromium_cc_library(
 )
 
 chromium_cc_test(
+    name = "adapters_unittest",
+    size = "small",
+    srcs = ["adapters_unittest.cc"],
+    deps = [
+        ":adapters",
+        ":span",
+        ":to_vector",
+        "//chromium/testing/gtest",
+    ],
+)
+
+chromium_cc_test(
+    name = "checked_iterators_unittest",
+    size = "small",
+    srcs = ["checked_iterators_unittest.cc"],
+    deps = [
+        ":checked_iterators",
+        "//chromium/base:check_op",
+        "//chromium/base/debug:alias",
+        "//chromium/base/test:gtest_util",
+        "//chromium/build:build_config",
+        "//chromium/testing/gtest",
+    ],
+)
+
+chromium_cc_test(
+    name = "contains_unittest",
+    size = "small",
+    srcs = ["contains_unittest.cc"],
+    deps = [
+        ":contains",
+        ":flat_set",
+        "//chromium/base/strings",
+        "//chromium/testing/gmock",
+        "//chromium/testing/gtest",
+    ],
+)
+
+chromium_cc_test(
     name = "heap_array_unittest",
     size = "small",
     srcs = ["heap_array_unittest.cc"],
@@ -105,15 +162,37 @@ chromium_cc_test(
     ],
 )
 
-# chromium_cc_test(
-#     name = "to_vector_unittest",
-#     size = "small",
-#     srcs = ["to_vector_unittest.cc"],
-#     deps = [
-#         ":adapters",
-#         ":flat_set",
-#         ":to_vector",
-#         "//chromium/testing/gmock",
-#         "//chromium/testing/gtest",
-#     ],
-# )
+chromium_cc_test(
+    name = "span_unittest",
+    size = "small",
+    srcs = ["span_unittest.cc"],
+    deps = [
+        ":adapters",
+        ":checked_iterators",
+        ":span",
+        "//chromium/base:bit_cast",
+        "//chromium/base:compiler_specific",
+        "//chromium/base/debug:alias",
+        "//chromium/base/memory:raw_span",
+        "//chromium/base/numerics:byte_conversions",
+        "//chromium/base/strings",
+        "//chromium/base/strings:cstring_view",
+        "//chromium/base/strings:to_string",
+        "//chromium/base/test:gtest_util",
+        "//chromium/testing/gmock",
+        "//chromium/testing/gtest",
+    ],
+)
+
+chromium_cc_test(
+    name = "to_vector_unittest",
+    size = "small",
+    srcs = ["to_vector_unittest.cc"],
+    deps = [
+        ":adapters",
+        ":flat_set",
+        ":to_vector",
+        "//chromium/testing/gmock",
+        "//chromium/testing/gtest",
+    ],
+)

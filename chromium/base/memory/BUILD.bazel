@@ -19,6 +19,16 @@ chromium_cc_library(
 )
 
 chromium_cc_library(
+    name = "raw_span",
+    hdrs = ["raw_span.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":raw_ptr",
+        "//chromium/base/containers:span",
+    ],
+)
+
+chromium_cc_library(
     name = "scoped_policy",
     hdrs = ["scoped_policy.h"],
     visibility = ["//visibility:public"],
@@ -30,6 +40,17 @@ chromium_cc_test(
     srcs = ["ptr_util_unittest.cc"],
     deps = [
         ":ptr_util",
+        "//chromium/testing/gtest",
+    ],
+)
+
+chromium_cc_test(
+    name = "raw_span_unittest",
+    size = "small",
+    srcs = ["raw_span_unittest.cc"],
+    deps = [
+        ":raw_span",
+        "//chromium/testing/gmock",
         "//chromium/testing/gtest",
     ],
 )

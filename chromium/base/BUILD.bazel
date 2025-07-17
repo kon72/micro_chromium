@@ -347,6 +347,23 @@ chromium_cc_test(
 )
 
 chromium_cc_test(
+    name = "values_unittest",
+    size = "small",
+    srcs = ["values_unittest.cc"],
+    deps = [
+        ":values",
+        "//chromium/base:bits",
+        "//chromium/base/containers:adapters",
+        "//chromium/base/containers:contains",
+        "//chromium/base/strings",
+        "//chromium/base/test:gtest_util",
+        "//chromium/build:build_config",
+        "//chromium/testing/gmock",
+        "//chromium/testing/gtest",
+    ],
+)
+
+chromium_cc_test(
     name = "version_unittest",
     size = "small",
     srcs = ["version_unittest.cc"],

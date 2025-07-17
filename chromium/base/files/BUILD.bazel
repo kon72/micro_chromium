@@ -41,6 +41,24 @@ chromium_cc_library(
 )
 
 chromium_cc_test(
+    name = "file_path_unittest",
+    size = "small",
+    srcs = ["file_path_unittest.cc"],
+    deps = [
+        ":file_path",
+        "//chromium/base/strings",
+        "//chromium/base/test:gtest_util",
+        "//chromium/build:build_config",
+        "//chromium/build:buildflag",
+        "//chromium/testing:platform_test",
+        "//chromium/testing/gtest",
+    ] + select({
+        "@platforms//os:windows": [],
+        "//conditions:default": ["//chromium/base/test:scoped_locale"],
+    }),
+)
+
+chromium_cc_test(
     name = "safe_base_name_unittest",
     size = "small",
     srcs = ["safe_base_name_unittest.cc"],

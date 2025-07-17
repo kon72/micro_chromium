@@ -1,4 +1,20 @@
-load("//chromium:build_defs.bzl", "chromium_cc_library")
+load("//chromium:build_defs.bzl", "chromium_cc_library", "chromium_cc_test")
+
+chromium_cc_library(
+    name = "basic_ops_impl",
+    hdrs = ["basic_ops_impl.h"],
+    visibility = ["//visibility:public"],
+)
+
+chromium_cc_library(
+    name = "byte_conversions",
+    hdrs = ["byte_conversions.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":basic_ops_impl",
+        "//chromium/build:build_config",
+    ],
+)
 
 chromium_cc_library(
     name = "integral_constant_like",
@@ -27,5 +43,15 @@ chromium_cc_library(
     deps = [
         ":integral_constant_like",
         "//chromium/build:build_config",
+    ],
+)
+
+chromium_cc_test(
+    name = "byte_conversions_unittest",
+    size = "small",
+    srcs = ["byte_conversions_unittest.cc"],
+    deps = [
+        ":byte_conversions",
+        "//chromium/testing/gtest",
     ],
 )

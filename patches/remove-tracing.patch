@@ -39,6 +39,46 @@
  #if BUILDFLAG(IS_APPLE)
    // Returns the string in the special canonical decomposed form as defined for
    // HFS, which is close to, but not quite, decomposition form D. See
+--- a/base/files/file_path_unittest.cc
++++ b/base/files/file_path_unittest.cc
+@@ -25,7 +25,6 @@
+ #include "build/buildflag.h"
+ #include "testing/gtest/include/gtest/gtest.h"
+ #include "testing/platform_test.h"
+-#include "third_party/perfetto/include/perfetto/test/traced_value_test_support.h"
+ 
+ #if BUILDFLAG(IS_POSIX) || BUILDFLAG(IS_FUCHSIA)
+ #include "base/test/scoped_locale.h"
+@@ -552,7 +551,7 @@ TEST_F(FilePathTest, IsAbsoluteOrNetwork
+       {FPL("c:/"), true, false},     {FPL("c:/a"), true, false},
+       {FPL("c:/."), true, false},    {FPL("c:/.."), true, false},
+       {FPL("C:/a"), true, false},    {FPL("d:/a"), true, false},
+-#else  // FILE_PATH_USES_DRIVE_LETTERS
++#else   // FILE_PATH_USES_DRIVE_LETTERS
+       {FPL("/"), true, false},
+       {FPL("/a"), true, false},
+       {FPL("/."), true, false},
+@@ -571,7 +570,7 @@ TEST_F(FilePathTest, IsAbsoluteOrNetwork
+       {FPL("c:\\a"), true, false},   {FPL("c:\\."), true, false},
+       {FPL("c:\\.."), true, false},  {FPL("C:\\a"), true, false},
+       {FPL("d:\\a"), true, false},
+-#else  // FILE_PATH_USES_DRIVE_LETTERS
++#else   // FILE_PATH_USES_DRIVE_LETTERS
+       {FPL("\\"), true, false},      {FPL("\\a"), true, false},
+       {FPL("\\."), true, false},     {FPL("\\.."), true, false},
+       {FPL("c:\\"), false, false},
+@@ -1658,9 +1657,11 @@ TEST_F(FilePathTest, PrintToOstream) {
+   EXPECT_EQ("foo", ss.str());
+ }
+ 
++#if 0
+ TEST_F(FilePathTest, TracedValueSupport) {
+   EXPECT_EQ(perfetto::TracedValueToString(FilePath(FPL("foo"))), "foo");
+ }
++#endif  // 0
+ 
+ // Test GetHFSDecomposedForm should return empty result for invalid UTF-8
+ // strings.
 --- a/base/json/json_reader.cc
 +++ b/base/json/json_reader.cc
 @@ -8,18 +8,13 @@
@@ -253,3 +293,29 @@
    template <typename Visitor>
    auto Visit(Visitor&& visitor) const {
      return std::visit(std::forward<Visitor>(visitor), data_);
+--- a/base/values_unittest.cc
++++ b/base/values_unittest.cc
+@@ -32,7 +32,6 @@
+ #include "build/build_config.h"
+ #include "testing/gmock/include/gmock/gmock.h"
+ #include "testing/gtest/include/gtest/gtest.h"
+-#include "third_party/perfetto/include/perfetto/test/traced_value_test_support.h"
+ 
+ namespace base {
+ 
+@@ -2205,6 +2204,7 @@ TEST(ValuesTest, MutableGetBlob) {
+   EXPECT_EQ(new_blob, value.GetBlob());
+ }
+ 
++#if 0
+ TEST(ValuesTest, TracingSupport) {
+   EXPECT_EQ(perfetto::TracedValueToString(Value(false)), "false");
+   EXPECT_EQ(perfetto::TracedValueToString(Value(1)), "1");
+@@ -2228,6 +2228,7 @@ TEST(ValuesTest, TracingSupport) {
+               "{key:value}");
+   }
+ }
++#endif  // 0
+ 
+ TEST(ValueViewTest, BasicConstruction) {
+   {
