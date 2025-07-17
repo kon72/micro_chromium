@@ -1,0 +1,41 @@
+load("//chromium:build_defs.bzl", "chromium_cc_library")
+
+chromium_cc_library(
+    name = "platform_thread_handle",
+    srcs = select({
+        "@platforms//os:windows": ["platform_thread_handle_win.cc"],
+        "//conditions:default": ["platform_thread_handle_posix.cc"],
+    }),
+    hdrs = ["platform_thread_handle.h"],
+    target_compatible_with = select({
+        "@platforms//os:fuchsia": ["@platforms//:incompatible"],
+        "//conditions:default": [],
+    }),
+    visibility = ["//visibility:public"],
+    deps = [
+        "//chromium/base:base_export",
+        "//chromium/base/threading:platform_thread_ref",
+        "//chromium/build:build_config",
+    ] + select({
+        "@platforms//os:windows": [],
+        "//conditions:default": [
+            "//chromium/base:check_op",
+            "//chromium/base:compiler_specific",
+            "//chromium/base:logging",
+        ],
+    }),
+)
+
+chromium_cc_library(
+    name = "platform_thread_ref",
+    srcs = ["platform_thread_ref.cc"],
+    hdrs = ["platform_thread_ref.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//chromium/base:base_export",
+        "//chromium/build:build_config",
+    ] + select({
+        "@platforms//os:windows": ["//chromium/base/win:windows_types"],
+        "//conditions:default": [],
+    }),
+)

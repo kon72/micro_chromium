@@ -234,6 +234,23 @@ files=(
   'base/third_party/superfasthash/LICENSE'
   'base/third_party/superfasthash/README.chromium'
   'base/third_party/superfasthash/superfasthash.c'
+  # 'base/threading/platform_thread.cc'
+  'base/threading/platform_thread.h'
+  # 'base/threading/platform_thread_android.cc'
+  # 'base/threading/platform_thread_apple.mm'
+  # 'base/threading/platform_thread_cros.cc'
+  # 'base/threading/platform_thread_fuchsia.cc'
+  # 'base/threading/platform_thread_internal_posix.cc'
+  # 'base/threading/platform_thread_internal_posix.h'
+  # 'base/threading/platform_thread_linux.cc'
+  # 'base/threading/platform_thread_linux_base.cc'
+  'base/threading/platform_thread_posix.cc'
+  'base/threading/platform_thread_ref.cc'
+  'base/threading/platform_thread_ref.h'
+  # 'base/threading/platform_thread_unittest.cc'
+  'base/threading/platform_thread_win.cc'
+  # 'base/threading/platform_thread_win.h'
+  # 'base/threading/platform_thread_win_unittest.cc'
   'base/types/always_false.h'
   'base/types/expected.h'
   'base/types/expected_internal.h'
@@ -352,3 +369,7 @@ for file in "${files[@]}"; do
     echo "File ${src} does not exist, skipping." >&2
   fi
 done
+
+mv "${out_dir}/base/threading/platform_thread.h" "${out_dir}/base/threading/platform_thread_handle.h"
+mv "${out_dir}/base/threading/platform_thread_posix.cc" "${out_dir}/base/threading/platform_thread_handle_posix.cc"
+mv "${out_dir}/base/threading/platform_thread_win.cc" "${out_dir}/base/threading/platform_thread_handle_win.cc"

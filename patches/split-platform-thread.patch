@@ -1,0 +1,255 @@
+--- a/base/threading/platform_thread_handle.h
++++ b/base/threading/platform_thread_handle.h
+@@ -11,18 +11,13 @@
+ 
+ #include <stddef.h>
+ 
++#include <compare>
+ #include <iosfwd>
+-#include <limits>
+-#include <optional>
++#include <ostream>
+ #include <type_traits>
+ 
+ #include "base/base_export.h"
+-#include "base/message_loop/message_pump_type.h"
+-#include "base/process/process_handle.h"
+ #include "base/threading/platform_thread_ref.h"
+-#include "base/time/time.h"
+-#include "base/trace_event/base_tracing_forward.h"
+-#include "base/types/strong_alias.h"
+ #include "build/build_config.h"
+ 
+ #if BUILDFLAG(IS_WIN)
+@@ -34,10 +29,6 @@
+ #include <unistd.h>
+ #endif
+ 
+-#if BUILDFLAG(IS_CHROMEOS)
+-#include "base/feature_list.h"
+-#endif
+-
+ namespace base {
+ 
+ // Used for uniquely identifying a thread.
+@@ -107,8 +98,10 @@ class BASE_EXPORT PlatformThreadId {
+   constexpr friend bool operator==(const PlatformThreadId& lhs,
+                                    const PlatformThreadId& rhs) = default;
+ 
++#if 0
+   // Allow serialising into a trace.
+   void WriteIntoTrace(perfetto::TracedValue&& context) const;
++#endif  // 0
+ 
+  private:
+   // TODO(crbug.com/393384253): Use a system-specific invalid value, which might
+@@ -148,6 +141,20 @@ class PlatformThreadHandle {
+ 
+ static constexpr PlatformThreadId kInvalidThreadId = PlatformThreadId();
+ 
++// Gets the current thread id, which may be useful for logging purposes.
++static PlatformThreadId GetCurrentThreadId();
++
++// Gets the current thread reference, which can be used to check if
++// we're on the right thread quickly.
++static PlatformThreadRef GetCurrentThreadRef();
++
++// Get the handle representing the current thread. On Windows, this is a
++// pseudo handle constant which will always represent the thread using it and
++// hence should not be shared with other threads nor be used to differentiate
++// the current thread from another.
++static PlatformThreadHandle GetCurrentThreadHandle();
++
++#if 0
+ // Valid values for `thread_type` of Thread::Options, SimpleThread::Options,
+ // and SetCurrentThreadType(), listed in increasing order of importance.
+ //
+@@ -482,6 +489,7 @@ inline constexpr auto SetThreadType = Se
+ #endif
+ 
+ }  // namespace internal
++#endif  // 0
+ 
+ }  // namespace base
+ 
+--- a/base/threading/platform_thread_handle_posix.cc
++++ b/base/threading/platform_thread_handle_posix.cc
+@@ -2,9 +2,8 @@
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+ 
+-#include "base/threading/platform_thread.h"
++#include "base/threading/platform_thread_handle.h"
+ 
+-#include <errno.h>
+ #include <pthread.h>
+ #include <sched.h>
+ #include <stddef.h>
+@@ -16,21 +15,10 @@
+ #include <memory>
+ #include <tuple>
+ 
++#include "base/check_op.h"
+ #include "base/compiler_specific.h"
+-#include "base/lazy_instance.h"
+ #include "base/logging.h"
+-#include "base/memory/raw_ptr.h"
+-#include "base/notimplemented.h"
+-#include "base/threading/platform_thread_internal_posix.h"
+-#include "base/threading/scoped_blocking_call.h"
+-#include "base/threading/thread_id_name_manager.h"
+-#include "base/threading/thread_restrictions.h"
+ #include "build/build_config.h"
+-#include "partition_alloc/buildflags.h"
+-
+-#if !BUILDFLAG(IS_APPLE) && !BUILDFLAG(IS_FUCHSIA)
+-#include "base/posix/can_lower_nice_to.h"
+-#endif
+ 
+ #if BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS)
+ #include <sys/syscall.h>
+@@ -46,18 +34,17 @@
+ #include <sys/resource.h>
+ #endif
+ 
+-#if PA_BUILDFLAG(USE_PARTITION_ALLOC_AS_MALLOC)
+-#include "partition_alloc/stack/stack.h"  // nogncheck
+-#endif
+-
+ namespace base {
+ 
++#if 0
+ void InitThreading();
+ void TerminateOnThread();
+ size_t GetDefaultThreadStackSize(const pthread_attr_t& attributes);
++#endif  // 0
+ 
+ namespace {
+ 
++#if 0
+ struct ThreadParams {
+   ThreadParams() = default;
+ 
+@@ -163,6 +150,7 @@ bool CreateThread(size_t stack_size,
+ 
+   return success;
+ }
++#endif  // 0
+ 
+ #if BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS)
+ 
+@@ -212,7 +200,7 @@ void InvalidateTidCache() {
+ #endif  // BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS)
+ 
+ // static
+-PlatformThreadId PlatformThreadBase::CurrentId() {
++PlatformThreadId GetCurrentThreadId() {
+   // Pthreads doesn't have the concept of a thread ID, so we have to reach down
+   // into the kernel.
+ #if BUILDFLAG(IS_APPLE)
+@@ -272,15 +260,16 @@ PlatformThreadId PlatformThreadBase::Cur
+ }
+ 
+ // static
+-PlatformThreadRef PlatformThreadBase::CurrentRef() {
++PlatformThreadRef GetCurrentThreadRef() {
+   return PlatformThreadRef(pthread_self());
+ }
+ 
+ // static
+-PlatformThreadHandle PlatformThreadBase::CurrentHandle() {
++PlatformThreadHandle GetCurrentThreadHandle() {
+   return PlatformThreadHandle(pthread_self());
+ }
+ 
++#if 0
+ #if !BUILDFLAG(IS_APPLE)
+ // static
+ void PlatformThreadBase::YieldCurrentThread() {
+@@ -415,5 +404,6 @@ size_t PlatformThreadBase::GetDefaultThr
+   pthread_attr_init(&attributes);
+   return base::GetDefaultThreadStackSize(attributes);
+ }
++#endif  // 0
+ 
+ }  // namespace base
+--- a/base/threading/platform_thread_handle_win.cc
++++ b/base/threading/platform_thread_handle_win.cc
+@@ -2,40 +2,15 @@
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+ 
+-#include "base/threading/platform_thread_win.h"
++#include "base/threading/platform_thread_handle_win.h"
+ 
+ #include <windows.h>
+ 
+-#include <stddef.h>
+-
+-#include <string>
+-
+-#include "base/debug/alias.h"
+-#include "base/debug/crash_logging.h"
+-#include "base/debug/profiler.h"
+-#include "base/feature_list.h"
+-#include "base/logging.h"
+-#include "base/memory/raw_ptr.h"
+-#include "base/metrics/histogram_macros.h"
+-#include "base/process/memory.h"
+-#include "base/strings/string_number_conversions.h"
+-#include "base/strings/utf_string_conversions.h"
+-#include "base/threading/scoped_blocking_call.h"
+-#include "base/threading/scoped_thread_priority.h"
+-#include "base/threading/thread_id_name_manager.h"
+-#include "base/threading/thread_restrictions.h"
+-#include "base/time/time_override.h"
+-#include "base/win/scoped_handle.h"
+-#include "base/win/windows_version.h"
+ #include "build/build_config.h"
+-#include "partition_alloc/buildflags.h"
+-
+-#if PA_BUILDFLAG(USE_PARTITION_ALLOC_AS_MALLOC)
+-#include "partition_alloc/stack/stack.h"
+-#endif
+ 
+ namespace base {
+ 
++#if 0
+ namespace {
+ 
+ // These values are sometimes returned by ::GetThreadPriority().
+@@ -234,22 +209,24 @@ void AssertMemoryPriority(HANDLE thread,
+ }
+ 
+ }  // namespace internal
++#endif  // 0
+ 
+ // static
+-PlatformThreadId PlatformThread::CurrentId() {
++PlatformThreadId GetCurrentThreadId() {
+   return PlatformThreadId(::GetCurrentThreadId());
+ }
+ 
+ // static
+-PlatformThreadRef PlatformThread::CurrentRef() {
++PlatformThreadRef GetCurrentThreadRef() {
+   return PlatformThreadRef(::GetCurrentThreadId());
+ }
+ 
+ // static
+-PlatformThreadHandle PlatformThread::CurrentHandle() {
++PlatformThreadHandle GetCurrentThreadHandle() {
+   return PlatformThreadHandle(::GetCurrentThread());
+ }
+ 
++#if 0
+ // static
+ void PlatformThread::YieldCurrentThread() {
+   ::Sleep(0);
+@@ -540,5 +517,6 @@ ThreadPriorityForTest PlatformThread::Ge
+ size_t PlatformThread::GetDefaultThreadStackSize() {
+   return 0;
+ }
++#endif  // 0
+ 
+ }  // namespace base
