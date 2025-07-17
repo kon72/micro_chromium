@@ -173,6 +173,7 @@ chromium_cc_library(
     deps = [
         ":check",
         ":compiler_specific",
+        "//chromium/base/memory:raw_ptr",
     ],
 )
 
@@ -208,6 +209,7 @@ chromium_cc_library(
         "//chromium/base/containers:map_util",
         "//chromium/base/containers:span",
         "//chromium/base/memory:ptr_util",
+        "//chromium/base/memory:raw_ptr",
         "//chromium/base/numerics:safe_math",
         "//chromium/base/strings",
         "//chromium/base/strings:strcat",
@@ -326,6 +328,7 @@ chromium_cc_test(
     deps = [
         ":scoped_generic",
         "//chromium/base/containers:contains",
+        "//chromium/base/memory:raw_ptr",
         "//chromium/build:build_config",
         "//chromium/testing/gtest",
     ],

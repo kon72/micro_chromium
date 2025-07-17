@@ -7,6 +7,12 @@ chromium_cc_library(
 )
 
 chromium_cc_library(
+    name = "raw_ptr",
+    hdrs = ["raw_ptr.h"],
+    visibility = ["//chromium:__subpackages__"],
+)
+
+chromium_cc_library(
     name = "raw_ptr_exclusion",
     hdrs = ["raw_ptr_exclusion.h"],
     visibility = ["//chromium:__subpackages__"],
