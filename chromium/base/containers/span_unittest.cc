@@ -2026,8 +2026,10 @@ TEST(SpanTest, OutOfBoundsDeath) {
       std::copy_n(span_len3.begin(), 3, span_len2.begin()), "");
 
   // Copying more values than exist in the source.
+#ifndef _MSVC_STL_VERSION
   ASSERT_DEATH_IF_SUPPORTED(
       std::copy_n(span_len2.begin(), 3, span_len3.begin()), "");
+#endif
 }
 
 TEST(SpanTest, Sort) {

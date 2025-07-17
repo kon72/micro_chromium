@@ -1,3 +1,16 @@
+--- a/base/containers/span_unittest.cc
++++ b/base/containers/span_unittest.cc
+@@ -2026,8 +2026,10 @@ TEST(SpanTest, OutOfBoundsDeath) {
+       std::copy_n(span_len3.begin(), 3, span_len2.begin()), "");
+ 
+   // Copying more values than exist in the source.
++#ifndef _MSVC_STL_VERSION
+   ASSERT_DEATH_IF_SUPPORTED(
+       std::copy_n(span_len2.begin(), 3, span_len3.begin()), "");
++#endif
+ }
+ 
+ TEST(SpanTest, Sort) {
 --- a/base/strings/to_string_unittest.cc
 +++ b/base/strings/to_string_unittest.cc
 @@ -117,9 +117,12 @@ TEST(ToStringTest, Pointer) {
