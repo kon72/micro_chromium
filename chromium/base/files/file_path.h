@@ -151,6 +151,10 @@ using CFStringRef = const struct __CFString*;
 namespace base {
 
 class SafeBaseName;
+#if 0
+class Pickle;
+class PickleIterator;
+#endif  // 0
 
 // An abstraction to isolate users from the differences between native
 // pathnames on different platforms.
@@ -192,6 +196,11 @@ class BASE_EXPORT FilePath {
 
   // The character used to identify a file extension.
   static constexpr CharType kExtensionSeparator = FILE_PATH_LITERAL('.');
+
+#if 0
+  // Initializes features for this class. See `base::features::Init()`.
+  static void InitializeFeatures();
+#endif  // 0
 
   FilePath();
   FilePath(const FilePath& that);
@@ -456,6 +465,11 @@ class BASE_EXPORT FilePath {
   // Similar to FromUTF8Unsafe, but accepts UTF-16 instead.
   static FilePath FromUTF16Unsafe(std::u16string_view utf16);
 
+#if 0
+  void WriteToPickle(Pickle* pickle) const;
+  bool ReadFromPickle(PickleIterator* iter);
+#endif  // 0
+
   // Normalize all path separators to backslash on Windows
   // (if FILE_PATH_USES_WIN_SEPARATORS is true), or do nothing on POSIX systems.
   [[nodiscard]] FilePath NormalizePathSeparators() const;
@@ -519,6 +533,9 @@ class BASE_EXPORT FilePath {
   // support UNC paths on Windows.
   void StripTrailingSeparatorsInternal();
 
+#if 0
+  bool IsParentFast(const FilePath& child) const;
+#endif  // 0
   bool IsParentSlow(const FilePath& child) const;
 
   StringType path_;

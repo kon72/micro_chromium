@@ -30,6 +30,7 @@ def chromium_cc_copts():
             "-Wextra-semi",
             "-Wunreachable-code-aggressive",
             "-Wgnu",
+            "-Wno-zero-length-array",
             "-Wthread-safety",
         ],
         "//conditions:default": [],
@@ -320,6 +321,7 @@ def chromium_cc_test(
             "//chromium/bazel/config:is_clang": [
                 "-Wno-implicit-int-conversion",
                 "-Wno-shorten-64-to-32",
+                "-Wno-sign-compare",
                 "-Wno-sign-conversion",
                 "-Wno-exit-time-destructors",
                 "-Wno-global-constructors",
@@ -353,6 +355,7 @@ def chromium_objc_test(
             "//chromium/bazel/config:is_clang": [
                 "-Wno-implicit-int-conversion",
                 "-Wno-shorten-64-to-32",
+                "-Wno-sign-compare",
                 "-Wno-sign-conversion",
                 "-Wno-exit-time-destructors",
                 "-Wno-global-constructors",

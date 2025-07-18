@@ -8,7 +8,7 @@
  #include "base/strings/strcat.h"
  #include "base/strings/string_util.h"
  #include "base/strings/sys_string_conversions.h"
-@@ -931,6 +930,7 @@ FilePath FilePath::FromUTF16Unsafe(std::
+@@ -933,6 +932,7 @@ FilePath FilePath::FromUTF16Unsafe(std::
  
  #endif  // BUILDFLAG(IS_WIN)
  
@@ -16,7 +16,7 @@
  void FilePath::WriteToPickle(Pickle* pickle) const {
  #if BUILDFLAG(IS_WIN)
    pickle->WriteString16(AsStringPiece16(path_));
-@@ -962,6 +962,7 @@ bool FilePath::ReadFromPickle(PickleIter
+@@ -964,6 +964,7 @@ bool FilePath::ReadFromPickle(PickleIter
  
    return true;
  }
@@ -26,22 +26,25 @@
  // Windows specific implementation of file string comparisons.
 --- a/base/files/file_path.h
 +++ b/base/files/file_path.h
-@@ -151,8 +151,6 @@ using CFStringRef = const struct __CFStr
+@@ -151,8 +151,10 @@ using CFStringRef = const struct __CFStr
  namespace base {
  
  class SafeBaseName;
--class Pickle;
--class PickleIterator;
++#if 0
+ class Pickle;
+ class PickleIterator;
++#endif  // 0
  
  // An abstraction to isolate users from the differences between native
  // pathnames on different platforms.
-@@ -458,9 +456,6 @@ class BASE_EXPORT FilePath {
+@@ -463,8 +465,10 @@ class BASE_EXPORT FilePath {
    // Similar to FromUTF8Unsafe, but accepts UTF-16 instead.
    static FilePath FromUTF16Unsafe(std::u16string_view utf16);
  
--  void WriteToPickle(Pickle* pickle) const;
--  bool ReadFromPickle(PickleIterator* iter);
--
++#if 0
+   void WriteToPickle(Pickle* pickle) const;
+   bool ReadFromPickle(PickleIterator* iter);
++#endif  // 0
+ 
    // Normalize all path separators to backslash on Windows
    // (if FILE_PATH_USES_WIN_SEPARATORS is true), or do nothing on POSIX systems.
-   [[nodiscard]] FilePath NormalizePathSeparators() const;

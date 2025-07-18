@@ -91,6 +91,7 @@ bool EqualDriveLetterCaseInsensitive(StringViewType a, StringViewType b) {
   return a_rest == b_rest;
 }
 
+#if 0
 // Returns true if `left` and `right` are equivalent drive letter components.
 // Will return false if `left` or `right` is not a drive letter component.
 bool AreDriveLetterComponentsEqual(FilePath::StringViewType left,
@@ -103,6 +104,7 @@ bool AreDriveLetterComponentsEqual(FilePath::StringViewType left,
          right[1] == ':' && IsAsciiAlpha(left[0]) &&
          ToLowerASCII(left[0]) == ToLowerASCII(right[0]);
 }
+#endif  // 0
 #endif  // defined(FILE_PATH_USES_DRIVE_LETTERS)
 
 bool IsPathAbsolute(StringViewType path) {
@@ -273,7 +275,7 @@ ExtractFirstComponent(FilePath::StringViewType path, bool can_be_drive_letter) {
 // State of the `FastFilePathIsParent` feature, to be updated after the feature
 // list is available.
 std::atomic_bool g_fast_file_path_is_parent{false};
-#endif
+#endif  // 0
 
 }  // namespace
 
@@ -285,7 +287,7 @@ void FilePath::InitializeFeatures() {
       FeatureList::IsEnabled(features::kFastFilePathIsParent),
       std::memory_order_relaxed);
 }
-#endif
+#endif  // 0
 
 FilePath::FilePath() = default;
 
@@ -370,7 +372,7 @@ bool FilePath::IsParent(const FilePath& child) const {
   if (g_fast_file_path_is_parent.load(std::memory_order_relaxed)) {
     return IsParentFast(child);
   }
-#endif
+#endif  // 0
 
   return IsParentSlow(child);
 }
@@ -448,7 +450,7 @@ bool FilePath::IsParentFast(const FilePath& child) const {
     child_view = child_remainder;
   }
 }
-#endif
+#endif  // 0
 
 bool FilePath::IsParentSlow(const FilePath& child) const {
   return AppendRelativePath(child, nullptr);

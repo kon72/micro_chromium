@@ -19,6 +19,7 @@ build --features=process_headers_in_dependencies
 build --define='absl=1'
 test --test_env="GTEST_INSTALL_FAILURE_SIGNAL_HANDLER=1"
 
+build --copt=-fcolor-diagnostics --host_copt=-fcolor-diagnostics
 build --copt=-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_EXTENSIVE --host_copt=-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_EXTENSIVE
 
 # Linux

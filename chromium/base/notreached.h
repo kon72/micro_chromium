@@ -6,16 +6,20 @@
 #define BASE_NOTREACHED_H_
 
 #include "absl/log/absl_log.h"
+#include "base/macros/uniquify.h"
 
 namespace logging {
 
-// ABSL_LOG(FATAL) is marked as [[noreturn]].  Use ABSL_LOG_FIRST_N to suppress
+#define NOTREACHED() ABSL_LOG(FATAL) << "NOTREACHED hit. "
+
+// ABSL_LOG(FATAL) is marked as [[noreturn]].  Use switch statement to suppress
 // unreachable-code warnings.
-
-#define NOTREACHED() ABSL_LOG_FIRST_N(FATAL, 1) << "NOTREACED hit. "
-
-#define DUMP_WILL_BE_NOTREACHED() \
-  ABSL_LOG_FIRST_N(FATAL, 1) << "NOTREACHED hit. "
+#define DUMP_WILL_BE_NOTREACHED()                                  \
+  switch (int BASE_UNIQUIFY(notreached_internal_) = 0)             \
+  case 0:                                                          \
+  default:                                                         \
+    ABSL_LOG_IF(FATAL, (BASE_UNIQUIFY(notreached_internal_) == 0)) \
+        << "NOTREACHED hit. "
 
 }  // namespace logging
 
