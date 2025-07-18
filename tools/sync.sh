@@ -12,6 +12,7 @@ checkout_dirs=(
 )
 files=(
   '.clang-format'
+  '.clang-tidy'
   'LICENSE'
   'base/apple/bridging.h'
   'base/apple/scoped_cftyperef.h'

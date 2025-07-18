@@ -6,24 +6,16 @@
 #define BASE_NOTREACHED_H_
 
 #include "absl/log/absl_log.h"
-#include "base/compiler_specific.h"
-#include "base/immediate_crash.h"
 
 namespace logging {
 
-// This function is used to be able to detect NOTREACHED() failures in stack
-// traces where this symbol is preserved (even if inlined). Its implementation
-// matches logging::CheckFailure() but intentionally uses a different signature.
-[[noreturn]] NOMERGE IMMEDIATE_CRASH_ALWAYS_INLINE void NotReachedFailure() {
-  base::ImmediateCrash();
-}
+// ABSL_LOG(FATAL) is marked as [[noreturn]].  Use ABSL_LOG_FIRST_N to suppress
+// unreachable-code warnings.
 
-#define NOTREACHED()                \
-  do {                              \
-    ::logging::NotReachedFailure(); \
-  } while (false)
+#define NOTREACHED() ABSL_LOG_FIRST_N(FATAL, 1) << "NOTREACED hit. "
 
-#define DUMP_WILL_BE_NOTREACHED() ABSL_LOG(FATAL) << "NOTREACHED hit. "
+#define DUMP_WILL_BE_NOTREACHED() \
+  ABSL_LOG_FIRST_N(FATAL, 1) << "NOTREACHED hit. "
 
 }  // namespace logging
 

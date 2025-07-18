@@ -24,5 +24,13 @@ chromium_cc_library(
         "double-conversion/utils.h",
     ],
     hdrs = ["double-conversion/double-conversion.h"],
+    copts = select({
+        "//chromium/bazel/config:is_clang": [
+            "-Wno-implicit-int-conversion",
+            "-Wno-shorten-64-to-32",
+            "-Wno-sign-conversion",
+        ],
+        "//conditions:default": [],
+    }),
     visibility = ["//chromium/base:__subpackages__"],
 )

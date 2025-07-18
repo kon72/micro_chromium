@@ -3,20 +3,173 @@ load("@rules_cc//cc:cc_test.bzl", "cc_test")
 load("@rules_cc//cc:objc_library.bzl", "objc_library")
 
 def chromium_cc_opts():
-    return select({
+    copts = select({
+        "@platforms//os:chromiumos": ["-DSYSTEM_NATIVE_UTF8"],
+        "@platforms//os:fuchsia": ["-DSYSTEM_NATIVE_UTF8"],
+        "@platforms//os:macos": ["-DSYSTEM_NATIVE_UTF8"],
+        "@platforms//os:ios": ["-DSYSTEM_NATIVE_UTF8"],
+        "//conditions:default": [],
+    }) + select({
+        "@platforms//os:linux": ["-DUSE_SYMBOLIZE"],
+        "@platforms//os:chromiumos": ["-DUSE_SYMBOLIZE"],
+        "//conditions:default": [],
+    }) + select({
         "@platforms//os:windows": [
-            "-DWINVER=0x0A00",
-            "-D_WIN32_WINNT=0x0A00",
+            "/W4",
+            "-D_HAS_NODISCARD",
+        ],
+        "//conditions:default": [
+            "-Wall",
+            "-Wextra",
+            "-D__STDC_CONSTANT_MACROS",
+            "-D__STDC_FORMAT_MACROS",
+        ],
+    }) + select({
+        "//chromium/bazel/config:is_clang": [
+            "-Wimplicit-fallthrough",
+            "-Wextra-semi",
+            "-Wunreachable-code-aggressive",
+            "-Wgnu",
+            "-Wthread-safety",
         ],
         "//conditions:default": [],
     }) + select({
-        "@rules_cc//cc/compiler:clang-cl": [
+        "@platforms//os:windows": ["-D_CRT_NONSTDC_NO_WARNINGS"],
+        "//conditions:default": [],
+    }) + select({
+        "@platforms//os:android": ["-Wunguarded-availability"],
+        "@platforms//os:macos": ["-Wunguarded-availability"],
+        "@platforms//os:ios": [
+            "-Wunguarded-availability",
+            "-Wundeclared-selector",
+        ],
+        "//conditions:default": [],
+    }) + ["-Wno-unused-parameter"] + select({
+        "//chromium/bazel/config:is_clang": [
+            "-Wloop-analysis",
+            "-Wno-unneeded-internal-declaration",
+            "-Wenum-compare-conditional",
+            "-Wshadow",
+        ],
+        "//conditions:default": [],
+    }) + ["-fno-ident"] + select({
+        "@platforms//os:windows": [],
+        "//conditions:default": ["-fno-strict-aliasing"],
+    }) + select({
+        "@platforms//os:android": [],
+        "@platforms//os:macos": [],
+        "@platforms//os:ios": [],
+        "@platforms//os:windows": [],
+        "//conditions:default": [
+            "-D_FILE_OFFSET_BITS=64",
+            "-D_LARGEFILE_SOURCE",
+            "-D_LARGEFILE64_SOURCE",
+        ],
+    }) + select({
+        "@platforms//os:linux": ["-D_GNU_SOURCE"],
+        "@platforms//os:android": ["-D_GNU_SOURCE"],
+        "@platforms//os:chromiumos": ["-D_GNU_SOURCE"],
+        "//conditions:default": [],
+    }) + select({
+        "@platforms//os:windows": [
+            "/bigobj",
+            "/utf-8",
+            "-fmsc-version=1934",
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "@platforms//os:windows": [
             "/EHs-c-",
             "-D_HAS_EXCEPTIONS=0",
+            "/GR-",
         ],
-        "//conditions:default": ["-fno-exceptions"],
+        "//conditions:default": [
+            "-fno-exceptions",
+            "-fno-rtti",
+        ],
     }) + select({
-        "@rules_cc//cc/compiler:clang-cl": ["-Wno-macro-redefined"],
+        "@platforms//os:windows": [
+            # Defines that set up the CRT.
+            "-D__STD_C",
+            "-D_CRT_RAND_S",
+            "-D_CRT_SECURE_NO_DEPRECATE",
+            "-D_SCL_SECURE_NO_DEPRECATE",
+            # Defines that set up the Windows SDK.
+            "-D_ATL_NO_OPENGL",
+            "-D_WINDOWS",
+            "-DCERT_CHAIN_PARA_HAS_EXTRA_FIELDS",
+            "-DPSAPI_VERSION=2",
+            "-DWIN32",
+            "-D_SECURE_ATL",
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "@platforms//os:linux": [
+            "-DUSE_UDEV",
+            "-DUSE_AURA=1",
+            "-DUSE_GLIB=1",
+            "-DUSE_OZONE=1",
+            "-DGLIB_VERSION_MAX_ALLOWED=GLIB_VERSION_2_56",
+            "-DGLIB_VERSION_MIN_REQUIRED=GLIB_VERSION_2_56",
+        ],
+        "@platforms//os:fuchsia": [
+            "-DUSE_AURA=1",
+            "-DUSE_OZONE=1",
+        ],
+        "@platforms//os:chromiumos": [
+            "-DUSE_UDEV=1",
+            "-DUSE_AURA=1",
+            "-DUSE_OZONE=1",
+        ],
+        "@platforms//os:windows": ["-DUSE_AURA=1"],
+        "//conditions:default": [],
+    }) + select({
+        "@platforms//os:windows": [
+            "-DWIN32_LEAN_AND_MEAN",
+            "-DNOMINMAX",
+            "-D_UNICODE",
+            "-DUNICODE",
+            "-DNTDDI_VERSION=NTDDI_WIN11_GE",
+            "-D_WIN32_WINNT=0x0A00",
+            "-DWINVER=0x0A00",
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//chromium/bazel/config:is_clang": [
+            "-Wheader-hygiene",
+            "-Wstring-conversion",
+            "-Wtautological-overlap-compare",
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//chromium/bazel/config:is_clang": [
+            "-Wimplicit-int-conversion",
+            "-Wshorten-64-to-32",
+            "-Wsign-compare",
+            "-Wsign-conversion",
+            "-Wtautological-unsigned-zero-compare",
+            "-Wexit-time-destructors",
+            "-Wglobal-constructors",
+        ],
+        "//conditions:default": [],
+    })
+
+    return copts
+
+def chromium_objc_opts():
+    return chromium_cc_opts() + [
+        "-fobjc-arc",
+        "-fno-objc-arc-exceptions",
+    ] + select({
+        "@platforms//os:macos": [
+            "-Wimplicit-retain-self",
+            "-Wobjc-missing-property-synthesis",
+            "-Wobjc-property-assign-on-object-type",
+        ],
+        "@platforms//os:ios": [
+            "-Wimplicit-retain-self",
+            "-Widiomatic-parentheses",
+        ],
         "//conditions:default": [],
     })
 
@@ -63,7 +216,7 @@ def chromium_objc_library(
         testonly = testonly,
         srcs = srcs,
         hdrs = hdrs,
-        copts = chromium_cc_opts() + copts,
+        copts = chromium_objc_opts() + copts,
         features = features,
         linkopts = linkopts,
         target_compatible_with = target_compatible_with,
@@ -148,7 +301,16 @@ def chromium_cc_test(
         name = name,
         size = size,
         srcs = srcs,
-        copts = chromium_cc_opts() + copts,
+        copts = chromium_cc_opts() + select({
+            "//chromium/bazel/config:is_clang": [
+                "-Wno-implicit-int-conversion",
+                "-Wno-shorten-64-to-32",
+                "-Wno-sign-conversion",
+                "-Wno-exit-time-destructors",
+                "-Wno-global-constructors",
+            ],
+            "//conditions:default": [],
+        }) + copts,
         linkopts = linkopts,
         target_compatible_with = target_compatible_with,
         visibility = visibility,
@@ -170,7 +332,16 @@ def chromium_objc_test(
         name = test_lib_name,
         testonly = True,
         srcs = srcs,
-        copts = copts,
+        copts = select({
+            "//chromium/bazel/config:is_clang": [
+                "-Wno-implicit-int-conversion",
+                "-Wno-shorten-64-to-32",
+                "-Wno-sign-conversion",
+                "-Wno-exit-time-destructors",
+                "-Wno-global-constructors",
+            ],
+            "//conditions:default": [],
+        }) + copts,
         linkopts = linkopts,
         target_compatible_with = target_compatible_with,
         visibility = ["//visibility:private"],

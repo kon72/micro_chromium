@@ -145,11 +145,7 @@ chromium_cc_library(
     name = "notreached",
     hdrs = ["notreached.h"],
     visibility = ["//visibility:public"],
-    deps = [
-        ":compiler_specific",
-        ":immediate_crash",
-        "@abseil-cpp//absl/log:absl_log",
-    ],
+    deps = ["@abseil-cpp//absl/log:absl_log"],
 )
 
 chromium_cc_library(

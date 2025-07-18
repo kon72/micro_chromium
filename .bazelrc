@@ -19,35 +19,26 @@ build --features=process_headers_in_dependencies
 build --define='absl=1'
 test --test_env="GTEST_INSTALL_FAILURE_SIGNAL_HANDLER=1"
 
+build --copt=-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_EXTENSIVE --host_copt=-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_EXTENSIVE
+
 # Linux
-build:linux --cxxopt=-std=c++20
-build:linux --host_cxxopt=-std=c++20
+build:linux --copt=-Werror --host_copt=-Werror
+build:linux --conlyopt=-std=c11 --host_conlyopt=-std=c11
+build:linux --cxxopt=-std=c++20 --host_cxxopt=-std=c++20
 build:linux --action_env=CC=clang-20
-build:linux --cxxopt=-stdlib=libc++
-build:linux --host_cxxopt=-stdlib=libc++
-build:linux --linkopt=-stdlib=libc++
-build:linux --host_linkopt=-stdlib=libc++
+build:linux --cxxopt=-stdlib=libc++ --host_cxxopt=-stdlib=libc++
+build:linux --linkopt=-stdlib=libc++ --host_linkopt=-stdlib=libc++
 
 # Windows
-build:windows --cxxopt=/std:c++20
-build:windows --host_cxxopt=/std:c++20
-build:windows --copt=/utf-8
-build:windows --host_copt=/utf-8
-# For using M_* math constants on Windows with MSVC.
-build:windows --copt=/D_USE_MATH_DEFINES
-build:windows --host_copt=/D_USE_MATH_DEFINES
-# Make sure to include as little of windows.h as possible
-build:windows --copt=-DWIN32_LEAN_AND_MEAN
-build:windows --host_copt=-DWIN32_LEAN_AND_MEAN
-build:windows --copt=-D_UNICODE
-build:windows --host_copt=-D_UNICODE
-build:windows --copt=-DUNICODE
-build:windows --host_copt=-DUNICODE
+build:windows --copt=/WX --host_copt=/WX
+build:windows --conlyopt=/std:c11 --host_conlyopt=/std:c11
+build:windows --cxxopt=/std:c++20 --host_cxxopt=/std:c++20
 build:windows --config=win_clang
 
 # macOS
-build:macos --cxxopt=-std=c++20
-build:macos --host_cxxopt=-std=c++20
+build:macos --copt=-Werror --host_copt=-Werror
+build:macos --conlyopt=-std=c11 --host_conlyopt=-std=c11
+build:macos --cxxopt=-std=c++20 --host_cxxopt=-std=c++20
 
 # clang-cl
 build:win_clang --extra_toolchains=@local_config_cc//:cc-toolchain-x64_windows-clang-cl

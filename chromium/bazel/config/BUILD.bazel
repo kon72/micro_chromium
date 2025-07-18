@@ -1,0 +1,11 @@
+load("@bazel_skylib//lib:selects.bzl", "selects")
+
+selects.config_setting_group(
+    name = "is_clang",
+    match_any = [
+        "@rules_cc//cc/compiler:clang",
+        "@rules_cc//cc/compiler:clang-cl",
+        "@rules_cc//cc/compiler:emscripten",
+    ],
+    visibility = ["//visibility:public"],
+)

@@ -1,6 +1,5 @@
 add-buildflags.patch
 add-check-and-logging-shim.patch
-add-notreached.patch
 add-win-util.patch
 add-gtest-util.patch
 split-process-handle.patch
