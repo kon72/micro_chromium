@@ -2,7 +2,7 @@ load("@rules_cc//cc:cc_library.bzl", "cc_library")
 load("@rules_cc//cc:cc_test.bzl", "cc_test")
 load("@rules_cc//cc:objc_library.bzl", "objc_library")
 
-def chromium_cc_opts():
+def chromium_cc_copts():
     copts = select({
         "@platforms//os:chromiumos": ["-DSYSTEM_NATIVE_UTF8"],
         "@platforms//os:fuchsia": ["-DSYSTEM_NATIVE_UTF8"],
@@ -79,16 +79,6 @@ def chromium_cc_opts():
         "//conditions:default": [],
     }) + select({
         "@platforms//os:windows": [
-            "/EHs-c-",
-            "-D_HAS_EXCEPTIONS=0",
-            "/GR-",
-        ],
-        "//conditions:default": [
-            "-fno-exceptions",
-            "-fno-rtti",
-        ],
-    }) + select({
-        "@platforms//os:windows": [
             # Defines that set up the CRT.
             "-D__STD_C",
             "-D_CRT_RAND_S",
@@ -130,6 +120,7 @@ def chromium_cc_opts():
             "-D_UNICODE",
             "-DUNICODE",
             "-DNTDDI_VERSION=NTDDI_WIN11_GE",
+            "-U_WIN32_WINNT",
             "-D_WIN32_WINNT=0x0A00",
             "-DWINVER=0x0A00",
         ],
@@ -156,8 +147,21 @@ def chromium_cc_opts():
 
     return copts
 
-def chromium_objc_opts():
-    return chromium_cc_opts() + [
+def chromium_cc_cxxopts():
+    return select({
+        "@platforms//os:windows": [
+            "/EHs-c-",
+            "-D_HAS_EXCEPTIONS=0",
+            "/GR-",
+        ],
+        "//conditions:default": [
+            "-fno-exceptions",
+            "-fno-rtti",
+        ],
+    })
+
+def chromium_objc_copts():
+    return chromium_cc_copts() + [
         "-fobjc-arc",
         "-fno-objc-arc-exceptions",
     ] + select({
@@ -173,12 +177,16 @@ def chromium_objc_opts():
         "//conditions:default": [],
     })
 
+def chromium_objc_cxxopts():
+    return chromium_cc_cxxopts()
+
 def chromium_cc_library(
         name,
         testonly = False,
         srcs = [],
         hdrs = [],
         copts = [],
+        cxxopts = [],
         features = [],
         linkopts = [],
         target_compatible_with = [],
@@ -190,7 +198,8 @@ def chromium_cc_library(
         testonly = testonly,
         srcs = srcs,
         hdrs = hdrs,
-        copts = chromium_cc_opts() + copts,
+        copts = chromium_cc_copts() + copts,
+        cxxopts = chromium_cc_cxxopts() + cxxopts,
         features = features,
         linkopts = linkopts,
         target_compatible_with = target_compatible_with,
@@ -205,6 +214,7 @@ def chromium_objc_library(
         srcs = [],
         hdrs = [],
         copts = [],
+        cxxopts = [],
         features = [],
         linkopts = [],
         target_compatible_with = [],
@@ -216,7 +226,8 @@ def chromium_objc_library(
         testonly = testonly,
         srcs = srcs,
         hdrs = hdrs,
-        copts = chromium_objc_opts() + copts,
+        copts = chromium_objc_copts() + copts,
+        cxxopts = chromium_objc_cxxopts() + cxxopts,
         features = features,
         linkopts = linkopts,
         target_compatible_with = target_compatible_with,
@@ -231,6 +242,7 @@ def chromium_cc_or_objc_library(
         srcs = [],
         hdrs = [],
         copts = [],
+        cxxopts = [],
         features = [],
         linkopts = [],
         target_compatible_with = [],
@@ -246,6 +258,7 @@ def chromium_cc_or_objc_library(
         srcs = srcs,
         hdrs = hdrs,
         copts = copts,
+        cxxopts = cxxopts,
         features = features,
         linkopts = linkopts,
         target_compatible_with = target_compatible_with + select({
@@ -264,6 +277,7 @@ def chromium_cc_or_objc_library(
         srcs = srcs,
         hdrs = hdrs,
         copts = copts,
+        cxxopts = cxxopts,
         features = features,
         linkopts = linkopts,
         target_compatible_with = target_compatible_with + select({
@@ -293,6 +307,7 @@ def chromium_cc_test(
         size = "medium",
         srcs = [],
         copts = [],
+        cxxopts = [],
         linkopts = [],
         target_compatible_with = [],
         visibility = None,
@@ -301,7 +316,7 @@ def chromium_cc_test(
         name = name,
         size = size,
         srcs = srcs,
-        copts = chromium_cc_opts() + select({
+        copts = chromium_cc_copts() + select({
             "//chromium/bazel/config:is_clang": [
                 "-Wno-implicit-int-conversion",
                 "-Wno-shorten-64-to-32",
@@ -311,6 +326,7 @@ def chromium_cc_test(
             ],
             "//conditions:default": [],
         }) + copts,
+        cxxopts = chromium_cc_cxxopts() + cxxopts,
         linkopts = linkopts,
         target_compatible_with = target_compatible_with,
         visibility = visibility,
@@ -322,6 +338,7 @@ def chromium_objc_test(
         size = "medium",
         srcs = [],
         copts = [],
+        cxxopts = [],
         linkopts = [],
         target_compatible_with = [],
         visibility = None,
@@ -342,6 +359,7 @@ def chromium_objc_test(
             ],
             "//conditions:default": [],
         }) + copts,
+        cxxopts = cxxopts,
         linkopts = linkopts,
         target_compatible_with = target_compatible_with,
         visibility = ["//visibility:private"],
