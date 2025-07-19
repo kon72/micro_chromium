@@ -2,6 +2,7 @@ load("//chromium:build_defs.bzl", "chromium_cc_library")
 
 chromium_cc_library(
     name = "atomic_flag",
+    srcs = ["atomic_flag.cc"],
     hdrs = ["atomic_flag.h"],
     visibility = ["//visibility:public"],
     deps = [

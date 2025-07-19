@@ -34,11 +34,11 @@ chromium_cc_library(
 
 chromium_cc_library(
     name = "callback",
-    srcs = [
-        "callback_forward.h",
+    srcs = ["callback_forward.h"],
+    hdrs = [
+        "callback.h",
         "callback_tags.h",
     ],
-    hdrs = ["callback.h"],
     deps = [
         ":bind",
         ":callback_internal",
