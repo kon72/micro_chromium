@@ -325,6 +325,7 @@ chromium_cc_or_objc_library(
         ],
         "//conditions:default": [],
     }),
+    features = ["-parse_headers"],
     textual_hdrs = select({
         "@platforms//os:windows": ["partition_alloc_base/win/win_handle_types_list.inc"],
         "//conditions:default": [],
@@ -418,6 +419,7 @@ chromium_cc_test(
     ],
     deps = [
         ":allocator_base",
+        ":allocator_config",
         ":build_config",
         ":buildflags",
         "//chromium/testing/gmock",
