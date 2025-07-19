@@ -1,0 +1,11 @@
+alias(
+    name = "buildflags",
+    actual = "//chromium/base/allocator/partition_allocator/src/partition_alloc:buildflags",
+    visibility = ["//visibility:public"],
+)
+
+alias(
+    name = "raw_ptr",
+    actual = "//chromium/base/allocator/partition_allocator/src/partition_alloc:raw_ptr",
+    visibility = ["//visibility:public"],
+)

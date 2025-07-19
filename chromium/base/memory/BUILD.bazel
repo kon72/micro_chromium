@@ -10,12 +10,21 @@ chromium_cc_library(
     name = "raw_ptr",
     hdrs = ["raw_ptr.h"],
     visibility = ["//chromium:__subpackages__"],
+    deps = ["//chromium/base/allocator/partition_allocator:raw_ptr"],
 )
 
 chromium_cc_library(
     name = "raw_ptr_exclusion",
     hdrs = ["raw_ptr_exclusion.h"],
     visibility = ["//chromium:__subpackages__"],
+    deps = ["//chromium/base/allocator/partition_allocator:raw_ptr"],
+)
+
+chromium_cc_library(
+    name = "raw_ref",
+    hdrs = ["raw_ref.h"],
+    visibility = ["//chromium:__subpackages__"],
+    deps = ["//chromium/base/allocator/partition_allocator:raw_ptr"],
 )
 
 chromium_cc_library(

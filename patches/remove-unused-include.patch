@@ -1,3 +1,21 @@
+--- a/base/allocator/partition_allocator/src/partition_alloc/pointers/instance_tracer.cc
++++ b/base/allocator/partition_allocator/src/partition_alloc/pointers/instance_tracer.cc
+@@ -4,6 +4,7 @@
+ 
+ #include "partition_alloc/pointers/instance_tracer.h"
+ 
++#if PA_BUILDFLAG(ENABLE_BACKUP_REF_PTR_INSTANCE_TRACER)
+ #include <atomic>
+ #include <map>
+ #include <mutex>
+@@ -13,6 +14,7 @@
+ #include "partition_alloc/partition_alloc_base/debug/stack_trace.h"
+ #include "partition_alloc/partition_alloc_base/no_destructor.h"
+ #include "partition_alloc/partition_root.h"
++#endif  // PA_BUILDFLAG(ENABLE_BACKUP_REF_PTR_INSTANCE_TRACER)
+ 
+ namespace base::internal {
+ 
 --- a/base/strings/string_util_impl_helpers.h
 +++ b/base/strings/string_util_impl_helpers.h
 @@ -16,7 +16,6 @@

@@ -1,0 +1,426 @@
+load("@bazel_skylib//rules:common_settings.bzl", "bool_flag")
+load("@rules_cc//cc:cc_library.bzl", "cc_library")
+load("//chromium:build_defs.bzl", "chromium_cc_library", "chromium_cc_or_objc_library", "chromium_cc_test")
+load("//chromium/bazel:configurable_value.bzl", "bool_value")
+load(":buildflag_header.bzl", "pa_buildflag_header")
+
+bool_flag(
+    name = "assert_cpp20",
+    build_setting_default = True,
+)
+
+bool_flag(
+    name = "can_unwind_with_frame_pointers",
+    build_setting_default = False,
+)
+
+bool_value(
+    name = "dchecks_are_on",
+    value = select({
+        "//chromium/bazel/config:is_debug": True,
+        "//conditions:default": False,
+    }),
+)
+
+bool_flag(
+    name = "dcheck_is_configurable",
+    build_setting_default = False,
+)
+
+bool_value(
+    name = "enable_backup_ref_ptr_instance_tracer",
+    value = False,
+)
+
+bool_value(
+    name = "enable_backup_ref_ptr_slow_checks",
+    value = False,
+)
+
+bool_value(
+    name = "enable_backup_ref_ptr_support",
+    value = False,
+)
+
+bool_value(
+    name = "enable_dangling_raw_ptr_checks",
+    value = False,
+)
+
+bool_value(
+    name = "enable_pointer_arithmetic_trait_check",
+    value = True,
+)
+
+bool_flag(
+    name = "enable_pointer_compression",
+    build_setting_default = False,
+)
+
+bool_value(
+    name = "enable_shadow_metadata",
+    value = False,
+)
+
+bool_flag(
+    name = "force_enable_raw_ptr_exclusion",
+    build_setting_default = False,
+)
+
+bool_value(
+    name = "has_64_bit_pointers",
+    value = select({
+        "//chromium/bazel/config:is_64bit": True,
+        "//conditions:default": False,
+    }),
+)
+
+bool_flag(
+    name = "has_memory_tagging",
+    build_setting_default = False,
+)
+
+bool_value(
+    name = "is_android",
+    value = select({
+        "@platforms//os:android": True,
+        "//conditions:default": False,
+    }),
+)
+
+bool_value(
+    name = "is_chromeos",
+    value = select({
+        "@platforms//os:chromiumos": True,
+        "//conditions:default": False,
+    }),
+)
+
+bool_value(
+    name = "is_debug",
+    value = select({
+        "//chromium/bazel/config:is_debug": True,
+        "//conditions:default": False,
+    }),
+)
+
+bool_flag(
+    name = "raw_ptr_zero_on_construct",
+    build_setting_default = True,
+)
+
+bool_flag(
+    name = "raw_ptr_zero_on_destruct",
+    build_setting_default = False,
+)
+
+bool_flag(
+    name = "raw_ptr_zero_on_move",
+    build_setting_default = True,
+)
+
+bool_value(
+    name = "use_asan_backup_ref_ptr",
+    value = False,
+)
+
+bool_value(
+    name = "use_partition_alloc",
+    value = False,
+)
+
+bool_value(
+    name = "use_partition_alloc_as_malloc",
+    value = False,
+)
+
+bool_value(
+    name = "use_partition_cookie",
+    value = select({
+        "//chromium/bazel/config:is_debug": True,
+        "//conditions:default": False,
+    }),
+)
+
+bool_value(
+    name = "use_raw_ptr_asan_unowned_impl",
+    value = False,
+)
+
+bool_value(
+    name = "use_raw_ptr_backup_ref_impl",
+    value = False,
+)
+
+bool_value(
+    name = "use_raw_ptr_hookable_impl",
+    value = False,
+)
+
+pa_buildflag_header(
+    name = "buildflags",
+    flags = {
+        "ASSERT_CPP_20": ":assert_cpp20",
+        "CAN_UNWIND_WITH_FRAME_POINTERS": ":can_unwind_with_frame_pointers",
+        "DCHECKS_ARE_ON": ":dchecks_are_on",
+        "DCHECK_IS_CONFIGURABLE": ":dcheck_is_configurable",
+        "ENABLE_BACKUP_REF_PTR_INSTANCE_TRACER": ":enable_backup_ref_ptr_instance_tracer",
+        "ENABLE_BACKUP_REF_PTR_SLOW_CHECKS": ":enable_backup_ref_ptr_slow_checks",
+        "ENABLE_BACKUP_REF_PTR_SUPPORT": ":enable_backup_ref_ptr_support",
+        "ENABLE_DANGLING_RAW_PTR_CHECKS": ":enable_dangling_raw_ptr_checks",
+        "ENABLE_POINTER_ARITHMETIC_TRAIT_CHECK": ":enable_pointer_arithmetic_trait_check",
+        "ENABLE_POINTER_COMPRESSION": ":enable_pointer_compression",
+        "ENABLE_SHADOW_METADATA_FOR_64_BITS_POINTERS": ":enable_shadow_metadata",
+        "FORCE_ENABLE_RAW_PTR_EXCLUSION": ":force_enable_raw_ptr_exclusion",
+        "HAS_64_BIT_POINTERS": ":has_64_bit_pointers",
+        "HAS_MEMORY_TAGGING": ":has_memory_tagging",
+        "IS_ANDROID": ":is_android",
+        "IS_CHROMEOS": ":is_chromeos",
+        "IS_DEBUG": ":is_debug",
+        "RAW_PTR_ZERO_ON_CONSTRUCT": ":raw_ptr_zero_on_construct",
+        "RAW_PTR_ZERO_ON_DESTRUCT": ":raw_ptr_zero_on_destruct",
+        "RAW_PTR_ZERO_ON_MOVE": ":raw_ptr_zero_on_move",
+        "USE_ASAN_BACKUP_REF_PTR": ":use_asan_backup_ref_ptr",
+        "USE_PARTITION_ALLOC": ":use_partition_alloc",
+        "USE_PARTITION_ALLOC_AS_MALLOC": ":use_partition_alloc_as_malloc",
+        "USE_PARTITION_COOKIE": ":use_partition_cookie",
+        "USE_RAW_PTR_ASAN_UNOWNED_IMPL": ":use_raw_ptr_asan_unowned_impl",
+        "USE_RAW_PTR_BACKUP_REF_IMPL": ":use_raw_ptr_backup_ref_impl",
+        "USE_RAW_PTR_HOOKABLE_IMPL": ":use_raw_ptr_hookable_impl",
+    },
+    visibility = ["//chromium/base/allocator/partition_allocator:__pkg__"],
+)
+
+cc_library(
+    name = "defs",
+    includes = [".."],
+)
+
+chromium_cc_or_objc_library(
+    name = "allocator_base",
+    srcs = [
+        "partition_alloc_base/check.cc",
+        "partition_alloc_base/cpu.cc",
+        "partition_alloc_base/debug/alias.cc",
+        "partition_alloc_base/debug/stack_trace.cc",
+        "partition_alloc_base/log_message.cc",
+        "partition_alloc_base/logging.cc",
+        "partition_alloc_base/numerics/checked_math_impl.h",
+        "partition_alloc_base/numerics/clamped_math_impl.h",
+        "partition_alloc_base/numerics/safe_conversions_arm_impl.h",
+        "partition_alloc_base/numerics/safe_conversions_impl.h",
+        "partition_alloc_base/numerics/safe_math_arm_impl.h",
+        "partition_alloc_base/numerics/safe_math_clang_gcc_impl.h",
+        "partition_alloc_base/numerics/safe_math_shared_impl.h",
+        "partition_alloc_base/strings/cstring_builder.cc",
+        "partition_alloc_base/strings/safe_sprintf.cc",
+        "partition_alloc_base/strings/string_util.cc",
+        "partition_alloc_base/strings/stringprintf.cc",
+        "partition_alloc_base/threading/platform_thread.cc",
+        "partition_alloc_base/time/time.cc",
+        "partition_alloc_base/time/time_override.cc",
+    ] + select({
+        "@platforms//os:fuchsia": [],
+        "@platforms//os:windows": ["partition_alloc_base/debug/stack_trace_win.cc"],
+        "@platforms//os:android": [
+            "partition_alloc_base/debug/stack_trace_android.cc",
+            "partition_alloc_base/debug/stack_trace_posix.cc",
+        ],
+        "@platforms//os:macos": [
+            "partition_alloc_base/debug/stack_trace_mac.cc",
+            "partition_alloc_base/debug/stack_trace_posix.cc",
+        ],
+        "@platforms//os:ios": [
+            "partition_alloc_base/debug/stack_trace_mac.cc",
+            "partition_alloc_base/debug/stack_trace_posix.cc",
+        ],
+        "//conditions:default": [
+            "partition_alloc_base/debug/stack_trace_linux.cc",
+            "partition_alloc_base/debug/stack_trace_posix.cc",
+        ],
+    }) + select({
+        "@platforms//os:windows": [],
+        "//conditions:default": ["partition_alloc_base/posix/safe_strerror.cc"],
+    }) + select({
+        "@platforms//os:fuchsia": [],
+        "@platforms//os:windows": ["partition_alloc_base/process/process_handle_win.cc"],
+        "//conditions:default": ["partition_alloc_base/process/process_handle_posix.cc"],
+    }) + select({
+        "@platforms//os:windows": ["partition_alloc_base/scoped_clear_last_error_win.cc"],
+        "//conditions:default": [],
+    }) + select({
+        "@platforms//os:windows": ["partition_alloc_base/threading/platform_thread_win.cc"],
+        "//conditions:default": [
+            "partition_alloc_base/threading/platform_thread_internal_posix.h",
+            "partition_alloc_base/threading/platform_thread_posix.cc",
+        ],
+    }) + select({
+        "@platforms//os:fuchsia": [
+            "partition_alloc_base/time/time_conversion_posix.cc",
+            "partition_alloc_base/time/time_fuchsia.cc",
+        ],
+        "@platforms//os:windows": ["partition_alloc_base/time/time_win.cc"],
+        "@platforms//os:macos": [
+            "partition_alloc_base/time/time_apple.mm",
+            "partition_alloc_base/time/time_conversion_posix.cc",
+        ],
+        "@platforms//os:ios": [
+            "partition_alloc_base/time/time_apple.mm",
+            "partition_alloc_base/time/time_conversion_posix.cc",
+        ],
+        "//conditions:default": [
+            "partition_alloc_base/time/time_conversion_posix.cc",
+            "partition_alloc_base/time/time_now_posix.cc",
+        ],
+    }),
+    hdrs = [
+        "partition_alloc_base/augmentations/compiler_specific.h",
+        "partition_alloc_base/bit_cast.h",
+        "partition_alloc_base/bits.h",
+        "partition_alloc_base/check.h",
+        "partition_alloc_base/compiler_specific.h",
+        "partition_alloc_base/component_export.h",
+        "partition_alloc_base/cpu.h",
+        "partition_alloc_base/cxx20_is_constant_evaluated.h",
+        "partition_alloc_base/cxx_wrapper/algorithm.h",
+        "partition_alloc_base/debug/alias.h",
+        "partition_alloc_base/debug/stack_trace.h",
+        "partition_alloc_base/immediate_crash.h",
+        "partition_alloc_base/log_message.h",
+        "partition_alloc_base/logging.h",
+        "partition_alloc_base/notreached.h",
+        "partition_alloc_base/numerics/checked_math.h",
+        "partition_alloc_base/numerics/clamped_math.h",
+        "partition_alloc_base/numerics/safe_conversions.h",
+        "partition_alloc_base/numerics/safe_math.h",
+        "partition_alloc_base/posix/eintr_wrapper.h",
+        "partition_alloc_base/process/process_handle.h",
+        "partition_alloc_base/scoped_clear_last_error.h",
+        "partition_alloc_base/strings/cstring_builder.h",
+        "partition_alloc_base/strings/safe_sprintf.h",
+        "partition_alloc_base/strings/string_util.h",
+        "partition_alloc_base/strings/stringprintf.h",
+        "partition_alloc_base/thread_annotations.h",
+        "partition_alloc_base/threading/platform_thread.h",
+        "partition_alloc_base/threading/platform_thread_ref.h",
+        "partition_alloc_base/time/time.h",
+        "partition_alloc_base/time/time_override.h",
+        "partition_alloc_base/types/same_as_any.h",
+    ] + select({
+        "@platforms//os:fuchsia": [
+            "partition_alloc_base/posix/safe_strerror.h",
+        ],
+        "@platforms//os:windows": [
+            "partition_alloc_base/win/win_handle_types.h",
+            "partition_alloc_base/win/windows_types.h",
+        ],
+        "//conditions:default": [
+            "partition_alloc_base/posix/safe_strerror.h",
+        ],
+    }),
+    copts = select({
+        "//chromium/bazel/config:is_clang": [
+            "-Wno-shorten-64-to-32",
+            "-Wno-sign-conversion",
+        ],
+        "//conditions:default": [],
+    }),
+    textual_hdrs = select({
+        "@platforms//os:windows": ["partition_alloc_base/win/win_handle_types_list.inc"],
+        "//conditions:default": [],
+    }),
+    deps = [
+        ":allocator_config",
+        ":build_config",
+        ":buildflags",
+        ":defs",
+    ],
+)
+
+chromium_cc_library(
+    name = "allocator_config",
+    hdrs = ["partition_alloc_config.h"],
+    deps = [
+        ":build_config",
+        ":buildflags",
+        ":defs",
+    ],
+)
+
+chromium_cc_library(
+    name = "allocator_core",
+    hdrs = [
+        "flags.h",
+        "partition_alloc_config.h",
+        "partition_alloc_forward.h",
+    ],
+    deps = [
+        ":allocator_base",
+        ":allocator_config",
+        ":build_config",
+        ":buildflags",
+        ":defs",
+    ],
+)
+
+chromium_cc_library(
+    name = "build_config",
+    hdrs = ["build_config.h"],
+    deps = [
+        ":buildflag_macro",
+        ":buildflags",
+        ":defs",
+    ],
+)
+
+chromium_cc_library(
+    name = "buildflag_macro",
+    hdrs = ["buildflag.h"],
+    deps = [":defs"],
+)
+
+chromium_cc_library(
+    name = "raw_ptr",
+    srcs = [
+        "pointers/instance_tracer.cc",
+        "pointers/instance_tracer.h",
+        "pointers/raw_ptr_noop_impl.h",
+    ],
+    hdrs = [
+        "pointers/raw_ptr.h",
+        "pointers/raw_ptr_exclusion.h",
+        "pointers/raw_ref.h",
+    ],
+    visibility = ["//chromium/base/allocator/partition_allocator:__pkg__"],
+    deps = [
+        ":allocator_base",
+        ":allocator_core",
+        ":build_config",
+        ":buildflags",
+        ":defs",
+    ],
+)
+
+chromium_cc_test(
+    name = "unittests",
+    size = "small",
+    srcs = [
+        "partition_alloc_base/bits_pa_unittest.cc",
+        "partition_alloc_base/component_export_pa_unittest.cc",
+        "partition_alloc_base/cpu_pa_unittest.cc",
+        "partition_alloc_base/logging_pa_unittest.cc",
+        "partition_alloc_base/scoped_clear_last_error_pa_unittest.cc",
+        "partition_alloc_base/strings/cstring_builder_pa_unittest.cc",
+        "partition_alloc_base/strings/safe_sprintf_pa_unittest.cc",
+        "partition_alloc_base/strings/string_util_pa_unittest.cc",
+        "partition_alloc_base/strings/stringprintf_pa_unittest.cc",
+        "partition_alloc_base/thread_annotations_pa_unittest.cc",
+    ],
+    deps = [
+        ":allocator_base",
+        ":build_config",
+        ":buildflags",
+        "//chromium/testing/gmock",
+        "//chromium/testing/gtest",
+    ],
+)

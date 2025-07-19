@@ -9,3 +9,27 @@ selects.config_setting_group(
     ],
     visibility = ["//visibility:public"],
 )
+
+config_setting(
+    name = "is_debug",
+    values = {"compilation_mode": "dbg"},
+    visibility = ["//visibility:public"],
+)
+
+selects.config_setting_group(
+    name = "is_64bit",
+    match_any = [
+        "@platforms//cpu:aarch64",
+        "@platforms//cpu:arm64e",
+        "@platforms//cpu:armv8-m",
+        "@platforms//cpu:cortex-r52",
+        "@platforms//cpu:cortex-r82",
+        "@platforms//cpu:mips64",
+        "@platforms//cpu:ppc64le",
+        "@platforms//cpu:riscv64",
+        "@platforms//cpu:s390x",
+        "@platforms//cpu:wasm64",
+        "@platforms//cpu:x86_64",
+    ],
+    visibility = ["//visibility:public"],
+)
