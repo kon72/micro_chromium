@@ -1,0 +1,17 @@
+load("//chromium:build_defs.bzl", "chromium_cc_library")
+
+chromium_cc_library(
+    name = "safe_strerror",
+    srcs = ["safe_strerror.cc"],
+    hdrs = ["safe_strerror.h"],
+    target_compatible_with = select({
+        "@platforms//os:windows": ["@platforms//:incompatible"],
+        "//conditions:default": [],
+    }),
+    visibility = ["//visibility:public"],
+    deps = [
+        "//chromium/base:base_export",
+        "//chromium/base:compiler_specific",
+        "//chromium/build:build_config",
+    ],
+)

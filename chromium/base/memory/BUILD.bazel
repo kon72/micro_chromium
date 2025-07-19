@@ -92,6 +92,12 @@ chromium_cc_library(
 )
 
 chromium_cc_library(
+    name = "stack_allocated",
+    hdrs = ["stack_allocated.h"],
+    visibility = ["//visibility:public"],
+)
+
+chromium_cc_library(
     name = "weak_ptr",
     srcs = ["weak_ptr.cc"],
     hdrs = ["weak_ptr.h"],

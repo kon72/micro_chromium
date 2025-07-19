@@ -1,3 +1,41 @@
+--- a/base/synchronization/lock.cc
++++ b/base/synchronization/lock.cc
+@@ -21,7 +21,7 @@
+ 
+ #include "base/functional/function_ref.h"
+ #include "base/synchronization/lock_subtle.h"
+-#include "base/threading/platform_thread.h"
++#include "base/threading/platform_thread_handle.h"
+ 
+ namespace base {
+ 
+@@ -83,7 +83,7 @@ bool Lock::Try(subtle::LockTracking trac
+ }
+ 
+ void Lock::AssertAcquired() const {
+-  DCHECK_EQ(owning_thread_ref_, PlatformThread::CurrentRef());
++  DCHECK_EQ(owning_thread_ref_, GetCurrentThreadRef());
+ }
+ 
+ void Lock::AssertNotHeld() const {
+@@ -91,7 +91,7 @@ void Lock::AssertNotHeld() const {
+ }
+ 
+ void Lock::CheckHeldAndUnmark() {
+-  DCHECK_EQ(owning_thread_ref_, PlatformThread::CurrentRef());
++  DCHECK_EQ(owning_thread_ref_, GetCurrentThreadRef());
+   if (check_invariants_) {
+     (*check_invariants_)();
+   }
+@@ -100,7 +100,7 @@ void Lock::CheckHeldAndUnmark() {
+ 
+ void Lock::CheckUnheldAndMark() {
+   DCHECK(owning_thread_ref_.is_null());
+-  owning_thread_ref_ = PlatformThread::CurrentRef();
++  owning_thread_ref_ = GetCurrentThreadRef();
+   if (check_invariants_) {
+     (*check_invariants_)();
+   }
 --- a/base/threading/platform_thread_handle.h
 +++ b/base/threading/platform_thread_handle.h
 @@ -11,18 +11,14 @@
