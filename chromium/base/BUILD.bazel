@@ -1,6 +1,12 @@
 load("//chromium:build_defs.bzl", "chromium_cc_library", "chromium_cc_test")
 
 chromium_cc_library(
+    name = "atomic_ref_count",
+    hdrs = ["atomic_ref_count.h"],
+    visibility = ["//visibility:public"],
+)
+
+chromium_cc_library(
     name = "base_export",
     hdrs = ["base_export.h"],
     visibility = ["//chromium:__subpackages__"],
@@ -177,6 +183,26 @@ chromium_cc_library(
 )
 
 chromium_cc_library(
+    name = "sequence_checker",
+    hdrs = ["sequence_checker.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":check",
+        ":thread_annotations",
+    ],
+)
+
+chromium_cc_library(
+    name = "thread_annotations",
+    hdrs = ["thread_annotations.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":dcheck_is_on",
+        "//chromium/build:build_config",
+    ],
+)
+
+chromium_cc_library(
     name = "values",
     srcs = [
         "json/json_common.h",
@@ -329,6 +355,17 @@ chromium_cc_test(
         "//chromium/base/containers:contains",
         "//chromium/base/memory:raw_ptr",
         "//chromium/build:build_config",
+        "//chromium/testing/gtest",
+    ],
+)
+
+chromium_cc_test(
+    name = "thread_annotations_unittest",
+    size = "small",
+    srcs = ["thread_annotations_unittest.cc"],
+    deps = [
+        ":thread_annotations",
+        "//chromium/base/memory:raw_ref",
         "//chromium/testing/gtest",
     ],
 )

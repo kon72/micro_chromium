@@ -261,3 +261,43 @@
 +#endif  // 0
  
  }  // namespace base
+--- a/base/threading/thread_collision_warner.cc
++++ b/base/threading/thread_collision_warner.cc
+@@ -8,7 +8,7 @@
+ #include <ostream>
+ 
+ #include "base/notreached.h"
+-#include "base/threading/platform_thread.h"
++#include "base/threading/platform_thread_handle.h"
+ 
+ namespace base {
+ 
+@@ -20,7 +20,7 @@ void ThreadCollisionWarner::EnterSelf()
+   // If the active thread is kInvalidThreadId then I'll write the current thread
+   // ID if two or more threads arrive here only one will succeed to write on
+   // valid_thread_id_ the current thread ID.
+-  PlatformThreadId current_thread_id = PlatformThread::CurrentId();
++  PlatformThreadId current_thread_id = GetCurrentThreadId();
+   PlatformThreadId expected = kInvalidThreadId;
+ 
+   bool ok = valid_thread_id_.compare_exchange_strong(
+@@ -35,7 +35,7 @@ void ThreadCollisionWarner::EnterSelf()
+ }
+ 
+ void ThreadCollisionWarner::Enter() {
+-  PlatformThreadId current_thread_id = PlatformThread::CurrentId();
++  PlatformThreadId current_thread_id = GetCurrentThreadId();
+   PlatformThreadId expected = kInvalidThreadId;
+ 
+   if (!valid_thread_id_.compare_exchange_strong(expected, current_thread_id,
+--- a/base/threading/thread_collision_warner.h
++++ b/base/threading/thread_collision_warner.h
+@@ -12,7 +12,7 @@
+ #include "base/dcheck_is_on.h"
+ #include "base/macros/uniquify.h"
+ #include "base/memory/raw_ptr.h"
+-#include "base/threading/platform_thread.h"
++#include "base/threading/platform_thread_handle.h"
+ 
+ // A helper class alongside macros to be used to verify assumptions about thread
+ // safety of a class.

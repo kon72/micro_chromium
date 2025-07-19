@@ -12,7 +12,8 @@ remove-tracing.patch
 remove-feature-switch.patch
 no-pickle.patch
 remove-scoped-blocking-call.patch
-remove-out-of-memory-handling.patch
+noop-sequence-checker.patch
+remove-failure-handling.patch
 remove-rand-util.patch
 remove-unused-include.patch
 add-missing-headers.patch

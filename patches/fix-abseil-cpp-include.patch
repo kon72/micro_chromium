@@ -1,3 +1,36 @@
+--- a/base/functional/bind_internal.h
++++ b/base/functional/bind_internal.h
+@@ -26,7 +26,7 @@
+ #include "base/types/is_instantiation.h"
+ #include "base/types/to_address.h"
+ #include "build/build_config.h"
+-#include "third_party/abseil-cpp/absl/functional/function_ref.h"
++#include "absl/functional/function_ref.h"
+ 
+ #if PA_BUILDFLAG(USE_ASAN_BACKUP_REF_PTR)
+ #include "base/memory/raw_ptr_asan_bound_arg_tracker.h"
+--- a/base/functional/function_ref.h
++++ b/base/functional/function_ref.h
+@@ -12,7 +12,7 @@
+ #include "base/compiler_specific.h"
+ #include "base/functional/bind_internal.h"
+ #include "base/types/is_instantiation.h"
+-#include "third_party/abseil-cpp/absl/functional/function_ref.h"
++#include "absl/functional/function_ref.h"
+ 
+ namespace base {
+ 
+--- a/base/functional/function_ref_unittest.cc
++++ b/base/functional/function_ref_unittest.cc
+@@ -11,7 +11,7 @@
+ 
+ #include "base/compiler_specific.h"
+ #include "testing/gtest/include/gtest/gtest.h"
+-#include "third_party/abseil-cpp/absl/functional/function_ref.h"
++#include "absl/functional/function_ref.h"
+ 
+ namespace base {
+ 
 --- a/base/strings/stringprintf.h
 +++ b/base/strings/stringprintf.h
 @@ -11,7 +11,7 @@

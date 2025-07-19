@@ -1,0 +1,128 @@
+load("//chromium:build_defs.bzl", "chromium_cc_library", "chromium_cc_test")
+
+chromium_cc_library(
+    name = "bind",
+    hdrs = ["bind.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":bind_internal",
+        "//chromium/base:compiler_specific",
+        "//chromium/base/memory:raw_ptr",
+        "//chromium/build:build_config",
+    ],
+)
+
+chromium_cc_library(
+    name = "bind_internal",
+    hdrs = ["bind_internal.h"],
+    deps = [
+        ":callback_internal",
+        ":unretained_traits",
+        "//chromium/base:check",
+        "//chromium/base:compiler_specific",
+        "//chromium/base/memory:raw_ptr",
+        "//chromium/base/memory:raw_ref",
+        "//chromium/base/memory:weak_ptr",
+        "//chromium/base/types:always_false",
+        "//chromium/base/types:is_complete",
+        "//chromium/base/types:is_instantiation",
+        "//chromium/base/types:to_address",
+        "//chromium/build:build_config",
+        "@abseil-cpp//absl/functional:function_ref",
+    ],
+)
+
+chromium_cc_library(
+    name = "callback",
+    srcs = [
+        "callback_forward.h",
+        "callback_tags.h",
+    ],
+    hdrs = ["callback.h"],
+    deps = [
+        ":bind",
+        ":callback_internal",
+        ":function_ref",
+        "//chromium/base:check",
+        "//chromium/base:compiler_specific",
+        "//chromium/base:notreached",
+        "//chromium/base/types:always_false",
+    ],
+)
+
+chromium_cc_library(
+    name = "callback_helpers",
+    srcs = ["callback_helpers.cc"],
+    hdrs = ["callback_helpers.h"],
+    deps = [
+        ":bind",
+        ":callback",
+        "//chromium/base:base_export",
+        "//chromium/base:check",
+    ],
+)
+
+chromium_cc_library(
+    name = "callback_internal",
+    srcs = [
+        "callback_forward.h",
+        "callback_internal.cc",
+    ],
+    hdrs = ["callback_internal.h"],
+    deps = [
+        "//chromium/base:base_export",
+        "//chromium/base:check",
+        "//chromium/base:compiler_specific",
+        "//chromium/base:notreached",
+        "//chromium/base/memory:ref_counted",
+        "//chromium/base/types:cxx23_to_underlying",
+    ],
+)
+
+chromium_cc_library(
+    name = "function_ref",
+    hdrs = ["function_ref.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":bind_internal",
+        "//chromium/base:compiler_specific",
+        "//chromium/base/types:is_instantiation",
+        "@abseil-cpp//absl/functional:function_ref",
+    ],
+)
+
+chromium_cc_library(
+    name = "unretained_traits",
+    hdrs = ["unretained_traits.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//chromium/base/types:is_complete",
+        "//chromium/base/types:same_as_any",
+        "//chromium/build:build_config",
+    ],
+)
+
+chromium_cc_test(
+    name = "callback_helpers_unittest",
+    size = "small",
+    srcs = ["callback_helpers_unittest.cc"],
+    deps = [
+        ":bind",
+        ":callback",
+        ":callback_helpers",
+        "//chromium/base/test:gtest_util",
+        "//chromium/testing/gtest",
+    ],
+)
+
+chromium_cc_test(
+    name = "function_ref_unittest",
+    size = "small",
+    srcs = ["function_ref_unittest.cc"],
+    deps = [
+        ":function_ref",
+        "//chromium/base:compiler_specific",
+        "//chromium/testing/gtest",
+        "@abseil-cpp//absl/functional:function_ref",
+    ],
+)

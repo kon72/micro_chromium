@@ -40,3 +40,19 @@ chromium_cc_library(
         "//conditions:default": [],
     }),
 )
+
+chromium_cc_library(
+    name = "thread_collision_warner",
+    srcs = ["thread_collision_warner.cc"],
+    hdrs = ["thread_collision_warner.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":platform_thread_handle",
+        "//chromium/base:base_export",
+        "//chromium/base:compiler_specific",
+        "//chromium/base:dcheck_is_on",
+        "//chromium/base:notreached",
+        "//chromium/base/macros:uniquify",
+        "//chromium/base/memory:raw_ptr",
+    ],
+)

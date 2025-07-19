@@ -38,9 +38,75 @@ chromium_cc_library(
 )
 
 chromium_cc_library(
+    name = "ref_counted",
+    srcs = ["ref_counted.cc"],
+    hdrs = ["ref_counted.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":scoped_refptr",
+        "//chromium/base:atomic_ref_count",
+        "//chromium/base:base_export",
+        "//chromium/base:check",
+        "//chromium/base:check_op",
+        "//chromium/base:compiler_specific",
+        "//chromium/base:dcheck_is_on",
+        "//chromium/base:sequence_checker",
+        "//chromium/base/threading:thread_collision_warner",
+        "//chromium/build:build_config",
+    ],
+)
+
+chromium_cc_library(
+    name = "safe_ref",
+    hdrs = ["safe_ref.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":safe_ref_traits",
+        ":weak_ptr",
+        "//chromium/base:check",
+    ],
+)
+
+chromium_cc_library(
+    name = "safe_ref_traits",
+    hdrs = ["safe_ref_traits.h"],
+    visibility = ["//visibility:public"],
+)
+
+chromium_cc_library(
     name = "scoped_policy",
     hdrs = ["scoped_policy.h"],
     visibility = ["//visibility:public"],
+)
+
+chromium_cc_library(
+    name = "scoped_refptr",
+    hdrs = ["scoped_refptr.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":raw_ptr",
+        ":raw_ptr_exclusion",
+        "//chromium/base:check",
+        "//chromium/base:compiler_specific",
+    ],
+)
+
+chromium_cc_library(
+    name = "weak_ptr",
+    srcs = ["weak_ptr.cc"],
+    hdrs = ["weak_ptr.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//chromium/base:base_export",
+        "//chromium/base:check",
+        "//chromium/base:compiler_specific",
+        "//chromium/base:dcheck_is_on",
+        "//chromium/base:sequence_checker",
+        "//chromium/base/memory:raw_ptr",
+        "//chromium/base/memory:ref_counted",
+        "//chromium/base/memory:safe_ref_traits",
+        "//chromium/base/synchronization:atomic_flag",
+    ],
 )
 
 chromium_cc_test(
@@ -60,6 +126,19 @@ chromium_cc_test(
     deps = [
         ":raw_span",
         "//chromium/testing/gmock",
+        "//chromium/testing/gtest",
+    ],
+)
+
+chromium_cc_test(
+    name = "ref_counted_unittest",
+    size = "small",
+    srcs = ["ref_counted_unittest.cc"],
+    deps = [
+        ":raw_ptr",
+        ":ref_counted",
+        "//chromium/base/test:gtest_util",
+        "//chromium/build:build_config",
         "//chromium/testing/gtest",
     ],
 )

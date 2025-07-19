@@ -1,0 +1,12 @@
+load("//chromium:build_defs.bzl", "chromium_cc_library")
+
+chromium_cc_library(
+    name = "atomic_flag",
+    hdrs = ["atomic_flag.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//chromium/base:base_export",
+        "//chromium/base:check_op",
+        "//chromium/base:sequence_checker",
+    ],
+)

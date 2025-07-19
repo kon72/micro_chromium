@@ -8,6 +8,12 @@ chromium_cc_library(
 )
 
 chromium_cc_library(
+    name = "cxx23_to_underlying",
+    hdrs = ["cxx23_to_underlying.h"],
+    visibility = ["//visibility:public"],
+)
+
+chromium_cc_library(
     name = "expected",
     srcs = ["expected_internal.h"],
     hdrs = ["expected.h"],
@@ -38,6 +44,12 @@ chromium_cc_library(
 )
 
 chromium_cc_library(
+    name = "is_complete",
+    hdrs = ["is_complete.h"],
+    visibility = ["//visibility:public"],
+)
+
+chromium_cc_library(
     name = "is_instantiation",
     hdrs = ["is_instantiation.h"],
     visibility = ["//visibility:public"],
@@ -46,6 +58,12 @@ chromium_cc_library(
 chromium_cc_library(
     name = "pass_key",
     hdrs = ["pass_key.h"],
+    visibility = ["//visibility:public"],
+)
+
+chromium_cc_library(
+    name = "same_as_any",
+    hdrs = ["same_as_any.h"],
     visibility = ["//visibility:public"],
 )
 
@@ -65,6 +83,16 @@ chromium_cc_library(
     name = "to_address",
     hdrs = ["to_address.h"],
     visibility = ["//visibility:public"],
+)
+
+chromium_cc_test(
+    name = "cxx23_to_underlying_unittest",
+    size = "small",
+    srcs = ["cxx23_to_underlying_unittest.cc"],
+    deps = [
+        ":cxx23_to_underlying",
+        "//chromium/testing/gtest",
+    ],
 )
 
 chromium_cc_test(
@@ -95,6 +123,18 @@ chromium_cc_test(
 )
 
 build_test(
+    name = "is_complete_unittest",
+    targets = [":is_complete_unittest_lib"],
+)
+
+chromium_cc_library(
+    name = "is_complete_unittest_lib",
+    testonly = True,
+    srcs = ["is_complete_unittest.cc"],
+    deps = [":is_complete"],
+)
+
+build_test(
     name = "is_instantiation_unittest",
     targets = [":is_instantiation_unittest_lib"],
 )
@@ -116,6 +156,18 @@ chromium_cc_library(
     testonly = True,
     srcs = ["pass_key_unittest.cc"],
     deps = [":pass_key"],
+)
+
+build_test(
+    name = "same_as_any_unittest",
+    targets = [":same_as_any_unittest_lib"],
+)
+
+chromium_cc_library(
+    name = "same_as_any_unittest_lib",
+    testonly = True,
+    srcs = ["same_as_any_unittest.cc"],
+    deps = [":same_as_any"],
 )
 
 build_test(
