@@ -45,7 +45,10 @@ def chromium_cc_copts():
             "-Wundeclared-selector",
         ],
         "//conditions:default": [],
-    }) + ["-Wno-unused-parameter"] + select({
+    }) + [
+        "-Wno-missing-field-initializers",
+        "-Wno-unused-parameter",
+    ] + select({
         "//chromium/bazel/config:is_clang": [
             "-Wloop-analysis",
             "-Wno-unneeded-internal-declaration",
