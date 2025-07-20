@@ -339,3 +339,23 @@
  
  // A helper class alongside macros to be used to verify assumptions about thread
  // safety of a class.
+--- a/base/time/time_win.cc
++++ b/base/time/time_win.cc
+@@ -55,7 +55,7 @@
+ #include "base/notreached.h"
+ #include "base/rand_util.h"
+ #include "base/synchronization/lock.h"
+-#include "base/threading/platform_thread.h"
++#include "base/threading/platform_thread_handle.h"
+ #include "base/time/time_override.h"
+ #include "build/build_config.h"
+ 
+@@ -815,7 +815,7 @@ LiveTicks LiveTicksNowIgnoringOverride()
+ 
+ namespace subtle {
+ ThreadTicks ThreadTicksNowIgnoringOverride() {
+-  return ThreadTicks::GetForThread(PlatformThread::CurrentHandle());
++  return ThreadTicks::GetForThread(GetCurrentThreadHandle());
+ }
+ }  // namespace subtle
+ 

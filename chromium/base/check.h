@@ -8,6 +8,7 @@
 #include <iosfwd>
 
 #include "absl/log/absl_check.h"
+#include "base/macros/uniquify.h"
 
 namespace logging {
 
@@ -27,9 +28,16 @@ class VoidifyStream {
        : ::logging::VoidifyStream(expr) & (*::logging::g_swallow_stream)
 extern std::ostream* g_swallow_stream;
 
-#define CHECK(cond) ABSL_CHECK(cond)
+#define CHECK(cond, ...) ABSL_CHECK(cond)
 
-#define DCHECK(cond) ABSL_DCHECK(cond)
+// absl::log_internal::LogMessageFatal::~LogMessageFatal() is marked as
+// [[noreturn]].  Use switch statement to suppress unreachable-code warnings.
+#define DCHECK(cond)                              \
+  switch (int BASE_UNIQUIFY(check_internal_) = 0) \
+  case 0:                                         \
+  default:                                        \
+    ABSL_LOG_INTERNAL_DCHECK_IMPL(                \
+        BASE_UNIQUIFY(check_internal_) != 0 || (cond), #cond)
 
 }  // namespace logging
 

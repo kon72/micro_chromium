@@ -10,9 +10,13 @@ checkout_dirs=(
   'testing'
   'third_party/rust'
 )
+submodules=(
+  'third_party/icu'
+)
 files=(
   '.clang-format'
   '.clang-tidy'
+  'DEPS'
   'LICENSE'
   'base/allocator/partition_allocator/src/partition_alloc/build_config.h'
   'base/allocator/partition_allocator/src/partition_alloc/buildflag.h'
@@ -123,6 +127,8 @@ files=(
   'base/apple/bridging.h'
   'base/apple/scoped_cftyperef.h'
   'base/apple/scoped_cftyperef_unittest.cc'
+  'base/apple/scoped_mach_port.cc'
+  'base/apple/scoped_mach_port.h'
   'base/apple/scoped_typeref.h'
   'base/atomic_ref_count.h'
   'base/base_export.h'
@@ -159,9 +165,14 @@ files=(
   'base/containers/span_forward_internal.h'
   # 'base/containers/span_nocompile.nc'
   'base/containers/span_unittest.cc'
+  'base/containers/span_writer.h'
+  'base/containers/span_writer_unittest.cc'
   'base/containers/to_vector.h'
   # 'base/containers/to_vector_nocompile.nc'
   'base/containers/to_vector_unittest.cc'
+  'base/cpu.cc'
+  'base/cpu.h'
+  'base/cpu_unittest.cc'
   'base/dcheck_is_on.h'
   'base/debug/alias.cc'
   'base/debug/alias.h'
@@ -220,6 +231,14 @@ files=(
   'base/macros/is_empty_unittest.cc'
   'base/macros/remove_parens.h'
   'base/macros/uniquify.h'
+  'base/memory/page_size.h'
+  'base/memory/page_size_posix.cc'
+  'base/memory/page_size_win.cc'
+  'base/memory/protected_memory.h'
+  # 'base/memory/protected_memory_nocompile.nc'
+  'base/memory/protected_memory_posix.cc'
+  'base/memory/protected_memory_unittest.cc'
+  'base/memory/protected_memory_win.cc'
   'base/memory/ptr_util.h'
   'base/memory/ptr_util_unittest.cc'
   'base/memory/raw_ptr.h'
@@ -392,6 +411,10 @@ files=(
   'base/third_party/icu/LICENSE'
   'base/third_party/icu/README.chromium'
   'base/third_party/icu/icu_utf.h'
+  'base/third_party/nspr/LICENSE'
+  'base/third_party/nspr/README.chromium'
+  'base/third_party/nspr/prtime.cc'
+  'base/third_party/nspr/prtime.h'
   'base/third_party/superfasthash/LICENSE'
   'base/third_party/superfasthash/README.chromium'
   'base/third_party/superfasthash/superfasthash.c'
@@ -418,6 +441,55 @@ files=(
   'base/threading/thread_collision_warner.cc'
   'base/threading/thread_collision_warner.h'
   # 'base/threading/thread_collision_warner_unittest.cc'
+  # 'base/time/clock.cc'
+  # 'base/time/clock.h'
+  # 'base/time/default_clock.cc'
+  # 'base/time/default_clock.h'
+  # 'base/time/default_tick_clock.cc'
+  # 'base/time/default_tick_clock.h'
+  # 'base/time/pr_time_unittest.cc'
+  # 'base/time/tick_clock.cc'
+  # 'base/time/tick_clock.h'
+  'base/time/time.cc'
+  'base/time/time.h'
+  'base/time/time_android.cc'
+  'base/time/time_apple.mm'
+  'base/time/time_apple_unittest.mm'
+  'base/time/time_conversion_posix.cc'
+  # 'base/time/time_delta_from_string.cc'
+  # 'base/time/time_delta_from_string.h'
+  # 'base/time/time_delta_from_string_fuzzer.cc'
+  # 'base/time/time_delta_from_string_unittest.cc'
+  'base/time/time_exploded_icu.cc'
+  'base/time/time_exploded_posix.cc'
+  # 'base/time/time_fuchsia.cc'
+  # 'base/time/time_fuzzer.cc'
+  'base/time/time_now_posix.cc'
+  'base/time/time_override.cc'
+  'base/time/time_override.h'
+  # 'base/time/time_unittest.cc'
+  'base/time/time_win.cc'
+  # 'base/time/time_win_perftest.cc'
+  # 'base/time/time_win_unittest.cc'
+  # 'base/timer/elapsed_timer.cc'
+  # 'base/timer/elapsed_timer.h'
+  # 'base/timer/elapsed_timer_unittest.cc'
+  # 'base/timer/hi_res_timer_manager.h'
+  # 'base/timer/hi_res_timer_manager_posix.cc'
+  # 'base/timer/hi_res_timer_manager_unittest.cc'
+  # 'base/timer/hi_res_timer_manager_win.cc'
+  # 'base/timer/lap_timer.cc'
+  # 'base/timer/lap_timer.h'
+  # 'base/timer/lap_timer_unittest.cc'
+  # 'base/timer/mock_timer.cc'
+  # 'base/timer/mock_timer.h'
+  # 'base/timer/mock_timer_unittest.cc'
+  # 'base/timer/timer.cc'
+  # 'base/timer/timer.h'
+  # 'base/timer/timer_unittest.cc'
+  # 'base/timer/wall_clock_timer.cc'
+  # 'base/timer/wall_clock_timer.h'
+  # 'base/timer/wall_clock_timer_unittest.cc'
   'base/types/always_false.h'
   'base/types/cxx23_to_underlying.h'
   'base/types/cxx23_to_underlying_unittest.cc'
@@ -495,6 +567,9 @@ files=(
   'testing/gtest/include/gtest/gtest_prod.h'
   'testing/platform_test.h'
   'testing/platform_test_mac.mm'
+  'third_party/icu/LICENSE'
+  'third_party/icu/README.chromium'
+  'third_party/icu/sources.gni'
   'third_party/rust/serde_json_lenient/v0_2/README.chromium'
   'third_party/rust/serde_json_lenient/v0_2/wrapper/functions.h'
   'third_party/rust/serde_json_lenient/v0_2/wrapper/lib.rs'
@@ -524,8 +599,24 @@ if ! git -C "${upstream_dir}" diff --quiet; then
   echo "The repository ${upstream_dir} is dirty" >&2
   exit 1
 fi
+if ! git -C "${upstream_dir}" submodule update --init "${submodules[@]}"; then
+  echo "Failed to update submodules in ${upstream_dir}" >&2
+  exit 1
+fi
 
-echo "Syncing upstream files to ${out_dir}..."
+safe_copy() {
+  local src="$1"
+  local dst="$2"
+  if [[ ! -f ${src} ]]; then
+    echo "File ${src} does not exist, skipping." >&2
+  elif [[ -e ${dst} ]]; then
+    echo "File ${dst} already exists, skipping." >&2
+  else
+    cp "${src}" "${dst}"
+  fi
+}
+
+echo "Syncing upstream files to ${out_dir}..." >&2
 fd --unrestricted --type=file \
   --exclude='**/BUILD.bazel' \
   --exclude='**/*.bzl' \
@@ -536,13 +627,20 @@ for file in "${files[@]}"; do
   src="${upstream_dir}/${file}"
   dst="${out_dir}/${file}"
   mkdir -p "$(dirname "${dst}")"
-  if [[ -f ${src} ]]; then
-    cp "${src}" "${dst}"
-  else
-    echo "File ${src} does not exist, skipping." >&2
-  fi
+  safe_copy "${src}" "${dst}"
 done
 
 mv "${out_dir}/base/threading/platform_thread.h" "${out_dir}/base/threading/platform_thread_handle.h"
 mv "${out_dir}/base/threading/platform_thread_posix.cc" "${out_dir}/base/threading/platform_thread_handle_posix.cc"
 mv "${out_dir}/base/threading/platform_thread_win.cc" "${out_dir}/base/threading/platform_thread_handle_win.cc"
+
+icu_files=$(
+  sed -n 's/^  "\(.*\)",/\1/p' "${out_dir}/third_party/icu/sources.gni" \
+    | sort -u
+)
+while IFS= read -r file; do
+  src="${upstream_dir}/third_party/icu/${file}"
+  dst="${out_dir}/third_party/icu/${file}"
+  mkdir -p "$(dirname "${dst}")"
+  safe_copy "${src}" "${dst}"
+done <<< "${icu_files}"

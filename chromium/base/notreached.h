@@ -10,7 +10,7 @@
 
 namespace logging {
 
-#define NOTREACHED() ABSL_LOG(FATAL) << "NOTREACHED hit. "
+#define NOTREACHED(...) ABSL_LOG(FATAL) << "NOTREACHED hit. "
 
 // ABSL_LOG(FATAL) is marked as [[noreturn]].  Use switch statement to suppress
 // unreachable-code warnings.

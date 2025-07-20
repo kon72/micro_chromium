@@ -92,6 +92,17 @@ chromium_cc_library(
 )
 
 chromium_cc_library(
+    name = "span_writer",
+    hdrs = ["span_writer.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":span",
+        "//chromium/base/memory:raw_span",
+        "//chromium/base/numerics:byte_conversions",
+    ],
+)
+
+chromium_cc_library(
     name = "to_vector",
     hdrs = ["to_vector.h"],
     visibility = ["//visibility:public"],
@@ -179,6 +190,17 @@ chromium_cc_test(
         "//chromium/base/strings:cstring_view",
         "//chromium/base/strings:to_string",
         "//chromium/base/test:gtest_util",
+        "//chromium/testing/gmock",
+        "//chromium/testing/gtest",
+    ],
+)
+
+chromium_cc_test(
+    name = "span_writer_unittest",
+    size = "small",
+    srcs = ["span_writer_unittest.cc"],
+    deps = [
+        ":span_writer",
         "//chromium/testing/gmock",
         "//chromium/testing/gtest",
     ],

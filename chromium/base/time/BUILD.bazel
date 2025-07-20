@@ -1,0 +1,108 @@
+load("//chromium:build_defs.bzl", "chromium_cc_or_objc_library", "chromium_objc_test")
+
+chromium_cc_or_objc_library(
+    name = "time",
+    srcs = [
+        "time.cc",
+        "time_override.cc",
+        "time_override.h",
+    ] + select({
+        "@platforms//os:fuchsia": [
+            # "time_fuchsia.cc",
+            "time_exploded_icu.cc",
+        ],
+        "@platforms//os:macos": ["time_apple.mm"],
+        "@platforms//os:ios": ["time_apple.mm"],
+        "@platforms//os:windows": ["time_win.cc"],
+        "//conditions:default": [
+            "time_exploded_icu.cc",
+            "time_now_posix.cc",
+        ],
+    }) + select({
+        "@platforms//os:fuchsia": ["time_conversion_posix.cc"],
+        "@platforms//os:windows": [],
+        "//conditions:default": [
+            "time_conversion_posix.cc",
+            "time_exploded_posix.cc",
+        ],
+    }) + select({
+        "@platforms//os:android": ["time_android.cc"],
+        "@platforms//os:chromiumos": ["time_android.cc"],
+        "//conditions:default": [],
+    }),
+    hdrs = ["time.h"],
+    target_compatible_with = select({
+        "@platforms//os:fuchsia": ["@platforms//:incompatible"],
+        "//conditions:default": [],
+    }),
+    visibility = ["//visibility:public"],
+    deps = [
+        "//chromium/base:base_export",
+        "//chromium/base:check",
+        "//chromium/base:check_op",
+        "//chromium/base:compiler_specific",
+        "//chromium/base:format_macros",
+        "//chromium/base/numerics:safe_math",
+        "//chromium/base/strings:stringprintf",
+        "//chromium/base/third_party/nspr",
+        "//chromium/build:build_config",
+    ] + select({
+        "@platforms//os:fuchsia": [
+            "//chromium/base:logging",
+            "//chromium/base/memory:ptr_util",
+            "//chromium/third_party/icu",
+        ],
+        "@platforms//os:macos": [
+            "//chromium/base:logging",
+            "//chromium/base/apple:mach_logging",
+            "//chromium/base/apple:scoped_cftyperef",
+            "//chromium/base/apple:scoped_mach_port",
+        ],
+        "@platforms//os:ios": [
+            "//chromium/base:logging",
+            "//chromium/base/apple:mach_logging",
+            "//chromium/base/apple:scoped_cftyperef",
+            "//chromium/base/apple:scoped_mach_port",
+        ],
+        "@platforms//os:windows": [
+            "//chromium/base:bit_cast",
+            "//chromium/base:cpu",
+            "//chromium/base:gtest_prod_util",
+            "//chromium/base:notreached",
+            "//chromium/base/synchronization:lock",
+            "//chromium/base/threading:platform_thread_handle",
+            "//chromium/base/win:windows_types",
+        ],
+        "//conditions:default": [
+            "//chromium/base:logging",
+            "//chromium/base:notreached",
+            "//chromium/base/memory:ptr_util",
+            "//chromium/third_party/icu:icui18n",
+            "//chromium/third_party/icu:icuuc",
+        ],
+    }) + select({
+        "@platforms//os:fuchsia": [],
+        "@platforms//os:windows": [],
+        "//conditions:default": [
+            "//chromium/base:no_destructor",
+            "//chromium/base/synchronization:lock",
+            "//chromium/build:chromecast_buildflags",
+        ],
+    }),
+)
+
+chromium_objc_test(
+    name = "time_apple_unittest",
+    size = "small",
+    srcs = ["time_apple_unittest.mm"],
+    target_compatible_with = select({
+        "@platforms//os:macos": [],
+        "@platforms//os:ios": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        ":time",
+        "//chromium/base/test:gtest_util",
+        "//chromium/testing/gtest",
+    ],
+)

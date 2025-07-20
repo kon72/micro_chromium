@@ -1,4 +1,56 @@
+load("@bazel_skylib//rules:common_settings.bzl", "bool_flag")
 load("//chromium:build_defs.bzl", "chromium_cc_library", "chromium_cc_test")
+load("//chromium/bazel:buildflag_header.bzl", "buildflag_header")
+
+bool_flag(
+    name = "protected_memory_enabled",
+    build_setting_default = True,
+)
+
+chromium_cc_library(
+    name = "page_size",
+    srcs = select({
+        "@platforms//os:windows": ["page_size_win.cc"],
+        "//conditions:default": ["page_size_posix.cc"],
+    }),
+    hdrs = ["page_size.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//chromium/base:base_export",
+    ],
+)
+
+chromium_cc_library(
+    name = "protected_memory",
+    srcs = select({
+        "@platforms//os:windows": ["protected_memory_win.cc"],
+        "//conditions:default": ["protected_memory_posix.cc"],
+    }),
+    hdrs = ["protected_memory.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":page_size",
+        ":protected_memory_buildflags",
+        ":raw_ref",
+        "//chromium/base:bits",
+        "//chromium/base:check",
+        "//chromium/base:check_op",
+        "//chromium/base:compiler_specific",
+        "//chromium/base:gtest_prod_util",
+        "//chromium/base:no_destructor",
+        "//chromium/base:thread_annotations",
+        "//chromium/base/synchronization:lock",
+        "//chromium/build:build_config",
+    ],
+)
+
+buildflag_header(
+    name = "protected_memory_buildflags",
+    flags = {
+        "PROTECTED_MEMORY_ENABLED": ":protected_memory_enabled",
+    },
+    visibility = ["//visibility:public"],
+)
 
 chromium_cc_library(
     name = "ptr_util",
@@ -103,15 +155,29 @@ chromium_cc_library(
     hdrs = ["weak_ptr.h"],
     visibility = ["//visibility:public"],
     deps = [
+        ":raw_ptr",
+        ":ref_counted",
+        ":safe_ref_traits",
         "//chromium/base:base_export",
         "//chromium/base:check",
         "//chromium/base:compiler_specific",
         "//chromium/base:dcheck_is_on",
         "//chromium/base:sequence_checker",
-        "//chromium/base/memory:raw_ptr",
-        "//chromium/base/memory:ref_counted",
-        "//chromium/base/memory:safe_ref_traits",
         "//chromium/base/synchronization:atomic_flag",
+    ],
+)
+
+chromium_cc_test(
+    name = "protected_memory_unittest",
+    size = "small",
+    srcs = ["protected_memory_unittest.cc"],
+    deps = [
+        ":protected_memory",
+        ":protected_memory_buildflags",
+        "//chromium/base/synchronization:lock",
+        "//chromium/base/test:gtest_util",
+        "//chromium/build:build_config",
+        "//chromium/testing/gtest",
     ],
 )
 

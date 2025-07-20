@@ -29,7 +29,10 @@ chromium_cc_library(
     name = "check",
     hdrs = ["check.h"],
     visibility = ["//chromium:__subpackages__"],
-    deps = ["@abseil-cpp//absl/log:absl_check"],
+    deps = [
+        "//chromium/base/macros:uniquify",
+        "@abseil-cpp//absl/log:absl_check",
+    ],
 )
 
 chromium_cc_library(
@@ -72,6 +75,20 @@ chromium_cc_library(
     hdrs = ["compiler_specific.h"],
     visibility = ["//visibility:public"],
     deps = ["//chromium/build:build_config"],
+)
+
+chromium_cc_library(
+    name = "cpu",
+    srcs = ["cpu.cc"],
+    hdrs = ["cpu.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":base_export",
+        "//chromium/base/containers:span",
+        "//chromium/base/containers:span_writer",
+        "//chromium/base/memory:protected_memory",
+        "//chromium/build:build_config",
+    ],
 )
 
 chromium_cc_library(
@@ -294,6 +311,22 @@ chromium_cc_test(
 )
 
 chromium_cc_test(
+    name = "cpu_unittest",
+    size = "small",
+    srcs = ["cpu_unittest.cc"],
+    deps = [
+        ":cpu",
+        ":logging",
+        "//chromium/base/containers:contains",
+        "//chromium/base/memory:protected_memory_buildflags",
+        "//chromium/base/strings",
+        "//chromium/base/test:gtest_util",
+        "//chromium/build:build_config",
+        "//chromium/testing/gtest",
+    ],
+)
+
+chromium_cc_test(
     name = "environment_unittest",
     size = "small",
     srcs = ["environment_unittest.cc"],
@@ -387,8 +420,8 @@ chromium_cc_test(
     size = "small",
     srcs = ["values_unittest.cc"],
     deps = [
+        ":bits",
         ":values",
-        "//chromium/base:bits",
         "//chromium/base/containers:adapters",
         "//chromium/base/containers:contains",
         "//chromium/base/strings",

@@ -1,0 +1,81 @@
+load("//chromium:build_defs.bzl", "chromium_cc_library")
+
+_ICU_DEFINES = [
+    "U_USING_ICU_NAMESPACE=0",
+    "U_ENABLE_DYLOAD=0",
+    "USE_CHROMIUM_ICU=1",
+    "U_ENABLE_TRACING=1",
+    "U_ENABLE_RESOURCE_TRACING=0",
+    "U_STATIC_IMPLEMENTATION",
+    "ICU_UTIL_DATA_IMPL=ICU_UTIL_DATA_STATIC",
+]
+
+_ICU_LOCAL_DEFINES = [
+    "HAVE_DLOPEN=0",
+    "UCONFIG_ONLY_HTML_CONVERSION=1",
+    "UCONFIG_USE_ML_PHRASE_BREAKING=1",
+    "UCONFIG_USE_WINDOWS_LCID_MAPPING_API=0",
+    "U_CHARSET_IS_UTF8=1",
+]
+
+chromium_cc_library(
+    name = "icuuc",
+    srcs = glob([
+        "source/common/*.cpp",
+        "source/common/*.h",
+    ]),
+    hdrs = glob(["source/common/unicode/*.h"]),
+    copts = select({
+        "//chromium/bazel/config:is_clang": [
+            "-Wno-implicit-int-conversion",
+            "-Wno-unreachable-code-return",
+            "-Wno-sign-conversion",
+            "-Wno-shadow",
+            "-Wno-unreachable-code-break",
+            "-Wno-deprecated-declarations",
+        ],
+        "//conditions:default": [],
+    }),
+    cxxopts = select({
+        "@platforms//os:windows": ["/GR"],
+        "//conditions:default": ["-frtti"],
+    }),
+    defines = _ICU_DEFINES,
+    includes = ["source/common"],
+    local_defines = _ICU_LOCAL_DEFINES + [
+        "U_COMMON_IMPLEMENTATION",
+        "U_ICUDATAENTRY_IN_COMMON",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+chromium_cc_library(
+    name = "icui18n",
+    srcs = glob([
+        "source/i18n/*.cpp",
+        "source/i18n/*.h",
+    ]),
+    hdrs = glob(["source/i18n/unicode/*.h"]),
+    copts = select({
+        "//chromium/bazel/config:is_clang": [
+            "-Wno-implicit-int-conversion",
+            "-Wno-unreachable-code-return",
+            "-Wno-unreachable-code",
+            "-Wno-sign-conversion",
+            "-Wno-shadow",
+            "-Wno-unreachable-code-break",
+            "-Wno-exit-time-destructors",
+            "-Wno-deprecated-declarations",
+        ],
+        "//conditions:default": [],
+    }),
+    cxxopts = select({
+        "@platforms//os:windows": ["/GR"],
+        "//conditions:default": ["-frtti"],
+    }),
+    defines = _ICU_DEFINES,
+    includes = ["source/i18n"],
+    local_defines = _ICU_LOCAL_DEFINES + ["U_I18N_IMPLEMENTATION"],
+    visibility = ["//visibility:public"],
+    deps = [":icuuc"],
+)

@@ -12,3 +12,10 @@ chromium_cc_library(
     hdrs = ["buildflag.h"],
     visibility = ["//chromium:__subpackages__"],
 )
+
+chromium_cc_library(
+    name = "chromecast_buildflags",
+    hdrs = ["chromecast_buildflags.h"],
+    visibility = ["//visibility:public"],
+    deps = [":buildflag"],
+)

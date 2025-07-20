@@ -1,3 +1,13 @@
+--- a/base/allocator/partition_allocator/src/partition_alloc/partition_alloc_base/threading/platform_thread.h
++++ b/base/allocator/partition_allocator/src/partition_alloc/partition_alloc_base/threading/platform_thread.h
+@@ -11,6 +11,7 @@
+ 
+ #include <cstddef>
+ #include <iosfwd>
++#include <string>
+ 
+ #include "partition_alloc/build_config.h"
+ #include "partition_alloc/partition_alloc_base/component_export.h"
 --- a/base/strings/string_util_impl_helpers.h
 +++ b/base/strings/string_util_impl_helpers.h
 @@ -16,6 +16,7 @@

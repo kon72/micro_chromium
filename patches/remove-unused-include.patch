@@ -16,6 +16,22 @@
  
  namespace base::internal {
  
+--- a/base/cpu.cc
++++ b/base/cpu.cc
+@@ -23,11 +23,13 @@
+ 
+ #include <algorithm>
+ 
++#if 0
+ #include "base/files/file_util.h"
+ #include "base/numerics/checked_math.h"
+ #include "base/strings/string_number_conversions.h"
+ #include "base/strings/string_split.h"
+ #include "base/strings/string_util.h"
++#endif  // 0
+ 
+ // Temporary definitions until a new hwcap.h is pulled in everywhere.
+ // https://crbug.com/1265965
 --- a/base/strings/string_util_impl_helpers.h
 +++ b/base/strings/string_util_impl_helpers.h
 @@ -16,7 +16,6 @@

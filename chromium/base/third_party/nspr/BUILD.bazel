@@ -1,0 +1,13 @@
+load("//chromium:build_defs.bzl", "chromium_cc_library")
+
+chromium_cc_library(
+    name = "nspr",
+    srcs = ["prtime.cc"],
+    hdrs = ["prtime.h"],
+    visibility = ["//chromium/base:__subpackages__"],
+    deps = [
+        "//chromium/base:base_export",
+        "//chromium/base:check",
+        "//chromium/build:build_config",
+    ],
+)

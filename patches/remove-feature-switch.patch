@@ -147,3 +147,102 @@
  }
  
  TEST_F(FilePathTest, AppendRelativePathTest) {
+--- a/base/time/time_win.cc
++++ b/base/time/time_win.cc
+@@ -47,13 +47,10 @@
+ #include <atomic>
+ #include <ostream>
+ 
+-#include "base/base_switches.h"
+ #include "base/bit_cast.h"
+ #include "base/check_op.h"
+-#include "base/command_line.h"
+ #include "base/cpu.h"
+ #include "base/notreached.h"
+-#include "base/rand_util.h"
+ #include "base/synchronization/lock.h"
+ #include "base/threading/platform_thread_handle.h"
+ #include "base/time/time_override.h"
+@@ -571,7 +568,9 @@ TimeTicks QPCNow() {
+   return TimeTicks() + QPCValueToTimeDelta(QPCNowRaw());
+ }
+ 
++#if 0
+ std::atomic<bool> g_opted_out_of_qpc_trial_because_no_command_line = false;
++#endif  // 0
+ 
+ void InitializeNowFunctionPointer() {
+   LARGE_INTEGER ticks_per_sec = {};
+@@ -597,15 +596,19 @@ void InitializeNowFunctionPointer() {
+   // ~97% of users fall within this category.
+   bool eligible_for_high_res_time_ticks = false;
+ 
++#if 0
+   // To debug an issue where in the field, all clients are in the Control group.
+   // We suspect it might be due to the command line not being ready before this
+   // function is called in some build configurations.
+   bool opted_out_because_no_command_line = false;
++#endif  // 0
+ 
+   // `ticks_per_sec.QuadPart <= 0` shouldn't happen post-WinXP (see CHECKs
+   // above) but if it does, QPC is broken and shouldn't be used for any reason.
+   if (ticks_per_sec.QuadPart > 0) {
+     CPU cpu;
++    bool force_high_res_time_ticks = true;
++#if 0
+     // QPC is enabled for all devices with invariant TSCs.
+     // On devices where the CPU doesn't report having an invariant TSC, we would
+     // previously have considered the QPC overhead to be unacceptable. For this
+@@ -643,6 +646,7 @@ void InitializeNowFunctionPointer() {
+     } else {
+       opted_out_because_no_command_line = true;
+     }
++#endif  // 0
+ 
+     eligible_for_high_res_time_ticks =
+         cpu.has_non_stop_time_stamp_counter() || force_high_res_time_ticks;
+@@ -684,10 +688,12 @@ void InitializeNowFunctionPointer() {
+     internal::g_time_ticks_now_function.store(now_function,
+                                               std::memory_order_relaxed);
+ 
++#if 0
+     // Only the thread setting the functions should report whether its command
+     // line was ready.
+     g_opted_out_of_qpc_trial_because_no_command_line.store(
+         opted_out_because_no_command_line, std::memory_order_relaxed);
++#endif  // 0
+   }
+ }
+ 
+@@ -697,6 +703,7 @@ TimeTicks InitialNowFunction() {
+       std::memory_order_relaxed)();
+ }
+ 
++#if 0
+ enum class HighResolutionTrialState {
+   kAlreadyHighResolution,
+   kExcludedFromTrial,
+@@ -741,6 +748,7 @@ HighResolutionTrialState GetHighResoluti
+   // Don't add clients with ideal QPC implementations to the trial at all.
+   return HighResolutionTrialState::kAlreadyHighResolution;
+ }
++#endif  // 0
+ 
+ }  // namespace
+ 
+@@ -881,6 +889,7 @@ TimeTicks TimeTicks::FromQPCValue(LONGLO
+   return TimeTicks() + QPCValueToTimeDelta(qpc_value);
+ }
+ 
++#if 0
+ // static
+ bool TimeTicks::GetHighResolutionTimeTicksFieldTrial(std::string* trial_name,
+                                                      std::string* group_name) {
+@@ -935,6 +944,7 @@ void TimeTicks::MaybeAddHighResolutionTi
+       break;
+   }
+ }
++#endif  // 0
+ 
+ // TimeDelta ------------------------------------------------------------------
+ 
