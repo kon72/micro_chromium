@@ -1,4 +1,4 @@
-load("//chromium:build_defs.bzl", "chromium_objc_library", "chromium_objc_test")
+load("//chromium:build_defs.bzl", "chromium_cc_or_objc_library", "chromium_objc_library", "chromium_objc_test")
 
 chromium_objc_library(
     name = "gtest_mac",
@@ -17,7 +17,7 @@ chromium_objc_library(
     ],
 )
 
-chromium_objc_library(
+chromium_cc_or_objc_library(
     name = "platform_test",
     testonly = True,
     srcs = select({
