@@ -1,0 +1,25 @@
+load("//chromium:build_defs.bzl", "chromium_cc_library")
+
+chromium_cc_library(
+    name = "elapsed_timer",
+    srcs = ["elapsed_timer.cc"],
+    hdrs = ["elapsed_timer.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//chromium/base:base_export",
+        "//chromium/base:check",
+        "//chromium/base/time",
+    ],
+)
+
+# chromium_cc_test(
+#     name = "elapsed_timer_unittest",
+#     size = "small",
+#     srcs = ["elapsed_timer_unittest.cc"],
+#     deps = [
+#         ":elapsed_timer",
+#         "//chromium/base/threading:platform_thread",
+#         "//chromium/base/time",
+#         "//chromium/testing/gtest",
+#     ],
+# )
