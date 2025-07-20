@@ -490,7 +490,7 @@ files=(
   # 'base/time/time_win_unittest.cc'
   'base/timer/elapsed_timer.cc'
   'base/timer/elapsed_timer.h'
-  # 'base/timer/elapsed_timer_unittest.cc'
+  'base/timer/elapsed_timer_unittest.cc'
   # 'base/timer/hi_res_timer_manager.h'
   # 'base/timer/hi_res_timer_manager_posix.cc'
   # 'base/timer/hi_res_timer_manager_unittest.cc'

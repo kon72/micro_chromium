@@ -1,4 +1,4 @@
-load("//chromium:build_defs.bzl", "chromium_cc_library")
+load("//chromium:build_defs.bzl", "chromium_cc_library", "chromium_cc_test")
 
 chromium_cc_library(
     name = "elapsed_timer",
@@ -12,14 +12,14 @@ chromium_cc_library(
     ],
 )
 
-# chromium_cc_test(
-#     name = "elapsed_timer_unittest",
-#     size = "small",
-#     srcs = ["elapsed_timer_unittest.cc"],
-#     deps = [
-#         ":elapsed_timer",
-#         "//chromium/base/threading:platform_thread",
-#         "//chromium/base/time",
-#         "//chromium/testing/gtest",
-#     ],
-# )
+chromium_cc_test(
+    name = "elapsed_timer_unittest",
+    size = "small",
+    srcs = ["elapsed_timer_unittest.cc"],
+    deps = [
+        ":elapsed_timer",
+        "//chromium/base/threading:platform_thread",
+        "//chromium/base/time",
+        "//chromium/testing/gtest",
+    ],
+)
