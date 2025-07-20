@@ -1,4 +1,4 @@
-load("//chromium:build_defs.bzl", "chromium_cc_library")
+load("//chromium:build_defs.bzl", "chromium_cc_library", "chromium_cc_test")
 
 chromium_cc_library(
     name = "eintr_wrapper",
@@ -20,5 +20,44 @@ chromium_cc_library(
         "//chromium/base:base_export",
         "//chromium/base:compiler_specific",
         "//chromium/build:build_config",
+    ],
+)
+
+chromium_cc_library(
+    name = "sysctl",
+    srcs = ["sysctl.cc"],
+    hdrs = ["sysctl.h"],
+    target_compatible_with = select({
+        "@platforms//os:macos": [],
+        "@platforms//os:ios": [],
+        "@platforms//os:freebsd": [],
+        "@platforms//os:openbsd": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    visibility = ["//visibility:public"],
+    deps = [
+        "//chromium/base:base_export",
+        "//chromium/base:check_op",
+        "//chromium/base/functional:function_ref",
+        "//chromium/base/numerics:safe_math",
+        "//chromium/build:build_config",
+    ],
+)
+
+chromium_cc_test(
+    name = "sysctl_unittest",
+    size = "small",
+    srcs = ["sysctl_unittest.cc"],
+    target_compatible_with = select({
+        "@platforms//os:macos": [],
+        "@platforms//os:ios": [],
+        "@platforms//os:freebsd": [],
+        "@platforms//os:openbsd": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        ":sysctl",
+        "//chromium/build:build_config",
+        "//chromium/testing/gtest",
     ],
 )
