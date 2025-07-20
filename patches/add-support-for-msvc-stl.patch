@@ -27,3 +27,18 @@
  
    // ... and whose contents is the hex representation of the value of the actual
    // pointer value.
+--- a/base/values_unittest.cc
++++ b/base/values_unittest.cc
+@@ -42,9 +42,9 @@ namespace base {
+ // This test is limited to NDEBUG builds, since some containers may require
+ // extra storage for supporting debug checks for things like iterators.
+ TEST(ValuesTest, SizeOfValue) {
+-#if defined(__GLIBCXX__)
+-  // libstdc++ std::string takes already 4 machine words, so the std::variant
+-  // takes 5
++#if defined(__GLIBCXX__) || defined(_MSVC_STL_VERSION)
++  // libstdc++ and MSVC STL std::string takes already 4 machine words, so the
++  // std::variant takes 5
+   constexpr size_t kExpectedSize = 5 * sizeof(void*);
+ #else   // !defined(__GLIBCXX__)
+   // libc++'s std::string and std::vector both take 3 machine words. An
