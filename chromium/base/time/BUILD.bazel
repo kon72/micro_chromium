@@ -32,6 +32,13 @@ chromium_cc_or_objc_library(
         "//conditions:default": [],
     }),
     hdrs = ["time.h"],
+    linkopts = select({
+        "@platforms//os:windows": [
+            "winmm.lib",
+            "onecore.lib",
+        ],
+        "//conditions:default": [],
+    }),
     target_compatible_with = select({
         "@platforms//os:fuchsia": ["@platforms//:incompatible"],
         "//conditions:default": [],
