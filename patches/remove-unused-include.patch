@@ -32,6 +32,16 @@
  
  // Temporary definitions until a new hwcap.h is pulled in everywhere.
  // https://crbug.com/1265965
+--- a/base/memory/protected_memory_win.cc
++++ b/base/memory/protected_memory_win.cc
+@@ -10,7 +10,6 @@
+ 
+ #include "base/bits.h"
+ #include "base/memory/page_size.h"
+-#include "base/process/process_metrics.h"
+ #include "base/synchronization/lock.h"
+ #include "build/build_config.h"
+ 
 --- a/base/strings/string_util_impl_helpers.h
 +++ b/base/strings/string_util_impl_helpers.h
 @@ -16,7 +16,6 @@
