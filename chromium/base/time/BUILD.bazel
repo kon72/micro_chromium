@@ -1,3 +1,4 @@
+load("@//chromium:build_defs.bzl", "chromium_cc_test")
 load("//chromium:build_defs.bzl", "chromium_cc_or_objc_library", "chromium_objc_test")
 
 chromium_cc_or_objc_library(
@@ -79,6 +80,19 @@ chromium_cc_or_objc_library(
             "//chromium/build:chromecast_buildflags",
         ],
     }),
+)
+
+chromium_cc_test(
+    name = "pr_time_unittest",
+    size = "small",
+    srcs = ["pr_time_unittest.cc"],
+    deps = [
+        ":time",
+        "//chromium/base:compiler_specific",
+        "//chromium/base/third_party/nspr",
+        "//chromium/build:build_config",
+        "//chromium/testing/gtest",
+    ],
 )
 
 chromium_objc_test(

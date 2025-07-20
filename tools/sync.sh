@@ -451,7 +451,7 @@ files=(
   # 'base/time/default_clock.h'
   # 'base/time/default_tick_clock.cc'
   # 'base/time/default_tick_clock.h'
-  # 'base/time/pr_time_unittest.cc'
+  'base/time/pr_time_unittest.cc'
   # 'base/time/tick_clock.cc'
   # 'base/time/tick_clock.h'
   'base/time/time.cc'
