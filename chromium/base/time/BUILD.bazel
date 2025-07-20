@@ -9,13 +9,13 @@ chromium_cc_or_objc_library(
     ] + select({
         "@platforms//os:fuchsia": [
             # "time_fuchsia.cc",
-            "time_exploded_icu.cc",
+            # "time_exploded_icu.cc",
         ],
         "@platforms//os:macos": ["time_apple.mm"],
         "@platforms//os:ios": ["time_apple.mm"],
         "@platforms//os:windows": ["time_win.cc"],
         "//conditions:default": [
-            "time_exploded_icu.cc",
+            # "time_exploded_icu.cc",
             "time_now_posix.cc",
         ],
     }) + select({
@@ -47,11 +47,7 @@ chromium_cc_or_objc_library(
         "//chromium/base/third_party/nspr",
         "//chromium/build:build_config",
     ] + select({
-        "@platforms//os:fuchsia": [
-            "//chromium/base:logging",
-            "//chromium/base/memory:ptr_util",
-            "//chromium/third_party/icu",
-        ],
+        "@platforms//os:fuchsia": [],
         "@platforms//os:macos": [
             "//chromium/base:logging",
             "//chromium/base/apple:mach_logging",
@@ -73,13 +69,7 @@ chromium_cc_or_objc_library(
             "//chromium/base/threading:platform_thread_handle",
             "//chromium/base/win:windows_types",
         ],
-        "//conditions:default": [
-            "//chromium/base:logging",
-            "//chromium/base:notreached",
-            "//chromium/base/memory:ptr_util",
-            "//chromium/third_party/icu:icui18n",
-            "//chromium/third_party/icu:icuuc",
-        ],
+        "//conditions:default": ["//chromium/base:notreached"],
     }) + select({
         "@platforms//os:fuchsia": [],
         "@platforms//os:windows": [],

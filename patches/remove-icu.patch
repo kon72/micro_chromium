@@ -1,0 +1,37 @@
+--- a/base/time/time.h
++++ b/base/time/time.h
+@@ -839,6 +839,7 @@ class BASE_EXPORT Time : public time_int
+                                          const Exploded& exploded,
+                                          Time* time);
+ 
++#if 0
+   // Some platforms use the ICU library to provide To/FromExploded, when their
+   // native library implementations are insufficient in some way.
+   static void ExplodeUsingIcu(int64_t millis_since_unix_epoch,
+@@ -848,6 +849,7 @@ class BASE_EXPORT Time : public time_int
+       bool is_local,
+       const Exploded& exploded,
+       int64_t* millis_since_unix_epoch);
++#endif  // 0
+ 
+   // Rounds down the time to the nearest day in either local time
+   // |is_local = true| or UTC |is_local = false|.
+--- a/base/time/time_exploded_posix.cc
++++ b/base/time/time_exploded_posix.cc
+@@ -126,6 +126,8 @@ void Time::Explode(bool is_local, Explod
+   const int64_t millis_since_unix_epoch =
+       ToRoundedDownMillisecondsSinceUnixEpoch();
+ 
++  static_assert(sizeof(SysTime) >= 8);
++#if 0
+   // For systems with a Y2038 problem, use ICU as the Explode() implementation.
+   if (sizeof(SysTime) < 8) {
+ // TODO(b/167763382) Find an alternate solution for Chromecast devices, since
+@@ -135,6 +137,7 @@ void Time::Explode(bool is_local, Explod
+     return;
+ #endif  // !BUILDFLAG(IS_CASTOS) && !BUILDFLAG(IS_CAST_ANDROID)
+   }
++#endif  // 0
+ 
+   // Split the |millis_since_unix_epoch| into separate seconds and millisecond
+   // components because the platform calendar-explode operates at one-second

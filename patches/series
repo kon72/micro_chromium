@@ -8,6 +8,7 @@ fix-googletest-include.patch
 fix-abseil-cpp-include.patch
 fix-boringssl-include.patch
 disable-scoped-handle-verifier.patch
+remove-icu.patch
 remove-tracing.patch
 remove-feature-switch.patch
 no-pickle.patch

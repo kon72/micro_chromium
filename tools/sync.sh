@@ -10,9 +10,6 @@ checkout_dirs=(
   'testing'
   'third_party/rust'
 )
-submodules=(
-  'third_party/icu'
-)
 files=(
   '.clang-format'
   '.clang-tidy'
@@ -460,7 +457,7 @@ files=(
   # 'base/time/time_delta_from_string.h'
   # 'base/time/time_delta_from_string_fuzzer.cc'
   # 'base/time/time_delta_from_string_unittest.cc'
-  'base/time/time_exploded_icu.cc'
+  # 'base/time/time_exploded_icu.cc'
   'base/time/time_exploded_posix.cc'
   # 'base/time/time_fuchsia.cc'
   # 'base/time/time_fuzzer.cc'
@@ -567,9 +564,6 @@ files=(
   'testing/gtest/include/gtest/gtest_prod.h'
   'testing/platform_test.h'
   'testing/platform_test_mac.mm'
-  'third_party/icu/LICENSE'
-  'third_party/icu/README.chromium'
-  'third_party/icu/sources.gni'
   'third_party/rust/serde_json_lenient/v0_2/README.chromium'
   'third_party/rust/serde_json_lenient/v0_2/wrapper/functions.h'
   'third_party/rust/serde_json_lenient/v0_2/wrapper/lib.rs'
@@ -597,10 +591,6 @@ if [[ ${current_revision} != "${revision}" ]]; then
 fi
 if ! git -C "${upstream_dir}" diff --quiet; then
   echo "The repository ${upstream_dir} is dirty" >&2
-  exit 1
-fi
-if ! git -C "${upstream_dir}" submodule update --init "${submodules[@]}"; then
-  echo "Failed to update submodules in ${upstream_dir}" >&2
   exit 1
 fi
 
@@ -633,14 +623,3 @@ done
 mv "${out_dir}/base/threading/platform_thread.h" "${out_dir}/base/threading/platform_thread_handle.h"
 mv "${out_dir}/base/threading/platform_thread_posix.cc" "${out_dir}/base/threading/platform_thread_handle_posix.cc"
 mv "${out_dir}/base/threading/platform_thread_win.cc" "${out_dir}/base/threading/platform_thread_handle_win.cc"
-
-icu_files=$(
-  sed -n 's/^  "\(.*\)",/\1/p' "${out_dir}/third_party/icu/sources.gni" \
-    | sort -u
-)
-while IFS= read -r file; do
-  src="${upstream_dir}/third_party/icu/${file}"
-  dst="${out_dir}/third_party/icu/${file}"
-  mkdir -p "$(dirname "${dst}")"
-  safe_copy "${src}" "${dst}"
-done <<< "${icu_files}"
