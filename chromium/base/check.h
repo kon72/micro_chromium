@@ -30,6 +30,8 @@ extern std::ostream* g_swallow_stream;
 
 #define CHECK(cond, ...) ABSL_CHECK(cond)
 
+#define PCHECK(cond) ABSL_PCHECK(cond)
+
 // absl::log_internal::LogMessageFatal::~LogMessageFatal() is marked as
 // [[noreturn]].  Use switch statement to suppress unreachable-code warnings.
 #define DCHECK(cond)                              \

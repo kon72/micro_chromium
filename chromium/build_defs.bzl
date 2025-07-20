@@ -30,6 +30,7 @@ def chromium_cc_copts():
             "-Wextra-semi",
             "-Wunreachable-code-aggressive",
             "-Wgnu",
+            "-Wno-gnu-statement-expression",
             "-Wno-zero-length-array",
             "-Wthread-safety",
         ],

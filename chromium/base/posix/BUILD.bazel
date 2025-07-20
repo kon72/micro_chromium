@@ -1,6 +1,13 @@
 load("//chromium:build_defs.bzl", "chromium_cc_library")
 
 chromium_cc_library(
+    name = "eintr_wrapper",
+    hdrs = ["eintr_wrapper.h"],
+    visibility = ["//visibility:public"],
+    deps = ["//chromium/build:build_config"],
+)
+
+chromium_cc_library(
     name = "safe_strerror",
     srcs = ["safe_strerror.cc"],
     hdrs = ["safe_strerror.h"],
