@@ -441,7 +441,7 @@ files=(
   # 'base/threading/platform_thread.cc'
   'base/threading/platform_thread.h'
   # 'base/threading/platform_thread_android.cc'
-  # 'base/threading/platform_thread_apple.mm'
+  'base/threading/platform_thread_apple.mm'
   # 'base/threading/platform_thread_cros.cc'
   # 'base/threading/platform_thread_fuchsia.cc'
   # 'base/threading/platform_thread_internal_posix.cc'
@@ -646,6 +646,6 @@ for file in "${files[@]}"; do
   safe_copy "${src}" "${dst}"
 done
 
-mv "${out_dir}/base/threading/platform_thread.h" "${out_dir}/base/threading/platform_thread_handle.h"
-mv "${out_dir}/base/threading/platform_thread_posix.cc" "${out_dir}/base/threading/platform_thread_handle_posix.cc"
-mv "${out_dir}/base/threading/platform_thread_win.cc" "${out_dir}/base/threading/platform_thread_handle_win.cc"
+cp "${out_dir}/base/threading/platform_thread.h" "${out_dir}/base/threading/platform_thread_handle.h"
+cp "${out_dir}/base/threading/platform_thread_posix.cc" "${out_dir}/base/threading/platform_thread_handle_posix.cc"
+cp "${out_dir}/base/threading/platform_thread_win.cc" "${out_dir}/base/threading/platform_thread_handle_win.cc"

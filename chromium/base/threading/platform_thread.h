@@ -6,19 +6,20 @@
 // the low-level platform-specific abstraction to the OS's threading interface.
 // You should instead be using a message-loop driven Thread, see thread.h.
 
-#ifndef BASE_THREADING_PLATFORM_THREAD_HANDLE_H_
-#define BASE_THREADING_PLATFORM_THREAD_HANDLE_H_
+#ifndef BASE_THREADING_PLATFORM_THREAD_H_
+#define BASE_THREADING_PLATFORM_THREAD_H_
 
 #include <stddef.h>
 
-#include <compare>
-#include <cstdint>
 #include <iosfwd>
-#include <ostream>
+#include <limits>
+#include <optional>
 #include <type_traits>
 
 #include "base/base_export.h"
+#include "base/threading/platform_thread_handle.h"
 #include "base/threading/platform_thread_ref.h"
+#include "base/time/time.h"
 #include "build/build_config.h"
 
 #if BUILDFLAG(IS_WIN)
@@ -32,6 +33,7 @@
 
 namespace base {
 
+#if 0
 // Used for uniquely identifying a thread.
 //
 // Wraps a platform-specific integer value with platform-specific size,
@@ -99,10 +101,8 @@ class BASE_EXPORT PlatformThreadId {
   constexpr friend bool operator==(const PlatformThreadId& lhs,
                                    const PlatformThreadId& rhs) = default;
 
-#if 0
   // Allow serialising into a trace.
   void WriteIntoTrace(perfetto::TracedValue&& context) const;
-#endif  // 0
 
  private:
   // TODO(crbug.com/393384253): Use a system-specific invalid value, which might
@@ -141,19 +141,7 @@ class PlatformThreadHandle {
 };
 
 static constexpr PlatformThreadId kInvalidThreadId = PlatformThreadId();
-
-// Gets the current thread id, which may be useful for logging purposes.
-PlatformThreadId GetCurrentThreadId();
-
-// Gets the current thread reference, which can be used to check if
-// we're on the right thread quickly.
-PlatformThreadRef GetCurrentThreadRef();
-
-// Get the handle representing the current thread. On Windows, this is a
-// pseudo handle constant which will always represent the thread using it and
-// hence should not be shared with other threads nor be used to differentiate
-// the current thread from another.
-PlatformThreadHandle GetCurrentThreadHandle();
+#endif  // 0
 
 #if 0
 // Valid values for `thread_type` of Thread::Options, SimpleThread::Options,
@@ -204,6 +192,7 @@ enum class ThreadPriorityForTest : int {
   kRealtimeAudio,
   kMaxValue = kRealtimeAudio,
 };
+#endif  // 0
 
 // A namespace for low-level thread functions.
 class BASE_EXPORT PlatformThreadBase {
@@ -260,6 +249,7 @@ class BASE_EXPORT PlatformThreadBase {
   // base::test::TaskEnvironment with MOCK_TIME mode.
   static void Sleep(base::TimeDelta duration);
 
+#if 0
   // Sets the thread name visible to debuggers/tools. This will try to
   // initialize the context for current thread unless it's a WorkerThread.
   static void SetName(const std::string& name);
@@ -345,10 +335,12 @@ class BASE_EXPORT PlatformThreadBase {
 
  protected:
   static void SetNameCommon(const std::string& name);
+#endif  // 0
 };
 
 #if BUILDFLAG(IS_APPLE)
 class BASE_EXPORT PlatformThreadApple : public PlatformThreadBase {
+#if 0
  public:
   // Stores the period value in TLS.
   static void SetCurrentThreadRealtimePeriodValue(TimeDelta realtime_period);
@@ -357,14 +349,18 @@ class BASE_EXPORT PlatformThreadApple : public PlatformThreadBase {
 
   // Initializes features for this class. See `base::features::Init()`.
   static void InitializeFeatures();
+#endif  // 0
 };
 #endif  // BUILDFLAG(IS_APPLE)
 
 #if BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS)
+#if 0
 class ThreadTypeDelegate;
 using IsViaIPC = base::StrongAlias<class IsViaIPCTag, bool>;
+#endif  // 0
 
 class BASE_EXPORT PlatformThreadLinux : public PlatformThreadBase {
+#if 0
  public:
   static constexpr struct sched_param kRealTimeAudioPrio = {8};
   static constexpr struct sched_param kRealTimeDisplayPrio = {6};
@@ -395,15 +391,19 @@ class BASE_EXPORT PlatformThreadLinux : public PlatformThreadBase {
   // Determine if thread_id is a background thread by looking up whether
   // it is in the urgent or non-urgent cpuset
   static bool IsThreadBackgroundedForTest(PlatformThreadId thread_id);
+#endif  // 0
 };
 #endif  // BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS)
 
 #if BUILDFLAG(IS_CHROMEOS)
+#if 0
 BASE_EXPORT BASE_DECLARE_FEATURE(kSetRtForDisplayThreads);
 
 class CrossProcessPlatformThreadDelegate;
+#endif  // 0
 
 class BASE_EXPORT PlatformThreadChromeOS : public PlatformThreadLinux {
+#if 0
  public:
   // Sets a delegate which handles thread type changes for threads of another
   // process. This must be externally synchronized with any call to
@@ -449,6 +449,7 @@ class BASE_EXPORT PlatformThreadChromeOS : public PlatformThreadLinux {
   // which complicates life for other base/ headers trying to avoid circular
   // dependencies.
   static void DcheckCrossProcessThreadPrioritySequence();
+#endif  // 0
 };
 #endif  // BUILDFLAG(IS_CHROMEOS)
 
@@ -463,6 +464,7 @@ using PlatformThread = PlatformThreadLinux;
 using PlatformThread = PlatformThreadBase;
 #endif
 
+#if 0
 namespace internal {
 
 void SetCurrentThreadType(ThreadType thread_type,
@@ -494,4 +496,4 @@ inline constexpr auto SetThreadType = SetThreadTypeLinux;
 
 }  // namespace base
 
-#endif  // BASE_THREADING_PLATFORM_THREAD_HANDLE_H_
+#endif  // BASE_THREADING_PLATFORM_THREAD_H_

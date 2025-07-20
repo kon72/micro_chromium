@@ -36,9 +36,206 @@
    if (check_invariants_) {
      (*check_invariants_)();
    }
+--- a/base/threading/platform_thread.h
++++ b/base/threading/platform_thread.h
+@@ -17,12 +17,9 @@
+ #include <type_traits>
+ 
+ #include "base/base_export.h"
+-#include "base/message_loop/message_pump_type.h"
+-#include "base/process/process_handle.h"
++#include "base/threading/platform_thread_handle.h"
+ #include "base/threading/platform_thread_ref.h"
+ #include "base/time/time.h"
+-#include "base/trace_event/base_tracing_forward.h"
+-#include "base/types/strong_alias.h"
+ #include "build/build_config.h"
+ 
+ #if BUILDFLAG(IS_WIN)
+@@ -34,12 +31,9 @@
+ #include <unistd.h>
+ #endif
+ 
+-#if BUILDFLAG(IS_CHROMEOS)
+-#include "base/feature_list.h"
+-#endif
+-
+ namespace base {
+ 
++#if 0
+ // Used for uniquely identifying a thread.
+ //
+ // Wraps a platform-specific integer value with platform-specific size,
+@@ -147,7 +141,9 @@ class PlatformThreadHandle {
+ };
+ 
+ static constexpr PlatformThreadId kInvalidThreadId = PlatformThreadId();
++#endif  // 0
+ 
++#if 0
+ // Valid values for `thread_type` of Thread::Options, SimpleThread::Options,
+ // and SetCurrentThreadType(), listed in increasing order of importance.
+ //
+@@ -196,6 +192,7 @@ enum class ThreadPriorityForTest : int {
+   kRealtimeAudio,
+   kMaxValue = kRealtimeAudio,
+ };
++#endif  // 0
+ 
+ // A namespace for low-level thread functions.
+ class BASE_EXPORT PlatformThreadBase {
+@@ -252,6 +249,7 @@ class BASE_EXPORT PlatformThreadBase {
+   // base::test::TaskEnvironment with MOCK_TIME mode.
+   static void Sleep(base::TimeDelta duration);
+ 
++#if 0
+   // Sets the thread name visible to debuggers/tools. This will try to
+   // initialize the context for current thread unless it's a WorkerThread.
+   static void SetName(const std::string& name);
+@@ -337,10 +335,12 @@ class BASE_EXPORT PlatformThreadBase {
+ 
+  protected:
+   static void SetNameCommon(const std::string& name);
++#endif  // 0
+ };
+ 
+ #if BUILDFLAG(IS_APPLE)
+ class BASE_EXPORT PlatformThreadApple : public PlatformThreadBase {
++#if 0
+  public:
+   // Stores the period value in TLS.
+   static void SetCurrentThreadRealtimePeriodValue(TimeDelta realtime_period);
+@@ -349,14 +349,18 @@ class BASE_EXPORT PlatformThreadApple :
+ 
+   // Initializes features for this class. See `base::features::Init()`.
+   static void InitializeFeatures();
++#endif  // 0
+ };
+ #endif  // BUILDFLAG(IS_APPLE)
+ 
+ #if BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS)
++#if 0
+ class ThreadTypeDelegate;
+ using IsViaIPC = base::StrongAlias<class IsViaIPCTag, bool>;
++#endif  // 0
+ 
+ class BASE_EXPORT PlatformThreadLinux : public PlatformThreadBase {
++#if 0
+  public:
+   static constexpr struct sched_param kRealTimeAudioPrio = {8};
+   static constexpr struct sched_param kRealTimeDisplayPrio = {6};
+@@ -387,15 +391,19 @@ class BASE_EXPORT PlatformThreadLinux :
+   // Determine if thread_id is a background thread by looking up whether
+   // it is in the urgent or non-urgent cpuset
+   static bool IsThreadBackgroundedForTest(PlatformThreadId thread_id);
++#endif  // 0
+ };
+ #endif  // BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS)
+ 
+ #if BUILDFLAG(IS_CHROMEOS)
++#if 0
+ BASE_EXPORT BASE_DECLARE_FEATURE(kSetRtForDisplayThreads);
+ 
+ class CrossProcessPlatformThreadDelegate;
++#endif  // 0
+ 
+ class BASE_EXPORT PlatformThreadChromeOS : public PlatformThreadLinux {
++#if 0
+  public:
+   // Sets a delegate which handles thread type changes for threads of another
+   // process. This must be externally synchronized with any call to
+@@ -441,6 +449,7 @@ class BASE_EXPORT PlatformThreadChromeOS
+   // which complicates life for other base/ headers trying to avoid circular
+   // dependencies.
+   static void DcheckCrossProcessThreadPrioritySequence();
++#endif  // 0
+ };
+ #endif  // BUILDFLAG(IS_CHROMEOS)
+ 
+@@ -455,6 +464,7 @@ using PlatformThread = PlatformThreadLin
+ using PlatformThread = PlatformThreadBase;
+ #endif
+ 
++#if 0
+ namespace internal {
+ 
+ void SetCurrentThreadType(ThreadType thread_type,
+@@ -482,6 +492,7 @@ inline constexpr auto SetThreadType = Se
+ #endif
+ 
+ }  // namespace internal
++#endif  // 0
+ 
+ }  // namespace base
+ 
+--- a/base/threading/platform_thread_apple.mm
++++ b/base/threading/platform_thread_apple.mm
+@@ -4,31 +4,13 @@
+ 
+ #include "base/threading/platform_thread.h"
+ 
+-#import <Foundation/Foundation.h>
+-#include <mach/mach.h>
+-#include <mach/mach_time.h>
+-#include <mach/thread_policy.h>
+ #include <mach/thread_switch.h>
+-#include <stddef.h>
+-#include <sys/resource.h>
+ 
+-#include <algorithm>
+-#include <atomic>
+-
+-#include "base/apple/foundation_util.h"
+-#include "base/apple/mach_logging.h"
+-#include "base/feature_list.h"
+-#include "base/lazy_instance.h"
+-#include "base/logging.h"
+-#include "base/mac/mac_util.h"
+-#include "base/metrics/histogram_functions.h"
+-#include "base/threading/thread_id_name_manager.h"
+-#include "base/threading/threading_features.h"
+-#include "build/blink_buildflags.h"
+ #include "build/build_config.h"
+ 
+ namespace base {
+ 
++#if 0
+ namespace {
+ NSString* const kRealtimePeriodNsKey = @"CrRealtimePeriodNsKey";
+ }  // namespace
+@@ -59,6 +41,7 @@ void InitThreading() {
+ TimeDelta PlatformThreadBase::Delegate::GetRealtimePeriod() {
+   return TimeDelta();
+ }
++#endif  // 0
+ 
+ // static
+ void PlatformThreadBase::YieldCurrentThread() {
+@@ -71,6 +54,7 @@ void PlatformThreadBase::YieldCurrentThr
+   thread_switch(MACH_PORT_NULL, SWITCH_OPTION_DEPRESS, timeout_ms);
+ }
+ 
++#if 0
+ // static
+ void PlatformThreadBase::SetName(const std::string& name) {
+   SetNameCommon(name);
+@@ -381,5 +365,6 @@ size_t GetDefaultThreadStackSize(const p
+ }
+ 
+ void TerminateOnThread() {}
++#endif  // 0
+ 
+ }  // namespace base
 --- a/base/threading/platform_thread_handle.h
 +++ b/base/threading/platform_thread_handle.h
-@@ -11,18 +11,14 @@
+@@ -6,23 +6,19 @@
+ // the low-level platform-specific abstraction to the OS's threading interface.
+ // You should instead be using a message-loop driven Thread, see thread.h.
+ 
+-#ifndef BASE_THREADING_PLATFORM_THREAD_H_
+-#define BASE_THREADING_PLATFORM_THREAD_H_
++#ifndef BASE_THREADING_PLATFORM_THREAD_HANDLE_H_
++#define BASE_THREADING_PLATFORM_THREAD_HANDLE_H_
  
  #include <stddef.h>
  
@@ -103,7 +300,7 @@
  // Valid values for `thread_type` of Thread::Options, SimpleThread::Options,
  // and SetCurrentThreadType(), listed in increasing order of importance.
  //
-@@ -482,6 +490,7 @@ inline constexpr auto SetThreadType = Se
+@@ -482,7 +490,8 @@ inline constexpr auto SetThreadType = Se
  #endif
  
  }  // namespace internal
@@ -111,6 +308,8 @@
  
  }  // namespace base
  
+-#endif  // BASE_THREADING_PLATFORM_THREAD_H_
++#endif  // BASE_THREADING_PLATFORM_THREAD_HANDLE_H_
 --- a/base/threading/platform_thread_handle_posix.cc
 +++ b/base/threading/platform_thread_handle_posix.cc
 @@ -2,9 +2,8 @@
@@ -293,6 +492,197 @@
  void PlatformThread::YieldCurrentThread() {
    ::Sleep(0);
 @@ -540,5 +514,6 @@ ThreadPriorityForTest PlatformThread::Ge
+ size_t PlatformThread::GetDefaultThreadStackSize() {
+   return 0;
+ }
++#endif  // 0
+ 
+ }  // namespace base
+--- a/base/threading/platform_thread_posix.cc
++++ b/base/threading/platform_thread_posix.cc
+@@ -8,7 +8,6 @@
+ #include <pthread.h>
+ #include <sched.h>
+ #include <stddef.h>
+-#include <stdint.h>
+ #include <sys/time.h>
+ #include <sys/types.h>
+ #include <unistd.h>
+@@ -16,21 +15,8 @@
+ #include <memory>
+ #include <tuple>
+ 
+-#include "base/compiler_specific.h"
+-#include "base/lazy_instance.h"
+-#include "base/logging.h"
+-#include "base/memory/raw_ptr.h"
+-#include "base/notimplemented.h"
+-#include "base/threading/platform_thread_internal_posix.h"
+-#include "base/threading/scoped_blocking_call.h"
+-#include "base/threading/thread_id_name_manager.h"
+-#include "base/threading/thread_restrictions.h"
++#include "base/threading/platform_thread_handle.h"
+ #include "build/build_config.h"
+-#include "partition_alloc/buildflags.h"
+-
+-#if !BUILDFLAG(IS_APPLE) && !BUILDFLAG(IS_FUCHSIA)
+-#include "base/posix/can_lower_nice_to.h"
+-#endif
+ 
+ #if BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS)
+ #include <sys/syscall.h>
+@@ -46,12 +32,9 @@
+ #include <sys/resource.h>
+ #endif
+ 
+-#if PA_BUILDFLAG(USE_PARTITION_ALLOC_AS_MALLOC)
+-#include "partition_alloc/stack/stack.h"  // nogncheck
+-#endif
+-
+ namespace base {
+ 
++#if 0
+ void InitThreading();
+ void TerminateOnThread();
+ size_t GetDefaultThreadStackSize(const pthread_attr_t& attributes);
+@@ -210,9 +193,12 @@ void InvalidateTidCache() {
+ }  // namespace internal
+ 
+ #endif  // BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS)
++#endif  // 0
+ 
+ // static
+ PlatformThreadId PlatformThreadBase::CurrentId() {
++  return GetCurrentThreadId();
++#if 0
+   // Pthreads doesn't have the concept of a thread ID, so we have to reach down
+   // into the kernel.
+ #if BUILDFLAG(IS_APPLE)
+@@ -269,16 +255,23 @@ PlatformThreadId PlatformThreadBase::Cur
+ #elif BUILDFLAG(IS_POSIX) && !BUILDFLAG(IS_AIX)
+   return PlatformThreadId(reinterpret_cast<int64_t>(pthread_self()));
+ #endif
++#endif  // 0
+ }
+ 
+ // static
+ PlatformThreadRef PlatformThreadBase::CurrentRef() {
++  return GetCurrentThreadRef();
++#if 0
+   return PlatformThreadRef(pthread_self());
++#endif  // 0
+ }
+ 
+ // static
+ PlatformThreadHandle PlatformThreadBase::CurrentHandle() {
++  return GetCurrentThreadHandle();
++#if 0
+   return PlatformThreadHandle(pthread_self());
++#endif  // 0
+ }
+ 
+ #if !BUILDFLAG(IS_APPLE)
+@@ -304,6 +297,7 @@ void PlatformThreadBase::Sleep(TimeDelta
+   }
+ }
+ 
++#if 0
+ // static
+ const char* PlatformThreadBase::GetName() {
+   return ThreadIdNameManager::GetInstance()->GetName(CurrentId());
+@@ -415,5 +409,6 @@ size_t PlatformThreadBase::GetDefaultThr
+   pthread_attr_init(&attributes);
+   return base::GetDefaultThreadStackSize(attributes);
+ }
++#endif  // 0
+ 
+ }  // namespace base
+--- a/base/threading/platform_thread_win.cc
++++ b/base/threading/platform_thread_win.cc
+@@ -2,40 +2,18 @@
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+ 
+-#include "base/threading/platform_thread_win.h"
++#include "base/threading/platform_thread.h"
+ 
+ #include <windows.h>
+ 
+-#include <stddef.h>
++#include <base/threading/platform_thread_handle.h>
+ 
+-#include <string>
+-
+-#include "base/debug/alias.h"
+-#include "base/debug/crash_logging.h"
+-#include "base/debug/profiler.h"
+-#include "base/feature_list.h"
+-#include "base/logging.h"
+-#include "base/memory/raw_ptr.h"
+-#include "base/metrics/histogram_macros.h"
+-#include "base/process/memory.h"
+-#include "base/strings/string_number_conversions.h"
+-#include "base/strings/utf_string_conversions.h"
+-#include "base/threading/scoped_blocking_call.h"
+-#include "base/threading/scoped_thread_priority.h"
+-#include "base/threading/thread_id_name_manager.h"
+-#include "base/threading/thread_restrictions.h"
+ #include "base/time/time_override.h"
+-#include "base/win/scoped_handle.h"
+-#include "base/win/windows_version.h"
+ #include "build/build_config.h"
+-#include "partition_alloc/buildflags.h"
+-
+-#if PA_BUILDFLAG(USE_PARTITION_ALLOC_AS_MALLOC)
+-#include "partition_alloc/stack/stack.h"
+-#endif
+ 
+ namespace base {
+ 
++#if 0
+ namespace {
+ 
+ // These values are sometimes returned by ::GetThreadPriority().
+@@ -234,20 +212,30 @@ void AssertMemoryPriority(HANDLE thread,
+ }
+ 
+ }  // namespace internal
++#endif  // 0
+ 
+ // static
+ PlatformThreadId PlatformThread::CurrentId() {
++  return GetCurrentThreadId();
++#if 0
+   return PlatformThreadId(::GetCurrentThreadId());
++#endif  // 0
+ }
+ 
+ // static
+ PlatformThreadRef PlatformThread::CurrentRef() {
++  return GetCurrentThreadRef();
++#if 0
+   return PlatformThreadRef(::GetCurrentThreadId());
++#endif  // 0
+ }
+ 
+ // static
+ PlatformThreadHandle PlatformThread::CurrentHandle() {
++  return GetCurrentThreadHandle();
++#if 0
+   return PlatformThreadHandle(::GetCurrentThread());
++#endif  // 0
+ }
+ 
+ // static
+@@ -268,6 +256,7 @@ void PlatformThread::Sleep(TimeDelta dur
+   }
+ }
+ 
++#if 0
+ // static
+ void PlatformThread::SetName(const std::string& name) {
+   SetNameCommon(name);
+@@ -540,5 +529,6 @@ ThreadPriorityForTest PlatformThread::Ge
  size_t PlatformThread::GetDefaultThreadStackSize() {
    return 0;
  }

@@ -1,4 +1,32 @@
-load("//chromium:build_defs.bzl", "chromium_cc_library")
+load("//chromium:build_defs.bzl", "chromium_cc_library", "chromium_cc_or_objc_library")
+
+chromium_cc_or_objc_library(
+    name = "platform_thread",
+    srcs = select({
+        "@platforms//os:windows": ["platform_thread_win.cc"],
+        "//conditions:default": ["platform_thread_posix.cc"],
+    }) + select({
+        "@platforms//os:macos": ["platform_thread_apple.mm"],
+        "@platforms//os:ios": ["platform_thread_apple.mm"],
+        "//conditions:default": [],
+    }),
+    hdrs = ["platform_thread.h"],
+    target_compatible_with = select({
+        "@platforms//os:fuchsia": ["@platforms//:incompatible"],
+        "//conditions:default": [],
+    }),
+    visibility = ["//visibility:public"],
+    deps = [
+        ":platform_thread_handle",
+        ":platform_thread_ref",
+        "//chromium/base:base_export",
+        "//chromium/base/time",
+        "//chromium/build:build_config",
+    ] + select({
+        "@platforms//os:windows": ["//chromium/base/win:windows_types"],
+        "//conditions:default": ["//chromium/base:compiler_specific"],
+    }),
+)
 
 chromium_cc_library(
     name = "platform_thread_handle",
@@ -13,11 +41,11 @@ chromium_cc_library(
     }),
     visibility = ["//visibility:public"],
     deps = [
+        ":platform_thread_ref",
         "//chromium/base:base_export",
-        "//chromium/base/threading:platform_thread_ref",
         "//chromium/build:build_config",
     ] + select({
-        "@platforms//os:windows": [],
+        "@platforms//os:windows": ["//chromium/base/win:windows_types"],
         "//conditions:default": [
             "//chromium/base:check_op",
             "//chromium/base:compiler_specific",
