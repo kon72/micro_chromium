@@ -118,6 +118,54 @@
    return serde_json_lenient::DecodeJSONInRust(json, options,
                                                internal::kAbsoluteMaxDepth);
  }
+--- a/base/types/strong_alias.h
++++ b/base/types/strong_alias.h
+@@ -11,7 +11,6 @@
+ #include <type_traits>
+ #include <utility>
+ 
+-#include "base/trace_event/base_tracing_forward.h"
+ #include "base/types/supports_ostream_operator.h"
+ 
+ namespace base {
+@@ -113,6 +112,7 @@ class StrongAlias {
+   friend bool operator==(const StrongAlias& lhs,
+                          const StrongAlias& rhs) = default;
+ 
++#if 0
+   // If UnderlyingType can be serialised into trace, its alias is also
+   // serialisable.
+   template <class U = UnderlyingType>
+@@ -120,6 +120,7 @@ class StrongAlias {
+       perfetto::TracedValue&& context) const {
+     perfetto::WriteIntoTracedValue(std::move(context), value_);
+   }
++#endif  // 0
+ 
+  protected:
+   UnderlyingType value_;
+--- a/base/types/strong_alias_unittest.cc
++++ b/base/types/strong_alias_unittest.cc
+@@ -16,7 +16,6 @@
+ 
+ #include "base/types/supports_ostream_operator.h"
+ #include "testing/gtest/include/gtest/gtest.h"
+-#include "third_party/perfetto/include/perfetto/test/traced_value_test_support.h"
+ 
+ namespace base {
+ 
+@@ -381,9 +380,11 @@ void StreamOperatorExists() {
+   static_assert(!internal::SupportsOstreamOperator<NonStreamableAlias>);
+ }
+ 
++#if 0
+ TEST(StrongAliasTest, TracedValueSupport) {
+   using IntAlias = StrongAlias<class FooTag, int>;
+   EXPECT_EQ(perfetto::TracedValueToString(IntAlias(42)), "42");
+ }
++#endif  // 0
+ 
+ }  // namespace base
 --- a/base/values.cc
 +++ b/base/values.cc
 @@ -27,9 +27,6 @@

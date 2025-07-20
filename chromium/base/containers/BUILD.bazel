@@ -25,6 +25,21 @@ chromium_cc_library(
 )
 
 chromium_cc_library(
+    name = "circular_deque",
+    hdrs = ["circular_deque.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":span",
+        ":vector_buffer",
+        "//chromium/base:check",
+        "//chromium/base:dcheck_is_on",
+        "//chromium/base/memory:raw_ptr_exclusion",
+        "//chromium/base/numerics:safe_math",
+        "//chromium/base/types:cxx23_from_range",
+    ],
+)
+
+chromium_cc_library(
     name = "contains",
     hdrs = ["contains.h"],
     visibility = ["//visibility:public"],
@@ -103,9 +118,30 @@ chromium_cc_library(
 )
 
 chromium_cc_library(
+    name = "stack",
+    hdrs = ["stack.h"],
+    visibility = ["//visibility:public"],
+    deps = [":circular_deque"],
+)
+
+chromium_cc_library(
     name = "to_vector",
     hdrs = ["to_vector.h"],
     visibility = ["//visibility:public"],
+)
+
+chromium_cc_library(
+    name = "vector_buffer",
+    hdrs = ["vector_buffer.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":span",
+        "//chromium/base:check",
+        "//chromium/base:check_op",
+        "//chromium/base:compiler_specific",
+        "//chromium/base/memory:raw_ptr_exclusion",
+        "//chromium/base/numerics:safe_math",
+    ],
 )
 
 chromium_cc_test(

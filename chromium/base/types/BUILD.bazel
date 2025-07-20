@@ -8,6 +8,12 @@ chromium_cc_library(
 )
 
 chromium_cc_library(
+    name = "cxx23_from_range",
+    hdrs = ["cxx23_from_range.h"],
+    visibility = ["//visibility:public"],
+)
+
+chromium_cc_library(
     name = "cxx23_to_underlying",
     hdrs = ["cxx23_to_underlying.h"],
     visibility = ["//visibility:public"],
@@ -65,6 +71,13 @@ chromium_cc_library(
     name = "same_as_any",
     hdrs = ["same_as_any.h"],
     visibility = ["//visibility:public"],
+)
+
+chromium_cc_library(
+    name = "strong_alias",
+    hdrs = ["strong_alias.h"],
+    visibility = ["//visibility:public"],
+    deps = [":supports_ostream_operator"],
 )
 
 chromium_cc_library(
@@ -156,6 +169,17 @@ chromium_cc_library(
     testonly = True,
     srcs = ["pass_key_unittest.cc"],
     deps = [":pass_key"],
+)
+
+chromium_cc_test(
+    name = "strong_alias_unittest",
+    size = "small",
+    srcs = ["strong_alias_unittest.cc"],
+    deps = [
+        ":strong_alias",
+        ":supports_ostream_operator",
+        "//chromium/testing/gtest",
+    ],
 )
 
 build_test(
