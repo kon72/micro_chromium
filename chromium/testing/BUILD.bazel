@@ -1,6 +1,23 @@
-load("//chromium:build_defs.bzl", "chromium_cc_or_objc_library")
+load("//chromium:build_defs.bzl", "chromium_objc_library", "chromium_objc_test")
 
-chromium_cc_or_objc_library(
+chromium_objc_library(
+    name = "gtest_mac",
+    testonly = True,
+    srcs = ["gtest_mac.mm"],
+    hdrs = ["gtest_mac.h"],
+    target_compatible_with = select({
+        "@platforms//os:macos": [],
+        "@platforms//os:ios": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    visibility = ["//visibility:public"],
+    deps = [
+        "//chromium/testing/gtest",
+        "@googletest//:gtest",
+    ],
+)
+
+chromium_objc_library(
     name = "platform_test",
     testonly = True,
     srcs = select({
@@ -11,4 +28,20 @@ chromium_cc_or_objc_library(
     hdrs = ["platform_test.h"],
     visibility = ["//visibility:public"],
     deps = ["@googletest//:gtest"],
+)
+
+chromium_objc_test(
+    name = "gtest_mac_unittest",
+    size = "small",
+    srcs = ["gtest_mac_unittest.mm"],
+    target_compatible_with = select({
+        "@platforms//os:macos": [],
+        "@platforms//os:ios": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        ":gtest_mac",
+        "//chromium/testing/gtest",
+        "@googletest//:gtest",
+    ],
 )

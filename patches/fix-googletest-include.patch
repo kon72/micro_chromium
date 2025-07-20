@@ -28,3 +28,38 @@
 +#include "gtest/gtest_prod.h"  // IWYU pragma: export
  
  #endif  // TESTING_GTEST_INCLUDE_GTEST_GTEST_PROD_H_
+--- a/testing/gtest_mac.h
++++ b/testing/gtest_mac.h
+@@ -6,7 +6,7 @@
+ #define TESTING_GTEST_MAC_H_
+ 
+ #include "testing/gtest/include/gtest/gtest.h"
+-#include "third_party/googletest/src/googletest/include/gtest/internal/gtest-port.h"
++#include "gtest/internal/gtest-port.h"
+ 
+ #ifdef GTEST_OS_MAC
+ 
+--- a/testing/gtest_mac.mm
++++ b/testing/gtest_mac.mm
+@@ -7,8 +7,8 @@
+ #include <string>
+ 
+ #include "testing/gtest/include/gtest/gtest.h"
+-#include "third_party/googletest/src/googletest/include/gtest/internal/gtest-port.h"
+-#include "third_party/googletest/src/googletest/include/gtest/internal/gtest-string.h"
++#include "gtest/internal/gtest-port.h"
++#include "gtest/internal/gtest-string.h"
+ 
+ // /!\ WARNING!
+ //
+--- a/testing/gtest_mac_unittest.mm
++++ b/testing/gtest_mac_unittest.mm
+@@ -11,7 +11,7 @@
+ #import <Foundation/Foundation.h>
+ 
+ #include "testing/gtest/include/gtest/gtest.h"
+-#include "third_party/googletest/src/googletest/include/gtest/internal/gtest-port.h"
++#include "gtest/internal/gtest-port.h"
+ 
+ namespace testing {
+ namespace internal {

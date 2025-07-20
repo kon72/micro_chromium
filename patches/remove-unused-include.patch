@@ -16,6 +16,16 @@
  
  namespace base::internal {
  
+--- a/base/apple/foundation_util.mm
++++ b/base/apple/foundation_util.mm
+@@ -13,7 +13,6 @@
+ 
+ #include "base/apple/bridging.h"
+ #include "base/apple/bundle_locations.h"
+-#include "base/apple/osstatus_logging.h"
+ #include "base/apple/scoped_cftyperef.h"
+ #include "base/check.h"
+ #include "base/compiler_specific.h"
 --- a/base/cpu.cc
 +++ b/base/cpu.cc
 @@ -23,11 +23,13 @@
