@@ -1,3 +1,23 @@
+--- a/base/files/scoped_file_linux.cc
++++ b/base/files/scoped_file_linux.cc
+@@ -11,7 +11,6 @@
+ #include <atomic>
+ 
+ #include "base/compiler_specific.h"
+-#include "base/debug/stack_trace.h"
+ #include "base/immediate_crash.h"
+ #include "base/logging.h"
+ 
+@@ -29,7 +28,9 @@ std::array<std::atomic_bool, kMaxTracked
+ 
+ NOINLINE void CrashOnFdOwnershipViolation() {
+   RAW_LOG(ERROR, "Crashing due to FD ownership violation:\n");
++#if 0
+   base::debug::StackTrace().Print();
++#endif  // 0
+   base::ImmediateCrash();
+ }
+ 
 --- a/base/memory/weak_ptr.cc
 +++ b/base/memory/weak_ptr.cc
 @@ -4,7 +4,7 @@

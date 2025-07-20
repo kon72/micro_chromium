@@ -28,6 +28,9 @@ std::array<std::atomic_bool, kMaxTrackedFds> g_is_fd_owned;
 
 NOINLINE void CrashOnFdOwnershipViolation() {
   RAW_LOG(ERROR, "Crashing due to FD ownership violation:\n");
+#if 0
+  base::debug::StackTrace().Print();
+#endif  // 0
   base::ImmediateCrash();
 }
 
