@@ -8,7 +8,7 @@
 #include <utility>
 
 #include "base/functional/callback.h"
-#include "absl/cleanup/cleanup.h"
+#include "third_party/abseil-cpp/absl/cleanup/cleanup.h"
 
 namespace base {
 

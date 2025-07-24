@@ -27,7 +27,7 @@
 #include "base/strings/string_util_win.h"
 #include "base/win/scoped_handle.h"
 #include "base/win/scoped_localalloc.h"
-#include "openssl/sha.h"
+#include "third_party/boringssl/src/include/openssl/sha.h"
 
 namespace base::win {
 

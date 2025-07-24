@@ -13,7 +13,7 @@ chromium_objc_library(
     visibility = ["//visibility:public"],
     deps = [
         "//chromium/testing/gtest",
-        "@googletest//:gtest",
+        "//chromium/third_party/googletest:gtest_for_library",
     ],
 )
 
@@ -27,7 +27,7 @@ chromium_cc_or_objc_library(
     }),
     hdrs = ["platform_test.h"],
     visibility = ["//visibility:public"],
-    deps = ["@googletest//:gtest"],
+    deps = ["//chromium/third_party/googletest:gtest_for_library"],
 )
 
 chromium_objc_test(
@@ -42,6 +42,6 @@ chromium_objc_test(
     deps = [
         ":gtest_mac",
         "//chromium/testing/gtest",
-        "@googletest//:gtest",
+        "//chromium/third_party/googletest:gtest",
     ],
 )

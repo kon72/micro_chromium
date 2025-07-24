@@ -26,7 +26,7 @@
 #include "base/types/is_instantiation.h"
 #include "base/types/to_address.h"
 #include "build/build_config.h"
-#include "absl/functional/function_ref.h"
+#include "third_party/abseil-cpp/absl/functional/function_ref.h"
 
 #if PA_BUILDFLAG(USE_ASAN_BACKUP_REF_PTR)
 #include "base/memory/raw_ptr_asan_bound_arg_tracker.h"

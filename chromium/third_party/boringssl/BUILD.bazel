@@ -1,0 +1,8 @@
+load("@rules_cc//cc:cc_library.bzl", "cc_library")
+
+cc_library(
+    name = "crypto",
+    hdrs = ["src/include/openssl/sha.h"],
+    visibility = ["//chromium:__subpackages__"],
+    deps = ["@boringssl//:crypto"],
+)

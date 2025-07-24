@@ -181,7 +181,7 @@ chromium_cc_library(
         "//chromium/base:check",
         "//chromium/base:no_destructor",
         "//chromium/base/strings",
-        "@boringssl//:crypto",
+        "//chromium/third_party/boringssl:crypto",
     ],
 )
 

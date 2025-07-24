@@ -145,7 +145,7 @@ chromium_cc_library(
         "//chromium/base:logging",
         "//chromium/base:scoped_clear_last_error",
         "//chromium/build:build_config",
-        "@abseil-cpp//absl/strings:str_format",
+        "//chromium/third_party/abseil-cpp/absl/strings:str_format",
     ],
 )
 

@@ -5,5 +5,5 @@ chromium_cc_library(
     testonly = True,
     hdrs = ["include/gmock/gmock.h"],
     visibility = ["//visibility:public"],
-    deps = ["@googletest//:gtest"],
+    deps = ["//chromium/third_party/googletest:gtest_for_library"],
 )

@@ -1,0 +1,6 @@
+#ifndef THIRD_PARTY_ABSEIL_CPP_ABSL_STRINGS_STR_FORMAT_H_
+#define THIRD_PARTY_ABSEIL_CPP_ABSL_STRINGS_STR_FORMAT_H_
+
+#include "absl/strings/str_format.h"  // IWYU pragma: export
+
+#endif  // THIRD_PARTY_ABSEIL_CPP_ABSL_STRINGS_STR_FORMAT_H_

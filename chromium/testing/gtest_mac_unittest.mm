@@ -11,7 +11,7 @@
 #import <Foundation/Foundation.h>
 
 #include "testing/gtest/include/gtest/gtest.h"
-#include "gtest/internal/gtest-port.h"
+#include "third_party/googletest/src/googletest/include/gtest/internal/gtest-port.h"
 
 namespace testing {
 namespace internal {

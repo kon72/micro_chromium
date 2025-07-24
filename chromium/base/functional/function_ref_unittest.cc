@@ -11,7 +11,7 @@
 
 #include "base/compiler_specific.h"
 #include "testing/gtest/include/gtest/gtest.h"
-#include "absl/functional/function_ref.h"
+#include "third_party/abseil-cpp/absl/functional/function_ref.h"
 
 namespace base {
 

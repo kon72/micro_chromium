@@ -1,0 +1,8 @@
+load("@rules_cc//cc:cc_library.bzl", "cc_library")
+
+cc_library(
+    name = "str_format",
+    hdrs = ["str_format.h"],
+    visibility = ["//chromium:__subpackages__"],
+    deps = ["@abseil-cpp//absl/strings:str_format"],
+)

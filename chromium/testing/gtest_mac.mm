@@ -7,8 +7,8 @@
 #include <string>
 
 #include "testing/gtest/include/gtest/gtest.h"
-#include "gtest/internal/gtest-port.h"
-#include "gtest/internal/gtest-string.h"
+#include "third_party/googletest/src/googletest/include/gtest/internal/gtest-port.h"
+#include "third_party/googletest/src/googletest/include/gtest/internal/gtest-string.h"
 
 // /!\ WARNING!
 //

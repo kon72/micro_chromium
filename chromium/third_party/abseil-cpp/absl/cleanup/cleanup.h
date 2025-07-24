@@ -1,0 +1,6 @@
+#ifndef THIRD_PARTY_ABSEIL_CPP_ABSL_CLEANUP_CLEANUP_H_
+#define THIRD_PARTY_ABSEIL_CPP_ABSL_CLEANUP_CLEANUP_H_
+
+#include "absl/cleanup/cleanup.h"  // IWYU pragma: export
+
+#endif  // THIRD_PARTY_ABSEIL_CPP_ABSL_CLEANUP_CLEANUP_H_

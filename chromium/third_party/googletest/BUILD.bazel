@@ -1,0 +1,33 @@
+load("@rules_cc//cc:cc_library.bzl", "cc_library")
+
+cc_library(
+    name = "gtest",
+    hdrs = [
+        "src/googlemock/include/gmock/gmock.h",
+        "src/googletest/include/gtest/gtest.h",
+        "src/googletest/include/gtest/internal/gtest-port.h",
+        "src/googletest/include/gtest/internal/gtest-string.h",
+    ],
+    visibility = ["//chromium/testing:__subpackages__"],
+    deps = ["@googletest//:gtest"],
+)
+
+alias(
+    name = "gtest_for_library",
+    testonly = True,
+    actual = ":gtest",
+    visibility = ["//chromium/testing:__subpackages__"],
+)
+
+alias(
+    name = "gtest_main",
+    actual = "@googletest//:gtest_main",
+    visibility = ["//chromium/testing:__subpackages__"],
+)
+
+cc_library(
+    name = "gtest_prod",
+    hdrs = ["src/googletest/include/gtest/gtest_prod.h"],
+    visibility = ["//chromium/testing:__subpackages__"],
+    deps = ["@googletest//:gtest_prod"],
+)

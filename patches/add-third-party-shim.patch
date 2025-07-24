@@ -1,0 +1,82 @@
+--- /dev/null
++++ b/third_party/abseil-cpp/absl/cleanup/cleanup.h
+@@ -0,0 +1,6 @@
++#ifndef THIRD_PARTY_ABSEIL_CPP_ABSL_CLEANUP_CLEANUP_H_
++#define THIRD_PARTY_ABSEIL_CPP_ABSL_CLEANUP_CLEANUP_H_
++
++#include "absl/cleanup/cleanup.h"  // IWYU pragma: export
++
++#endif  // THIRD_PARTY_ABSEIL_CPP_ABSL_CLEANUP_CLEANUP_H_
+--- /dev/null
++++ b/third_party/abseil-cpp/absl/functional/function_ref.h
+@@ -0,0 +1,6 @@
++#ifndef THIRD_PARTY_ABSEIL_CPP_ABSL_FUNCTIONAL_FUNCTION_REF_H_
++#define THIRD_PARTY_ABSEIL_CPP_ABSL_FUNCTIONAL_FUNCTION_REF_H_
++
++#include "absl/functional/function_ref.h"  // IWYU pragma: export
++
++#endif  // THIRD_PARTY_ABSEIL_CPP_ABSL_FUNCTIONAL_FUNCTION_REF_H_
+--- /dev/null
++++ b/third_party/abseil-cpp/absl/strings/str_format.h
+@@ -0,0 +1,6 @@
++#ifndef THIRD_PARTY_ABSEIL_CPP_ABSL_STRINGS_STR_FORMAT_H_
++#define THIRD_PARTY_ABSEIL_CPP_ABSL_STRINGS_STR_FORMAT_H_
++
++#include "absl/strings/str_format.h"  // IWYU pragma: export
++
++#endif  // THIRD_PARTY_ABSEIL_CPP_ABSL_STRINGS_STR_FORMAT_H_
+--- /dev/null
++++ b/third_party/boringssl/src/include/openssl/sha.h
+@@ -0,0 +1,7 @@
++
++#ifndef THIRD_PARTY_BORINGSSL_SRC_INCLUDE_OPENSSL_SHA_H_
++#define THIRD_PARTY_BORINGSSL_SRC_INCLUDE_OPENSSL_SHA_H_
++
++#include "openssl/sha.h"  // IWYU pragma: export
++
++#endif  // THIRD_PARTY_BORINGSSL_SRC_INCLUDE_OPENSSL_SHA_H_
+--- /dev/null
++++ b/third_party/googletest/src/googlemock/include/gmock/gmock.h
+@@ -0,0 +1,6 @@
++#ifndef THIRD_PARTY_GOOGLETEST_SRC_GOOGLEMOCK_INCLUDE_GMOCK_GMOCK_H_
++#define THIRD_PARTY_GOOGLETEST_SRC_GOOGLEMOCK_INCLUDE_GMOCK_GMOCK_H_
++
++#include "gmock/gmock.h"  // IWYU pragma: export
++
++#endif  // THIRD_PARTY_GOOGLETEST_SRC_GOOGLEMOCK_INCLUDE_GMOCK_GMOCK_H_
+--- /dev/null
++++ b/third_party/googletest/src/googletest/include/gtest/gtest.h
+@@ -0,0 +1,6 @@
++#ifndef THIRD_PARTY_GOOGLETEST_SRC_GOOGLETEST_INCLUDE_GTEST_GTEST_H_
++#define THIRD_PARTY_GOOGLETEST_SRC_GOOGLETEST_INCLUDE_GTEST_GTEST_H_
++
++#include "gtest/gtest.h"  // IWYU pragma: export
++
++#endif  // THIRD_PARTY_GOOGLETEST_SRC_GOOGLETEST_INCLUDE_GTEST_GTEST_H_
+--- /dev/null
++++ b/third_party/googletest/src/googletest/include/gtest/gtest_prod.h
+@@ -0,0 +1,6 @@
++#ifndef THIRD_PARTY_GOOGLETEST_SRC_GOOGLETEST_INCLUDE_GTEST_GTEST_PROD_H_
++#define THIRD_PARTY_GOOGLETEST_SRC_GOOGLETEST_INCLUDE_GTEST_GTEST_PROD_H_
++
++#include "gtest/gtest_prod.h"  // IWYU pragma: export
++
++#endif  // THIRD_PARTY_GOOGLETEST_SRC_GOOGLETEST_INCLUDE_GTEST_GTEST_PROD_H_
+--- /dev/null
++++ b/third_party/googletest/src/googletest/include/gtest/internal/gtest-port.h
+@@ -0,0 +1,6 @@
++#ifndef THIRD_PARTY_GOOGLETEST_SRC_GOOGLETEST_INCLUDE_GTEST_INTERNAL_GTEST_PORT_H_
++#define THIRD_PARTY_GOOGLETEST_SRC_GOOGLETEST_INCLUDE_GTEST_INTERNAL_GTEST_PORT_H_
++
++#include "gtest/internal/gtest-port.h"  // IWYU pragma: export
++
++#endif  // THIRD_PARTY_GOOGLETEST_SRC_GOOGLETEST_INCLUDE_GTEST_INTERNAL_GTEST_PORT_H_
+--- /dev/null
++++ b/third_party/googletest/src/googletest/include/gtest/internal/gtest-string.h
+@@ -0,0 +1,6 @@
++#ifndef THIRD_PARTY_GOOGLETEST_SRC_GOOGLETEST_INCLUDE_GTEST_INTERNAL_GTEST_STRING_H_
++#define THIRD_PARTY_GOOGLETEST_SRC_GOOGLETEST_INCLUDE_GTEST_INTERNAL_GTEST_STRING_H_
++
++#include "gtest/internal/gtest-string.h"  // IWYU pragma: export
++
++#endif  // THIRD_PARTY_GOOGLETEST_SRC_GOOGLETEST_INCLUDE_GTEST_INTERNAL_GTEST_STRING_H_

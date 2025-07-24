@@ -11,7 +11,7 @@
 
 #include "base/base_export.h"
 #include "base/compiler_specific.h"
-#include "absl/strings/str_format.h"
+#include "third_party/abseil-cpp/absl/strings/str_format.h"
 
 namespace base {
 

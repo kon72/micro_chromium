@@ -23,7 +23,7 @@ chromium_cc_library(
     deps = [
         "//chromium/base:no_destructor",
         "//chromium/base/functional:callback",
-        "@abseil-cpp//absl/cleanup",
+        "//chromium/third_party/abseil-cpp/absl/cleanup",
     ],
 )
 
@@ -63,7 +63,7 @@ chromium_cc_library(
     deps = [
         "//chromium/base:no_destructor",
         "//chromium/base/functional:callback",
-        "@abseil-cpp//absl/cleanup",
+        "//chromium/third_party/abseil-cpp/absl/cleanup",
     ],
 )
 

@@ -220,7 +220,7 @@
  #include "base/win/scoped_handle.h"
  #include "base/win/scoped_localalloc.h"
 -#include "base/win/windows_version.h"
- #include "openssl/sha.h"
+ #include "third_party/boringssl/src/include/openssl/sha.h"
  
  namespace base::win {
 --- a/base/win/sid_unittest.cc

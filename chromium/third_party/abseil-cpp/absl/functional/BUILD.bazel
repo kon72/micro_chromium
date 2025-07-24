@@ -1,0 +1,8 @@
+load("@rules_cc//cc:cc_library.bzl", "cc_library")
+
+cc_library(
+    name = "function_ref",
+    hdrs = ["function_ref.h"],
+    visibility = ["//chromium:__subpackages__"],
+    deps = ["@abseil-cpp//absl/functional:function_ref"],
+)

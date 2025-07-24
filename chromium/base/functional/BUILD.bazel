@@ -28,7 +28,7 @@ chromium_cc_library(
         "//chromium/base/types:is_instantiation",
         "//chromium/base/types:to_address",
         "//chromium/build:build_config",
-        "@abseil-cpp//absl/functional:function_ref",
+        "//chromium/third_party/abseil-cpp/absl/functional:function_ref",
     ],
 )
 
@@ -89,7 +89,7 @@ chromium_cc_library(
         ":bind_internal",
         "//chromium/base:compiler_specific",
         "//chromium/base/types:is_instantiation",
-        "@abseil-cpp//absl/functional:function_ref",
+        "//chromium/third_party/abseil-cpp/absl/functional:function_ref",
     ],
 )
 
@@ -148,6 +148,6 @@ chromium_cc_test(
         ":function_ref",
         "//chromium/base:compiler_specific",
         "//chromium/testing/gtest",
-        "@abseil-cpp//absl/functional:function_ref",
+        "//chromium/third_party/abseil-cpp/absl/functional:function_ref",
     ],
 )

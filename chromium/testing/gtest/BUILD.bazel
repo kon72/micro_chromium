@@ -2,15 +2,17 @@ load("//chromium:build_defs.bzl", "chromium_cc_library")
 
 chromium_cc_library(
     name = "gtest",
-    testonly = True,
     hdrs = ["include/gtest/gtest.h"],
-    visibility = ["//visibility:public"],
-    deps = ["@googletest//:gtest_main"],
+    visibility = ["//chromium:__subpackages__"],
+    deps = [
+        "//chromium/third_party/googletest:gtest",
+        "//chromium/third_party/googletest:gtest_main",
+    ],
 )
 
 chromium_cc_library(
     name = "gtest_prod",
     hdrs = ["include/gtest/gtest_prod.h"],
-    visibility = ["//visibility:public"],
-    deps = ["@googletest//:gtest_prod"],
+    visibility = ["//chromium:__subpackages__"],
+    deps = ["//chromium/third_party/googletest:gtest_prod"],
 )
