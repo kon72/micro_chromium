@@ -58,6 +58,6 @@ chromium_cc_test(
     deps = [
         ":sysctl",
         "//chromium/build:build_config",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )

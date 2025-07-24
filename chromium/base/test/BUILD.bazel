@@ -10,7 +10,7 @@ chromium_cc_library(
         "//chromium/base:location",
         "//chromium/base/functional:bind",
         "//chromium/base/functional:callback",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -37,8 +37,7 @@ chromium_cc_library(
         "//chromium/base/strings:to_string",
         "//chromium/base/types:expected",
         "//chromium/base/types:expected_macros",
-        "//chromium/testing/gmock",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -50,7 +49,7 @@ chromium_cc_library(
     deps = [
         "//chromium/base:dcheck_is_on",
         "//chromium/build:build_config",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -73,7 +72,7 @@ chromium_cc_library(
     srcs = ["scoped_locale.cc"],
     hdrs = ["scoped_locale.h"],
     visibility = ["//chromium:__subpackages__"],
-    deps = ["//chromium/testing/gtest"],
+    deps = ["//chromium/testing:gtest"],
 )
 
 chromium_cc_test(
@@ -83,7 +82,6 @@ chromium_cc_test(
     deps = [
         ":gmock_expected_support",
         "//chromium/base/types:expected",
-        "//chromium/testing/gmock",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )

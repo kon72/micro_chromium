@@ -288,7 +288,7 @@ chromium_cc_test(
         "//chromium/base/debug:alias",
         "//chromium/base/strings:strcat",
         "//chromium/base/test:gtest_util",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -298,8 +298,7 @@ chromium_cc_test(
     srcs = ["span_printf_unittest.cc"],
     deps = [
         ":span_printf",
-        "//chromium/testing/gmock",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -310,7 +309,7 @@ chromium_cc_test(
     deps = [
         ":strcat",
         ":strings",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -324,7 +323,7 @@ chromium_cc_test(
         ":strings",
         "//chromium/base:bit_cast",
         "//chromium/base:format_macros",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -336,8 +335,7 @@ chromium_cc_test(
         ":string_split",
         ":string_view_util",
         ":strings",
-        "//chromium/testing/gmock",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -347,8 +345,7 @@ chromium_cc_test(
     srcs = ["string_tokenizer_unittest.cc"],
     deps = [
         ":string_tokenizer",
-        "//chromium/testing/gmock",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -360,8 +357,7 @@ chromium_cc_test(
         ":strings",
         "//chromium/base:bits",
         "//chromium/build:build_config",
-        "//chromium/testing/gmock",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -372,7 +368,7 @@ chromium_cc_test(
     deps = [
         ":string_view_util",
         "//chromium/base/containers:span",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -383,7 +379,7 @@ chromium_cc_test(
     deps = [
         ":stringprintf",
         "//chromium/build:build_config",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -396,7 +392,7 @@ chromium_cc_test(
         ":sys_string_conversions",
         "//chromium/base/test:scoped_locale",
         "//chromium/build:build_config",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -413,7 +409,7 @@ chromium_objc_test(
     deps = [
         ":strings",
         ":sys_string_conversions",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -425,7 +421,7 @@ chromium_cc_test(
         ":string_number_conversions",
         ":to_string",
         "//chromium/build:build_config",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -436,7 +432,7 @@ chromium_cc_test(
     deps = [
         ":strings",
         "//chromium/build:build_config",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -446,6 +442,6 @@ chromium_cc_test(
     srcs = ["utf_string_conversion_utils_unittest.cc"],
     deps = [
         ":utf_string_conversion_utils",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )

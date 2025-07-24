@@ -63,7 +63,7 @@ chromium_cc_test(
     srcs = ["alias_unittest.cc"],
     deps = [
         ":alias",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -74,6 +74,6 @@ chromium_cc_test(
     deps = [
         "//chromium/base/debug:debugger",
         "//chromium/build:build_config",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )

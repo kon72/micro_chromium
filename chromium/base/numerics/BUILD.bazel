@@ -52,6 +52,6 @@ chromium_cc_test(
     srcs = ["byte_conversions_unittest.cc"],
     deps = [
         ":byte_conversions",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )

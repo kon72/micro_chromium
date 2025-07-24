@@ -101,8 +101,8 @@ chromium_cc_test(
         "//chromium/base/test:gtest_util",
         "//chromium/build:build_config",
         "//chromium/build:buildflag",
+        "//chromium/testing:gtest",
         "//chromium/testing:platform_test",
-        "//chromium/testing/gtest",
     ] + select({
         "@platforms//os:windows": [],
         "//conditions:default": ["//chromium/base/test:scoped_locale"],
@@ -115,6 +115,6 @@ chromium_cc_test(
     srcs = ["safe_base_name_unittest.cc"],
     deps = [
         ":file_path",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )

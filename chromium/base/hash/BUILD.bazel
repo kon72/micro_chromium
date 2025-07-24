@@ -23,6 +23,6 @@ chromium_cc_test(
     deps = [
         ":hash",
         "//chromium/base/containers:span",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )

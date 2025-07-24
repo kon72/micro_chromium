@@ -140,7 +140,7 @@ chromium_cc_library(
     visibility = ["//visibility:public"],
     deps = [
         ":base_export",
-        "//chromium/testing/gtest:gtest_prod",
+        "//chromium/testing:gtest_prod",
     ],
 )
 
@@ -318,7 +318,7 @@ chromium_cc_test(
     srcs = ["bit_cast_unittest.cc"],
     deps = [
         ":bit_cast",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -334,8 +334,7 @@ chromium_cc_test(
         "//chromium/base/strings:strcat",
         "//chromium/base/test:gtest_util",
         "//chromium/build:build_config",
-        "//chromium/testing/gmock",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -351,7 +350,7 @@ chromium_cc_test(
         "//chromium/base/strings",
         "//chromium/base/test:gtest_util",
         "//chromium/build:build_config",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -362,9 +361,8 @@ chromium_cc_test(
     deps = [
         ":environment",
         "//chromium/build:build_config",
+        "//chromium/testing:gtest",
         "//chromium/testing:platform_test",
-        "//chromium/testing/gmock",
-        "//chromium/testing/gtest",
     ],
 )
 
@@ -378,7 +376,7 @@ chromium_cc_test(
         "//chromium/base/strings:stringprintf",
         "//chromium/base/test:gmock_expected_support",
         "//chromium/build:build_config",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ] + select({
         "@platforms//os:windows": ["//chromium/base/strings"],
         "//conditions:default": [],
@@ -392,7 +390,7 @@ chromium_cc_test(
     deps = [
         ":values",
         "//chromium/base/strings",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -402,8 +400,7 @@ chromium_cc_test(
     srcs = ["location_unittest.cc"],
     deps = [
         ":location",
-        "//chromium/testing/gmock",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -415,7 +412,7 @@ chromium_cc_test(
         ":logging",
         ":scoped_clear_last_error",
         "//chromium/build:build_config",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -428,7 +425,7 @@ chromium_cc_test(
         "//chromium/base/containers:contains",
         "//chromium/base/memory:raw_ptr",
         "//chromium/build:build_config",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -439,7 +436,7 @@ chromium_cc_test(
     deps = [
         ":thread_annotations",
         "//chromium/base/memory:raw_ref",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -450,8 +447,7 @@ chromium_cc_test(
     deps = [
         ":values",
         "//chromium/base/memory:ptr_util",
-        "//chromium/testing/gmock",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -467,8 +463,7 @@ chromium_cc_test(
         "//chromium/base/strings",
         "//chromium/base/test:gtest_util",
         "//chromium/build:build_config",
-        "//chromium/testing/gmock",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -478,6 +473,6 @@ chromium_cc_test(
     srcs = ["version_unittest.cc"],
     deps = [
         ":version",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )

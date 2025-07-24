@@ -177,7 +177,7 @@ chromium_cc_test(
         "//chromium/base/synchronization:lock",
         "//chromium/base/test:gtest_util",
         "//chromium/build:build_config",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -187,7 +187,7 @@ chromium_cc_test(
     srcs = ["ptr_util_unittest.cc"],
     deps = [
         ":ptr_util",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -198,8 +198,7 @@ chromium_cc_test(
     deps = [
         ":raw_span",
         "//chromium/base:compiler_specific",
-        "//chromium/testing/gmock",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -212,7 +211,7 @@ chromium_cc_test(
         ":ref_counted",
         "//chromium/base/test:gtest_util",
         "//chromium/build:build_config",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -227,7 +226,6 @@ chromium_cc_test(
         "//chromium/base/memory:raw_ptr_exclusion",
         "//chromium/base/memory:weak_ptr",
         "//chromium/base/test:gtest_util",
-        "//chromium/testing/gmock",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )

@@ -422,7 +422,6 @@ chromium_cc_test(
         ":allocator_config",
         ":build_config",
         ":buildflags",
-        "//chromium/testing/gmock",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )

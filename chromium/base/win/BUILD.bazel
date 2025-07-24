@@ -255,7 +255,7 @@ chromium_cc_test(
         ":scoped_localalloc",
         "//chromium/base:check",
         "//chromium/base/strings:string_number_conversions",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -268,7 +268,7 @@ chromium_cc_test(
         ":atl",
         ":scoped_handle",
         ":security_util",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -279,7 +279,7 @@ chromium_cc_test(
     linkopts = ["shell32.lib"],
     deps = [
         ":scoped_localalloc",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -296,7 +296,7 @@ chromium_cc_test(
 #         "//chromium/base/files:scoped_temp_dir",
 #         "//chromium/base/strings",
 #         "//chromium/base/strings:stringprintf",
-#         "//chromium/testing/gtest",
+#         "//chromium/testing:gtest",
 #     ],
 # )
 
@@ -313,7 +313,7 @@ chromium_cc_test(
 #         "//chromium/base/files:scoped_temp_dir",
 #         "//chromium/base/strings:string_number_conversions",
 #         "//chromium/base/test:test_file_util",
-#         "//chromium/testing/gtest",
+#         "//chromium/testing:gtest",
 #     ],
 # )
 
@@ -327,6 +327,6 @@ chromium_cc_test(
         ":scoped_localalloc",
         ":sid",
         ":win_util",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )

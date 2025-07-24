@@ -141,9 +141,8 @@ chromium_objc_test(
         "//chromium/base/files:file_path",
         "//chromium/base/strings:stringprintf",
         "//chromium/build:build_config",
+        "//chromium/testing:gtest",
         "//chromium/testing:gtest_mac",
-        "//chromium/testing/gmock",
-        "//chromium/testing/gtest",
     ],
 )
 
@@ -160,6 +159,6 @@ chromium_cc_test(
     deps = [
         ":scoped_cftyperef",
         "//chromium/base/memory:scoped_policy",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )

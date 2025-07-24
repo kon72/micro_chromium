@@ -98,7 +98,7 @@ chromium_cc_test(
         "//chromium/base:compiler_specific",
         "//chromium/base/third_party/nspr",
         "//chromium/build:build_config",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -114,6 +114,6 @@ chromium_objc_test(
     deps = [
         ":time",
         "//chromium/base/test:gtest_util",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )

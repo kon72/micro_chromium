@@ -20,6 +20,6 @@ chromium_cc_test(
         ":elapsed_timer",
         "//chromium/base/threading:platform_thread",
         "//chromium/base/time",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )

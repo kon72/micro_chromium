@@ -122,8 +122,7 @@ chromium_cc_test(
         "//chromium/base/test:bind",
         "//chromium/base/test:gtest_util",
         "//chromium/build:build_config",
-        "//chromium/testing/gmock",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -136,7 +135,7 @@ chromium_cc_test(
         ":callback",
         ":callback_helpers",
         "//chromium/base/test:gtest_util",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -147,7 +146,7 @@ chromium_cc_test(
     deps = [
         ":function_ref",
         "//chromium/base:compiler_specific",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
         "//chromium/third_party/abseil-cpp/absl/functional:function_ref",
     ],
 )

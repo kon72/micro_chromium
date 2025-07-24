@@ -152,7 +152,7 @@ chromium_cc_test(
         ":adapters",
         ":span",
         ":to_vector",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -166,7 +166,7 @@ chromium_cc_test(
         "//chromium/base/debug:alias",
         "//chromium/base/test:gtest_util",
         "//chromium/build:build_config",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -178,8 +178,7 @@ chromium_cc_test(
         ":contains",
         ":flat_set",
         "//chromium/base/strings",
-        "//chromium/testing/gmock",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -190,8 +189,7 @@ chromium_cc_test(
     deps = [
         ":flat_map",
         "//chromium/base/test:move_only_int",
-        "//chromium/testing/gmock",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -203,8 +201,7 @@ chromium_cc_test(
         ":flat_set",
         "//chromium/base/memory:ptr_util",
         "//chromium/base/test:move_only_int",
-        "//chromium/testing/gmock",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -217,8 +214,7 @@ chromium_cc_test(
         ":span",
         "//chromium/base/test:gtest_util",
         "//chromium/base/test:move_only_int",
-        "//chromium/testing/gmock",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -231,8 +227,7 @@ chromium_cc_test(
         ":span",
         "//chromium/base/memory:raw_ptr_exclusion",
         "//chromium/base/test:gtest_util",
-        "//chromium/testing/gmock",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -243,8 +238,7 @@ chromium_cc_test(
     deps = [
         ":flat_map",
         ":map_util",
-        "//chromium/testing/gmock",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -265,8 +259,7 @@ chromium_cc_test(
         "//chromium/base/strings:cstring_view",
         "//chromium/base/strings:to_string",
         "//chromium/base/test:gtest_util",
-        "//chromium/testing/gmock",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -276,8 +269,7 @@ chromium_cc_test(
     srcs = ["span_writer_unittest.cc"],
     deps = [
         ":span_writer",
-        "//chromium/testing/gmock",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -289,8 +281,7 @@ chromium_cc_test(
         ":adapters",
         ":flat_set",
         ":to_vector",
-        "//chromium/testing/gmock",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -305,7 +296,6 @@ chromium_cc_test(
         "//chromium/base/test:bind",
         "//chromium/base/test:copy_only_int",
         "//chromium/base/test:move_only_int",
-        "//chromium/testing/gmock",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )

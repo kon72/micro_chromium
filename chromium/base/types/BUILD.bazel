@@ -104,7 +104,7 @@ chromium_cc_test(
     srcs = ["cxx23_to_underlying_unittest.cc"],
     deps = [
         ":cxx23_to_underlying",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -117,8 +117,7 @@ chromium_cc_test(
         "//chromium/base/containers:contains",
         "//chromium/base/strings:to_string",
         "//chromium/base/test:gmock_expected_support",
-        "//chromium/testing/gmock",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -131,8 +130,7 @@ chromium_cc_test(
         ":expected_macros",
         "//chromium/base:compiler_specific",
         "//chromium/base/test:gmock_expected_support",
-        "//chromium/testing/gmock",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 
@@ -179,7 +177,7 @@ chromium_cc_test(
     deps = [
         ":strong_alias",
         ":supports_ostream_operator",
-        "//chromium/testing/gtest",
+        "//chromium/testing:gtest",
     ],
 )
 

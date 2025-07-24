@@ -1,4 +1,18 @@
-load("//chromium:build_defs.bzl", "chromium_cc_or_objc_library", "chromium_objc_library", "chromium_objc_test")
+load("//chromium:build_defs.bzl", "chromium_cc_library", "chromium_cc_or_objc_library", "chromium_objc_library", "chromium_objc_test")
+
+chromium_cc_library(
+    name = "gtest",
+    testonly = True,
+    hdrs = [
+        "gmock/include/gmock/gmock.h",
+        "gtest/include/gtest/gtest.h",
+    ],
+    visibility = ["//chromium:__subpackages__"],
+    deps = [
+        "//chromium/third_party/googletest:gtest_for_library",
+        "//chromium/third_party/googletest:gtest_main",
+    ],
+)
 
 chromium_objc_library(
     name = "gtest_mac",
@@ -12,9 +26,16 @@ chromium_objc_library(
     }),
     visibility = ["//visibility:public"],
     deps = [
-        "//chromium/testing/gtest",
+        ":gtest",
         "//chromium/third_party/googletest:gtest_for_library",
     ],
+)
+
+chromium_cc_library(
+    name = "gtest_prod",
+    hdrs = ["gtest/include/gtest/gtest_prod.h"],
+    visibility = ["//chromium:__subpackages__"],
+    deps = ["//chromium/third_party/googletest:gtest_prod"],
 )
 
 chromium_cc_or_objc_library(
@@ -40,8 +61,8 @@ chromium_objc_test(
         "//conditions:default": ["@platforms//:incompatible"],
     }),
     deps = [
+        ":gtest",
         ":gtest_mac",
-        "//chromium/testing/gtest",
         "//chromium/third_party/googletest:gtest",
     ],
 )
