@@ -1,6 +1,6 @@
-load("@rules_cc//cc:cc_library.bzl", "cc_library")
+load("//chromium:build_defs.bzl", "chromium_cc_library")
 
-cc_library(
+chromium_cc_library(
     name = "gtest",
     hdrs = [
         "src/googlemock/include/gmock/gmock.h",
@@ -25,7 +25,7 @@ alias(
     visibility = ["//chromium/testing:__subpackages__"],
 )
 
-cc_library(
+chromium_cc_library(
     name = "gtest_prod",
     hdrs = ["src/googletest/include/gtest/gtest_prod.h"],
     visibility = ["//chromium/testing:__subpackages__"],
