@@ -42,6 +42,39 @@
  
  // Temporary definitions until a new hwcap.h is pulled in everywhere.
  // https://crbug.com/1265965
+--- a/base/debug/debugger_posix.cc
++++ b/base/debug/debugger_posix.cc
+@@ -2,7 +2,6 @@
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+ 
+-
+ #include "base/debug/debugger.h"
+ 
+ #include <errno.h>
+@@ -47,16 +46,19 @@
+ #include "base/check.h"
+ #include "base/debug/alias.h"
+ #include "base/debug/debugging_buildflags.h"
+-#include "base/environment.h"
+-#include "base/files/file_util.h"
+ #include "base/posix/eintr_wrapper.h"
+-#include "base/process/process.h"
+ #include "base/strings/string_number_conversions.h"
+ 
+ #if defined(USE_SYMBOLIZE)
+ #include "base/third_party/symbolize/symbolize.h"  // nogncheck
+ #endif
+ 
++#if BUILDFLAG(ENABLE_GDBINIT_WARNING) || BUILDFLAG(ENABLE_LLDBINIT_WARNING)
++#include "base/environment.h"
++#include "base/files/file_util.h"
++#include "base/process/process.h"
++#endif
++
+ namespace base::debug {
+ 
+ #if BUILDFLAG(IS_APPLE) || BUILDFLAG(IS_BSD)
 --- a/base/memory/protected_memory_win.cc
 +++ b/base/memory/protected_memory_win.cc
 @@ -10,7 +10,6 @@

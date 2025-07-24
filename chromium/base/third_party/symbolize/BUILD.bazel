@@ -1,0 +1,21 @@
+load("//chromium:build_defs.bzl", "chromium_cc_library")
+
+chromium_cc_library(
+    name = "symbolize",
+    srcs = [
+        "config.h",
+        "demangle.cc",
+        "demangle.h",
+        "glog/logging.h",
+        "glog/raw_logging.h",
+        "symbolize.cc",
+        "utilities.h",
+    ],
+    hdrs = ["symbolize.h"],
+    defines = ["GLOG_EXPORT="],
+    target_compatible_with = [
+        "@platforms//os:linux",
+        "@platforms//os:chromiumos",
+    ],
+    visibility = ["//chromium/base:__subpackages__"],
+)

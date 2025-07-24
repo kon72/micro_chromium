@@ -13,6 +13,42 @@ chromium_cc_library(
 )
 
 chromium_cc_library(
+    name = "debugger",
+    srcs = ["debugger.cc"] + select({
+        "@platforms//os:fuchsia": ["debugger_fuchsia.cc"],
+        "@platforms//os:windows": ["debugger_win.cc"],
+        "//conditions:default": ["debugger_posix.cc"],
+    }),
+    hdrs = ["debugger.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//chromium/base:base_export",
+        "//chromium/base:clang_profiling_buildflags",
+        "//chromium/base:logging",
+        "//chromium/base/threading:platform_thread",
+        "//chromium/build:build_config",
+    ] + select({
+        "@platforms//os:fuchsia": ["//chromium/base/debug:alias"],
+        "@platforms//os:windows": [],
+        "//conditions:default": [
+            "//chromium/base:check",
+            "//chromium/base:check_op",
+            "//chromium/base:notimplemented",
+            "//chromium/base/debug:alias",
+            "//chromium/base/debug:debugging_buildflags",
+            "//chromium/base/posix:eintr_wrapper",
+            "//chromium/base/strings",
+            "//chromium/base/strings:string_number_conversions",
+            "//chromium/base/time",
+        ],
+    }) + select({
+        "@platforms//os:linux": ["//chromium/base/third_party/symbolize"],
+        "@platforms//os:chromiumos": ["//chromium/base/third_party/symbolize"],
+        "//conditions:default": [],
+    }),
+)
+
+chromium_cc_library(
     name = "debugging_buildflags",
     hdrs = ["debugging_buildflags.h"],
     visibility = ["//visibility:public"],
@@ -25,6 +61,17 @@ chromium_cc_test(
     srcs = ["alias_unittest.cc"],
     deps = [
         ":alias",
+        "//chromium/testing/gtest",
+    ],
+)
+
+chromium_cc_test(
+    name = "debugger_unittest",
+    size = "small",
+    srcs = ["debugger_unittest.cc"],
+    deps = [
+        "//chromium/base/debug:debugger",
+        "//chromium/build:build_config",
         "//chromium/testing/gtest",
     ],
 )

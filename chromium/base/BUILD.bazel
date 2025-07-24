@@ -43,6 +43,13 @@ chromium_cc_library(
 )
 
 chromium_cc_library(
+    name = "clang_profiling_buildflags",
+    hdrs = ["clang_profiling_buildflags.h"],
+    visibility = ["//visibility:public"],
+    deps = ["//chromium/build:buildflag"],
+)
+
+chromium_cc_library(
     name = "command_line",
     srcs = ["command_line.cc"],
     hdrs = ["command_line.h"],
@@ -162,6 +169,13 @@ chromium_cc_library(
     name = "no_destructor",
     hdrs = ["no_destructor.h"],
     visibility = ["//visibility:public"],
+)
+
+chromium_cc_library(
+    name = "notimplemented",
+    hdrs = ["notimplemented.h"],
+    visibility = ["//visibility:public"],
+    deps = ["@abseil-cpp//absl/log:absl_log"],
 )
 
 chromium_cc_library(
