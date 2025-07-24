@@ -1,4 +1,5 @@
 add-buildflags.patch
+add-noop-histogram-macros
 add-third-party-shim.patch
 add-check-and-logging-shim.patch
 add-win-util.patch

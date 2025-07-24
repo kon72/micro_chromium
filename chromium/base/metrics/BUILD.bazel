@@ -1,0 +1,7 @@
+load("//chromium:build_defs.bzl", "chromium_cc_library")
+
+chromium_cc_library(
+    name = "histogram_macros",
+    hdrs = ["histogram_macros.h"],
+    visibility = ["//chromium:__subpackages__"],
+)

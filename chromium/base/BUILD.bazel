@@ -300,6 +300,7 @@ chromium_cc_library(
         "//chromium/base/containers:span",
         "//chromium/base/memory:ptr_util",
         "//chromium/base/memory:raw_ptr",
+        "//chromium/base/metrics:histogram_macros",
         "//chromium/base/numerics:safe_math",
         "//chromium/base/strings",
         "//chromium/base/strings:strcat",
