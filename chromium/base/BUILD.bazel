@@ -1,6 +1,25 @@
 load("//chromium:build_defs.bzl", "chromium_cc_library", "chromium_cc_test")
 
 chromium_cc_library(
+    name = "at_exit",
+    srcs = ["at_exit.cc"],
+    hdrs = ["at_exit.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//chromium/base:base_export",
+        "//chromium/base:check_op",
+        "//chromium/base:dcheck_is_on",
+        "//chromium/base:notreached",
+        "//chromium/base:thread_annotations",
+        "//chromium/base/containers:stack",
+        "//chromium/base/functional:bind",
+        "//chromium/base/functional:callback",
+        "//chromium/base/memory:raw_ptr",
+        "//chromium/base/synchronization:lock",
+    ],
+)
+
+chromium_cc_library(
     name = "atomic_ref_count",
     hdrs = ["atomic_ref_count.h"],
     visibility = ["//visibility:public"],
@@ -309,6 +328,17 @@ chromium_cc_library(
         "//chromium/base/strings",
         "//chromium/base/strings:string_number_conversions",
         "//chromium/base/strings:string_split",
+    ],
+)
+
+chromium_cc_test(
+    name = "at_exit_unittest",
+    size = "small",
+    srcs = ["at_exit_unittest.cc"],
+    deps = [
+        ":at_exit",
+        "//chromium/base/functional:bind",
+        "//chromium/testing:gtest",
     ],
 )
 

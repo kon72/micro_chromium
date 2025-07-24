@@ -8,6 +8,22 @@ bool_flag(
 )
 
 chromium_cc_library(
+    name = "aligned_memory",
+    srcs = ["aligned_memory.cc"],
+    hdrs = ["aligned_memory.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//chromium/base:base_export",
+        "//chromium/base:check",
+        "//chromium/base:check_op",
+        "//chromium/base:logging",
+        "//chromium/base/containers:heap_array",
+        "//chromium/base/containers:span",
+        "//chromium/build:build_config",
+    ],
+)
+
+chromium_cc_library(
     name = "page_size",
     srcs = select({
         "@platforms//os:windows": ["page_size_win.cc"],
@@ -164,6 +180,18 @@ chromium_cc_library(
         "//chromium/base:dcheck_is_on",
         "//chromium/base:sequence_checker",
         "//chromium/base/synchronization:atomic_flag",
+    ],
+)
+
+chromium_cc_test(
+    name = "aligned_memory_unittest",
+    size = "small",
+    srcs = ["aligned_memory_unittest.cc"],
+    deps = [
+        ":aligned_memory",
+        "//chromium/base:compiler_specific",
+        "//chromium/build:build_config",
+        "//chromium/testing:gtest",
     ],
 )
 

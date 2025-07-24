@@ -7,6 +7,7 @@ chromium_cc_library(
         "gmock/include/gmock/gmock.h",
         "gtest/include/gtest/gtest.h",
     ],
+    defines = ["UNIT_TEST"],
     visibility = ["//chromium:__subpackages__"],
     deps = [
         "//chromium/third_party/googletest:gtest_for_library",
