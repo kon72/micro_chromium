@@ -58,7 +58,7 @@ bool_flag(
 )
 
 bool_value(
-    name = "enable_shadow_metadata",
+    name = "move_metadata_outside_gigacage",
     value = False,
 )
 
@@ -170,7 +170,7 @@ pa_buildflag_header(
         "ENABLE_DANGLING_RAW_PTR_CHECKS": ":enable_dangling_raw_ptr_checks",
         "ENABLE_POINTER_ARITHMETIC_TRAIT_CHECK": ":enable_pointer_arithmetic_trait_check",
         "ENABLE_POINTER_COMPRESSION": ":enable_pointer_compression",
-        "ENABLE_SHADOW_METADATA_FOR_64_BITS_POINTERS": ":enable_shadow_metadata",
+        "MOVE_METADATA_OUT_OF_GIGACAGE_FOR_64_BITS_POINTERS": ":move_metadata_outside_gigacage",
         "FORCE_ENABLE_RAW_PTR_EXCLUSION": ":force_enable_raw_ptr_exclusion",
         "HAS_64_BIT_POINTERS": ":has_64_bit_pointers",
         "HAS_MEMORY_TAGGING": ":has_memory_tagging",

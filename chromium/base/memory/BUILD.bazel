@@ -197,6 +197,7 @@ chromium_cc_test(
     srcs = ["raw_span_unittest.cc"],
     deps = [
         ":raw_span",
+        "//chromium/base:compiler_specific",
         "//chromium/testing/gmock",
         "//chromium/testing/gtest",
     ],

@@ -129,6 +129,7 @@ chromium_cc_test(
     deps = [
         ":expected",
         ":expected_macros",
+        "//chromium/base:compiler_specific",
         "//chromium/base/test:gmock_expected_support",
         "//chromium/testing/gmock",
         "//chromium/testing/gtest",

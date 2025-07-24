@@ -58,6 +58,9 @@ def chromium_cc_copts():
         ],
         "//conditions:default": [],
     }) + ["-fno-ident"] + select({
+        "@platforms//os:windows": ["/clang:-fno-math-errno"],
+        "//conditions:default": ["-fno-math-errno"],
+    }) + select({
         "@platforms//os:windows": [],
         "//conditions:default": ["-fno-strict-aliasing"],
     }) + select({
