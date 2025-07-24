@@ -1,6 +1,33 @@
 load("//chromium:build_defs.bzl", "chromium_cc_library", "chromium_cc_test")
 
 chromium_cc_library(
+    name = "bind",
+    testonly = True,
+    srcs = ["bind.cc"],
+    hdrs = ["bind.h"],
+    visibility = ["//chromium:__subpackages__"],
+    deps = [
+        "//chromium/base:location",
+        "//chromium/base/functional:bind",
+        "//chromium/base/functional:callback",
+        "//chromium/testing/gtest",
+    ],
+)
+
+chromium_cc_library(
+    name = "copy_only_int",
+    testonly = True,
+    srcs = ["copy_only_int.cc"],
+    hdrs = ["copy_only_int.h"],
+    visibility = ["//chromium:__subpackages__"],
+    deps = [
+        "//chromium/base:no_destructor",
+        "//chromium/base/functional:callback",
+        "@abseil-cpp//absl/cleanup",
+    ],
+)
+
+chromium_cc_library(
     name = "gmock_expected_support",
     testonly = True,
     hdrs = ["gmock_expected_support.h"],
@@ -24,6 +51,19 @@ chromium_cc_library(
         "//chromium/base:dcheck_is_on",
         "//chromium/build:build_config",
         "//chromium/testing/gtest",
+    ],
+)
+
+chromium_cc_library(
+    name = "move_only_int",
+    testonly = True,
+    srcs = ["move_only_int.cc"],
+    hdrs = ["move_only_int.h"],
+    visibility = ["//chromium:__subpackages__"],
+    deps = [
+        "//chromium/base:no_destructor",
+        "//chromium/base/functional:callback",
+        "@abseil-cpp//absl/cleanup",
     ],
 )
 

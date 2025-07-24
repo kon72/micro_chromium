@@ -155,6 +155,21 @@ chromium_cc_library(
 )
 
 chromium_cc_library(
+    name = "location",
+    srcs = ["location.cc"],
+    hdrs = ["location.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":base_export",
+        ":compiler_specific",
+        "//chromium/base/memory:raw_ptr_exclusion",
+        "//chromium/base/strings:string_number_conversions",
+        "//chromium/base/strings:stringprintf",
+        "//chromium/build:build_config",
+    ],
+)
+
+chromium_cc_library(
     name = "logging",
     hdrs = ["logging.h"],
     visibility = ["//chromium:__subpackages__"],
@@ -377,6 +392,17 @@ chromium_cc_test(
     deps = [
         ":values",
         "//chromium/base/strings",
+        "//chromium/testing/gtest",
+    ],
+)
+
+chromium_cc_test(
+    name = "location_unittest",
+    size = "small",
+    srcs = ["location_unittest.cc"],
+    deps = [
+        ":location",
+        "//chromium/testing/gmock",
         "//chromium/testing/gtest",
     ],
 )

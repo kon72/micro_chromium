@@ -184,6 +184,45 @@ chromium_cc_test(
 )
 
 chromium_cc_test(
+    name = "flat_map_unittest",
+    size = "small",
+    srcs = ["flat_map_unittest.cc"],
+    deps = [
+        ":flat_map",
+        "//chromium/base/test:move_only_int",
+        "//chromium/testing/gmock",
+        "//chromium/testing/gtest",
+    ],
+)
+
+chromium_cc_test(
+    name = "flat_set_unittest",
+    size = "small",
+    srcs = ["flat_set_unittest.cc"],
+    deps = [
+        ":flat_set",
+        "//chromium/base/memory:ptr_util",
+        "//chromium/base/test:move_only_int",
+        "//chromium/testing/gmock",
+        "//chromium/testing/gtest",
+    ],
+)
+
+chromium_cc_test(
+    name = "flat_tree_unittest",
+    size = "small",
+    srcs = ["flat_tree_unittest.cc"],
+    deps = [
+        ":flat_tree",
+        ":span",
+        "//chromium/base/test:gtest_util",
+        "//chromium/base/test:move_only_int",
+        "//chromium/testing/gmock",
+        "//chromium/testing/gtest",
+    ],
+)
+
+chromium_cc_test(
     name = "heap_array_unittest",
     size = "small",
     srcs = ["heap_array_unittest.cc"],
@@ -250,6 +289,22 @@ chromium_cc_test(
         ":adapters",
         ":flat_set",
         ":to_vector",
+        "//chromium/testing/gmock",
+        "//chromium/testing/gtest",
+    ],
+)
+
+chromium_cc_test(
+    name = "vector_buffer_unittest",
+    size = "small",
+    srcs = ["vector_buffer_unittest.cc"],
+    deps = [
+        ":vector_buffer",
+        "//chromium/base:compiler_specific",
+        "//chromium/base/memory:raw_ptr",
+        "//chromium/base/test:bind",
+        "//chromium/base/test:copy_only_int",
+        "//chromium/base/test:move_only_int",
         "//chromium/testing/gmock",
         "//chromium/testing/gtest",
     ],

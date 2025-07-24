@@ -17,6 +17,7 @@ noop-sequence-checker.patch
 remove-chromium-specific-stuff.patch
 remove-failure-handling.patch
 remove-rand-util.patch
+do-not-strip-source-file-location.patch
 remove-unused-include.patch
 add-missing-headers.patch
 add-support-for-msvc-stl.patch

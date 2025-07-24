@@ -118,6 +118,78 @@
    return serde_json_lenient::DecodeJSONInRust(json, options,
                                                internal::kAbsoluteMaxDepth);
  }
+--- a/base/location.cc
++++ b/base/location.cc
+@@ -9,7 +9,6 @@
+ #include "base/compiler_specific.h"
+ #include "base/strings/string_number_conversions.h"
+ #include "base/strings/stringprintf.h"
+-#include "base/trace_event/trace_event.h"
+ 
+ #if defined(COMPILER_MSVC)
+ #include <intrin.h>
+@@ -86,12 +85,14 @@ std::string Location::ToString() const {
+   return StringPrintf("pc:%p", program_counter_);
+ }
+ 
++#if 0
+ void Location::WriteIntoTrace(perfetto::TracedValue context) const {
+   auto dict = std::move(context).WriteDictionary();
+   dict.Add("function_name", function_name_);
+   dict.Add("file_name", file_name_);
+   dict.Add("line_number", line_number_);
+ }
++#endif  // 0
+ 
+ #if defined(COMPILER_MSVC)
+ #define RETURN_ADDRESS() _ReturnAddress()
+--- a/base/location.h
++++ b/base/location.h
+@@ -10,7 +10,6 @@
+ 
+ #include "base/base_export.h"
+ #include "base/memory/raw_ptr_exclusion.h"
+-#include "base/trace_event/base_tracing_forward.h"
+ #include "build/build_config.h"
+ 
+ namespace base {
+@@ -72,8 +71,10 @@ class BASE_EXPORT Location {
+   // are not available, this will return "pc:<hex address>".
+   std::string ToString() const;
+ 
++#if 0
+   // Write a representation of this object into a trace.
+   void WriteIntoTrace(perfetto::TracedValue context) const;
++#endif  // 0
+ 
+   static Location Current(const char* function_name = __builtin_FUNCTION(),
+                           const char* file_name = __builtin_FILE(),
+--- a/base/location_unittest.cc
++++ b/base/location_unittest.cc
+@@ -4,10 +4,8 @@
+ 
+ #include "base/location.h"
+ 
+-#include "base/trace_event/trace_event.h"
+ #include "testing/gmock/include/gmock/gmock.h"
+ #include "testing/gtest/include/gtest/gtest.h"
+-#include "third_party/perfetto/include/perfetto/test/traced_value_test_support.h"
+ 
+ namespace base {
+ 
+@@ -31,10 +29,12 @@ TEST(LocationTest, CurrentYieldsCorrectV
+   EXPECT_STREQ("TestBody", here.function_name());
+ }
+ 
++#if 0
+ TEST(LocationTest, TracingSupport) {
+   EXPECT_EQ(perfetto::TracedValueToString(Location::CreateForTesting(
+                 "func", "file", 42, WhereAmI().program_counter())),
+             "{function_name:func,file_name:file,line_number:42}");
+ }
++#endif  // 0
+ 
+ }  // namespace base
 --- a/base/types/strong_alias.h
 +++ b/base/types/strong_alias.h
 @@ -11,7 +11,6 @@

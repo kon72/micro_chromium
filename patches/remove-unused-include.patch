@@ -74,6 +74,54 @@
  namespace base::debug {
  
  #if BUILDFLAG(IS_APPLE) || BUILDFLAG(IS_BSD)
+--- a/base/functional/bind_unittest.cc
++++ b/base/functional/bind_unittest.cc
+@@ -15,8 +15,6 @@
+ #include <utility>
+ #include <vector>
+ 
+-#include "base/allocator/partition_alloc_features.h"
+-#include "base/allocator/partition_alloc_support.h"
+ #include "base/functional/callback.h"
+ #include "base/logging.h"
+ #include "base/memory/ptr_util.h"
+@@ -27,14 +25,21 @@
+ #include "base/strings/string_number_conversions.h"
+ #include "base/test/bind.h"
+ #include "base/test/gtest_util.h"
+-#include "base/test/scoped_feature_list.h"
+ #include "build/build_config.h"
+ #include "partition_alloc/buildflags.h"
++#include "testing/gmock/include/gmock/gmock.h"
++#include "testing/gtest/include/gtest/gtest.h"
++
++#if PA_BUILDFLAG(ENABLE_BACKUP_REF_PTR_SUPPORT) && \
++    PA_BUILDFLAG(USE_RAW_PTR_BACKUP_REF_IMPL)
++#include "base/allocator/partition_alloc_features.h"
++#include "base/allocator/partition_alloc_support.h"
++#include "base/test/scoped_feature_list.h"
+ #include "partition_alloc/dangling_raw_ptr_checks.h"
+ #include "partition_alloc/partition_alloc_for_testing.h"
+ #include "partition_alloc/partition_root.h"
+-#include "testing/gmock/include/gmock/gmock.h"
+-#include "testing/gtest/include/gtest/gtest.h"
++#endif  // PA_BUILDFLAG(ENABLE_BACKUP_REF_PTR_SUPPORT) &&
++        // PA_BUILDFLAG(USE_RAW_PTR_BACKUP_REF_IMPL)
+ 
+ using ::testing::_;
+ using ::testing::AnyNumber;
+@@ -2011,8 +2016,9 @@ TEST_F(BindUnretainedDanglingTest, Unsaf
+ 
+ TEST_F(BindUnretainedDanglingTest,
+        UnsafeDanglingPtrWithDummyAndDanglingTraits) {
+-  raw_ptr<int, RawPtrTraits::kDummyForTest | RawPtrTraits::kMayDangle> p =
+-      Alloc<int, RawPtrTraits::kDummyForTest | RawPtrTraits::kMayDangle>(3);
++  raw_ptr<int, RawPtrTraits::kDummyForTest | RawPtrTraits::kMayDangle>
++      p = Alloc < int,
++      RawPtrTraits::kDummyForTest | RawPtrTraits::kMayDangle > (3);
+   auto callback =
+       BindOnce(MayBeDanglingAndDummyTraitCheckFn, UnsafeDangling(p));
+   Free(p);
 --- a/base/memory/protected_memory_win.cc
 +++ b/base/memory/protected_memory_win.cc
 @@ -10,7 +10,6 @@
@@ -84,6 +132,32 @@
  #include "base/synchronization/lock.h"
  #include "build/build_config.h"
  
+--- a/base/memory/safe_ref_unittest.cc
++++ b/base/memory/safe_ref_unittest.cc
+@@ -12,7 +12,6 @@
+ #include "base/memory/raw_ptr_exclusion.h"
+ #include "base/memory/weak_ptr.h"
+ #include "base/test/gtest_util.h"
+-#include "base/test/memory/dangling_ptr_instrumentation.h"
+ #include "testing/gmock/include/gmock/gmock.h"
+ #include "testing/gtest/include/gtest/gtest.h"
+ 
+@@ -270,6 +269,7 @@ TEST(SafeRefTest, Bind) {
+   BindOnce(&WithWeak::Method, with.factory.GetSafeRef()).Run();
+ }
+ 
++#if 0
+ TEST(SafeRefTest, DanglingPointerDetector) {
+   auto instrumentation = test::DanglingPtrInstrumentation::Create();
+   if (!instrumentation.has_value()) {
+@@ -308,6 +308,7 @@ TEST(SafeRefTest, DanglingUntriaged) {
+   EXPECT_EQ(instrumentation->dangling_ptr_detected(), 0u);
+   EXPECT_EQ(instrumentation->dangling_ptr_released(), 0u);
+ }
++#endif  // 0
+ 
+ }  // namespace
+ }  // namespace base
 --- a/base/strings/string_util_impl_helpers.h
 +++ b/base/strings/string_util_impl_helpers.h
 @@ -16,7 +16,6 @@

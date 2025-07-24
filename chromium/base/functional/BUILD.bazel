@@ -39,6 +39,7 @@ chromium_cc_library(
         "callback.h",
         "callback_tags.h",
     ],
+    visibility = ["//visibility:public"],
     deps = [
         ":bind",
         ":callback_internal",
@@ -54,6 +55,7 @@ chromium_cc_library(
     name = "callback_helpers",
     srcs = ["callback_helpers.cc"],
     hdrs = ["callback_helpers.h"],
+    visibility = ["//visibility:public"],
     deps = [
         ":bind",
         ":callback",
@@ -99,6 +101,28 @@ chromium_cc_library(
         "//chromium/base/types:is_complete",
         "//chromium/base/types:same_as_any",
         "//chromium/build:build_config",
+    ],
+)
+
+chromium_cc_test(
+    name = "bind_unittest",
+    size = "small",
+    srcs = ["bind_unittest.cc"],
+    deps = [
+        ":callback",
+        "//chromium/base:logging",
+        "//chromium/base/allocator/partition_allocator:buildflags",
+        "//chromium/base/memory:ptr_util",
+        "//chromium/base/memory:raw_ptr",
+        "//chromium/base/memory:raw_ref",
+        "//chromium/base/memory:ref_counted",
+        "//chromium/base/memory:weak_ptr",
+        "//chromium/base/strings:string_number_conversions",
+        "//chromium/base/test:bind",
+        "//chromium/base/test:gtest_util",
+        "//chromium/build:build_config",
+        "//chromium/testing/gmock",
+        "//chromium/testing/gtest",
     ],
 )
 

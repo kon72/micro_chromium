@@ -215,3 +215,19 @@ chromium_cc_test(
         "//chromium/testing/gtest",
     ],
 )
+
+chromium_cc_test(
+    name = "safe_ref_unittest",
+    size = "small",
+    srcs = ["safe_ref_unittest.cc"],
+    deps = [
+        ":safe_ref",
+        "//chromium/base/functional:bind",
+        "//chromium/base/functional:callback",
+        "//chromium/base/memory:raw_ptr_exclusion",
+        "//chromium/base/memory:weak_ptr",
+        "//chromium/base/test:gtest_util",
+        "//chromium/testing/gmock",
+        "//chromium/testing/gtest",
+    ],
+)
