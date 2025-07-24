@@ -12,10 +12,18 @@ chromium_cc_library(
         "utilities.h",
     ],
     hdrs = ["symbolize.h"],
+    copts = select({
+        "//chromium/bazel/config:is_clang": [
+            "-Wno-unreachable-code-return",
+            "-Wno-unused-but-set-variable",
+        ],
+        "//conditions:default": [],
+    }),
     defines = ["GLOG_EXPORT="],
-    target_compatible_with = [
-        "@platforms//os:linux",
-        "@platforms//os:chromiumos",
-    ],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "@platforms//os:chromiumos": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
     visibility = ["//chromium/base:__subpackages__"],
 )

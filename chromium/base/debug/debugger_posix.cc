@@ -4,6 +4,7 @@
 
 #include "base/debug/debugger.h"
 
+
 #include <errno.h>
 #include <fcntl.h>
 #include <stddef.h>
@@ -46,7 +47,9 @@
 #include "base/check.h"
 #include "base/debug/alias.h"
 #include "base/debug/debugging_buildflags.h"
+#include "base/environment.h"
 #include "base/posix/eintr_wrapper.h"
+#include "base/process/process_handle.h"
 #include "base/strings/string_number_conversions.h"
 
 #if defined(USE_SYMBOLIZE)
@@ -54,9 +57,7 @@
 #endif
 
 #if BUILDFLAG(ENABLE_GDBINIT_WARNING) || BUILDFLAG(ENABLE_LLDBINIT_WARNING)
-#include "base/environment.h"
 #include "base/files/file_util.h"
-#include "base/process/process.h"
 #endif
 
 namespace base::debug {
@@ -156,13 +157,13 @@ void VerifyDebugger() {
 // Another option that is common is to try to ptrace yourself, but then we
 // can't detach without forking(), and that's not so great.
 // static
-Process GetDebuggerProcess() {
+ProcessHandle GetDebuggerProcess() {
   // NOTE: This code MUST be async-signal safe (it's used by in-process
   // stack dumping signal handler). NO malloc or stdio is allowed here.
 
   int status_fd = open("/proc/self/status", O_RDONLY);
   if (status_fd == -1) {
-    return Process();
+    return kNullProcessHandle;
   }
 
   // We assume our line will be in the first 1024 characters and that we can
@@ -173,11 +174,11 @@ Process GetDebuggerProcess() {
   ssize_t num_read = HANDLE_EINTR(read(
       status_fd, buf.data(), (buf.size() * sizeof(decltype(buf)::value_type))));
   if (IGNORE_EINTR(close(status_fd)) < 0) {
-    return Process();
+    return kNullProcessHandle;
   }
 
   if (num_read <= 0) {
-    return Process();
+    return kNullProcessHandle;
   }
 
   std::string_view status(buf.data(), static_cast<size_t>(num_read));
@@ -185,26 +186,26 @@ Process GetDebuggerProcess() {
 
   std::string_view::size_type pid_index = status.find(tracer);
   if (pid_index == std::string_view::npos) {
-    return Process();
+    return kNullProcessHandle;
   }
   pid_index += tracer.size();
   std::string_view::size_type pid_end_index = status.find('\n', pid_index);
   if (pid_end_index == std::string_view::npos) {
-    return Process();
+    return kNullProcessHandle;
   }
 
   std::string_view pid_str(base::span<char>(buf).subspan(pid_index).data(),
                            pid_end_index - pid_index);
   int pid = 0;
   if (!StringToInt(pid_str, &pid)) {
-    return Process();
+    return kNullProcessHandle;
   }
 
-  return Process(pid);
+  return pid;
 }
 
 bool BeingDebugged() {
-  return GetDebuggerProcess().IsValid();
+  return GetDebuggerProcess() != kNullProcessHandle;
 }
 
 void VerifyDebugger() {
@@ -214,13 +215,15 @@ void VerifyDebugger() {
     return;
   }
 
-  Process proc = GetDebuggerProcess();
-  if (!proc.IsValid()) {
+  ProcessHandle proc = GetDebuggerProcess();
+  if (proc == kNullProcessHandle) {
     return;
   }
 
   FilePath cmdline_file =
-      FilePath("/proc").Append(NumberToString(proc.Handle())).Append("cmdline");
+      FilePath("/proc").Append(NumberToString(proc)).Append("cmdline");
+  std::string cmdline;
+  FilePath("/proc").Append(NumberToString(proc.Handle())).Append("cmdline");
   std::string cmdline;
   if (!ReadFileToString(cmdline_file, &cmdline)) {
     return;
