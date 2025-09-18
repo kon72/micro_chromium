@@ -549,7 +549,7 @@ TEST_F(FilePathTest, IsAbsoluteOrNetwork) {
       {FPL("c:/"), true, false},     {FPL("c:/a"), true, false},
       {FPL("c:/."), true, false},    {FPL("c:/.."), true, false},
       {FPL("C:/a"), true, false},    {FPL("d:/a"), true, false},
-#else   // FILE_PATH_USES_DRIVE_LETTERS
+#else  // FILE_PATH_USES_DRIVE_LETTERS
       {FPL("/"), true, false},
       {FPL("/a"), true, false},
       {FPL("/."), true, false},
@@ -568,7 +568,7 @@ TEST_F(FilePathTest, IsAbsoluteOrNetwork) {
       {FPL("c:\\a"), true, false},   {FPL("c:\\."), true, false},
       {FPL("c:\\.."), true, false},  {FPL("C:\\a"), true, false},
       {FPL("d:\\a"), true, false},
-#else   // FILE_PATH_USES_DRIVE_LETTERS
+#else  // FILE_PATH_USES_DRIVE_LETTERS
       {FPL("\\"), true, false},      {FPL("\\a"), true, false},
       {FPL("\\."), true, false},     {FPL("\\.."), true, false},
       {FPL("c:\\"), false, false},
