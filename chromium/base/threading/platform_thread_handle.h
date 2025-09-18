@@ -32,6 +32,8 @@
 
 namespace base {
 
+class TimeDelta;
+
 // Used for uniquely identifying a thread.
 //
 // Wraps a platform-specific integer value with platform-specific size,

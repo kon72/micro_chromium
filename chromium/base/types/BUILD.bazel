@@ -2,12 +2,6 @@ load("@bazel_skylib//rules:build_test.bzl", "build_test")
 load("//chromium:build_defs.bzl", "chromium_cc_library", "chromium_cc_test")
 
 chromium_cc_library(
-    name = "always_false",
-    hdrs = ["always_false.h"],
-    visibility = ["//visibility:public"],
-)
-
-chromium_cc_library(
     name = "cxx23_from_range",
     hdrs = ["cxx23_from_range.h"],
     visibility = ["//visibility:public"],

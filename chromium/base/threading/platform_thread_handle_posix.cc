@@ -95,6 +95,9 @@ void* ThreadFunc(void* params) {
   ThreadIdNameManager::GetInstance()->RemoveName(
       PlatformThread::CurrentHandle().platform_handle(),
       PlatformThread::CurrentId());
+#if BUILDFLAG(IS_ANDROID)
+  PlatformThreadPriorityMonitor::Get().UnregisterCurrentThread();
+#endif
 
 #if PA_BUILDFLAG(USE_PARTITION_ALLOC_AS_MALLOC)
   partition_alloc::internal::StackTopRegistry::Get().NotifyThreadDestroyed();

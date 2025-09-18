@@ -182,7 +182,6 @@ chromium_cc_library(
         "//chromium/base:no_destructor",
         "//chromium/base/containers:span",
         "//chromium/base/third_party/icu",
-        "//chromium/base/types:always_false",
         "//chromium/base/types:supports_ostream_operator",
         "//chromium/base/types:to_address",
         "//chromium/build:build_config",

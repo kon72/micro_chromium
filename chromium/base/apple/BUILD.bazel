@@ -13,7 +13,6 @@ chromium_objc_library(
         ":scoped_cftyperef",
         "//chromium/base:base_export",
         "//chromium/base:check",
-        "//chromium/base/types:always_false",
         "//chromium/build:build_config",
     ],
 )

@@ -491,6 +491,7 @@ chromium_cc_test(
         ":values",
         "//chromium/base/containers:adapters",
         "//chromium/base/containers:contains",
+        "//chromium/base/containers:span",
         "//chromium/base/strings",
         "//chromium/base/test:gtest_util",
         "//chromium/build:build_config",

@@ -194,7 +194,10 @@ chromium_cc_library(
         "//conditions:default": ["@platforms//:incompatible"],
     }),
     visibility = ["//visibility:public"],
-    deps = ["//chromium/base:base_export"],
+    deps = [
+        "//chromium/base:base_export",
+        "//chromium/base/containers:heap_array",
+    ],
 )
 
 chromium_cc_library(

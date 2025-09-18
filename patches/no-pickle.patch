@@ -1,6 +1,6 @@
 --- a/base/files/file_path.cc
 +++ b/base/files/file_path.cc
-@@ -19,7 +19,6 @@
+@@ -18,7 +18,6 @@
  #include "base/check_op.h"
  #include "base/files/safe_base_name.h"
  #include "base/numerics/safe_conversions.h"
@@ -8,7 +8,7 @@
  #include "base/strings/strcat.h"
  #include "base/strings/string_util.h"
  #include "base/strings/sys_string_conversions.h"
-@@ -938,6 +937,7 @@ FilePath FilePath::FromUTF16Unsafe(std::
+@@ -937,6 +936,7 @@ FilePath FilePath::FromUTF16Unsafe(std::
  
  #endif  // BUILDFLAG(IS_WIN)
  
@@ -16,7 +16,7 @@
  void FilePath::WriteToPickle(Pickle* pickle) const {
  #if BUILDFLAG(IS_WIN)
    pickle->WriteString16(AsStringPiece16(path_));
-@@ -969,6 +969,7 @@ bool FilePath::ReadFromPickle(PickleIter
+@@ -968,6 +968,7 @@ bool FilePath::ReadFromPickle(PickleIter
  
    return true;
  }
@@ -26,7 +26,7 @@
  // Windows specific implementation of file string comparisons.
 --- a/base/files/file_path.h
 +++ b/base/files/file_path.h
-@@ -152,8 +152,10 @@ using CFStringRef = const struct __CFStr
+@@ -151,8 +151,10 @@ using CFStringRef = const struct __CFStr
  namespace base {
  
  class SafeBaseName;
@@ -37,7 +37,7 @@
  
  // An abstraction to isolate users from the differences between native
  // pathnames on different platforms.
-@@ -464,8 +466,10 @@ class BASE_EXPORT FilePath {
+@@ -463,8 +465,10 @@ class BASE_EXPORT FilePath {
    // Similar to FromUTF8Unsafe, but accepts UTF-16 instead.
    static FilePath FromUTF16Unsafe(std::u16string_view utf16);
  

@@ -1,6 +1,6 @@
 --- a/base/files/file_path.cc
 +++ b/base/files/file_path.cc
-@@ -17,7 +17,6 @@
+@@ -16,7 +16,6 @@
  #include <string_view>
  
  #include "base/check_op.h"
@@ -8,7 +8,7 @@
  #include "base/files/safe_base_name.h"
  #include "base/numerics/safe_conversions.h"
  #include "base/pickle.h"
-@@ -98,6 +97,7 @@ bool EqualDriveLetterCaseInsensitive(Str
+@@ -97,6 +96,7 @@ bool EqualDriveLetterCaseInsensitive(Str
    return a_rest == b_rest;
  }
  
@@ -16,7 +16,7 @@
  // Returns true if `left` and `right` are equivalent drive letter components.
  // Will return false if `left` or `right` is not a drive letter component.
  bool AreDriveLetterComponentsEqual(FilePath::StringViewType left,
-@@ -110,6 +110,7 @@ bool AreDriveLetterComponentsEqual(FileP
+@@ -109,6 +109,7 @@ bool AreDriveLetterComponentsEqual(FileP
           right[1] == ':' && IsAsciiAlpha(left[0]) &&
           ToLowerASCII(left[0]) == ToLowerASCII(right[0]);
  }
@@ -24,7 +24,7 @@
  #endif  // defined(FILE_PATH_USES_DRIVE_LETTERS)
  
  bool IsPathAbsolute(StringViewType path) {
-@@ -206,6 +207,7 @@ bool IsEmptyOrSpecialCase(const StringTy
+@@ -205,6 +206,7 @@ bool IsEmptyOrSpecialCase(const StringTy
    return false;
  }
  
@@ -32,7 +32,7 @@
  // Splits `path` in 2 parts: the first component and the remainder of the path.
  // Leading separators are removed from the remainder of the path, unless
  // `can_be_drive_letter` is true. `can_be_drive_letter` indicates that a leading
-@@ -279,9 +281,11 @@ ExtractFirstComponent(FilePath::StringVi
+@@ -278,9 +280,11 @@ ExtractFirstComponent(FilePath::StringVi
  // State of the `FastFilePathIsParent` feature, to be updated after the feature
  // list is available.
  std::atomic_bool g_fast_file_path_is_parent{false};
@@ -44,7 +44,7 @@
  void FilePath::InitializeFeatures() {
    // `std::memory_order_relaxed` because there are no dependencies with other
    // memory operations.
-@@ -289,6 +293,7 @@ void FilePath::InitializeFeatures() {
+@@ -288,6 +292,7 @@ void FilePath::InitializeFeatures() {
        FeatureList::IsEnabled(features::kFastFilePathIsParent),
        std::memory_order_relaxed);
  }
@@ -52,7 +52,7 @@
  
  FilePath::FilePath() = default;
  
-@@ -367,15 +372,18 @@ std::vector<FilePath::StringType> FilePa
+@@ -366,15 +371,18 @@ std::vector<FilePath::StringType> FilePa
  }
  
  bool FilePath::IsParent(const FilePath& child) const {
@@ -71,7 +71,7 @@
  bool FilePath::IsParentFast(const FilePath& child) const {
    StringViewType parent_view = path_;
    StringViewType child_view = child.path_;
-@@ -448,6 +456,7 @@ bool FilePath::IsParentFast(const FilePa
+@@ -447,6 +455,7 @@ bool FilePath::IsParentFast(const FilePa
      child_view = child_remainder;
    }
  }
@@ -81,7 +81,7 @@
    return AppendRelativePath(child, nullptr);
 --- a/base/files/file_path.h
 +++ b/base/files/file_path.h
-@@ -196,8 +196,10 @@ class BASE_EXPORT FilePath {
+@@ -195,8 +195,10 @@ class BASE_EXPORT FilePath {
    // The character used to identify a file extension.
    static constexpr CharType kExtensionSeparator = FILE_PATH_LITERAL('.');
  
@@ -92,7 +92,7 @@
  
    FilePath();
    FilePath(const FilePath& that);
-@@ -536,7 +538,9 @@ class BASE_EXPORT FilePath {
+@@ -535,7 +537,9 @@ class BASE_EXPORT FilePath {
    // support UNC paths on Windows.
    void StripTrailingSeparatorsInternal();
  

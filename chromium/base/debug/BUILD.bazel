@@ -26,6 +26,7 @@ chromium_cc_library(
         "//chromium/base:clang_profiling_buildflags",
         "//chromium/base:logging",
         "//chromium/base/threading:platform_thread",
+        "//chromium/base/time",
         "//chromium/build:build_config",
     ] + select({
         "@platforms//os:fuchsia": ["//chromium/base/debug:alias"],
@@ -41,7 +42,6 @@ chromium_cc_library(
             "//chromium/base/process:process_handle",
             "//chromium/base/strings",
             "//chromium/base/strings:string_number_conversions",
-            "//chromium/base/time",
         ],
     }) + select({
         "@platforms//os:linux": ["//chromium/base/third_party/symbolize"],

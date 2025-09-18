@@ -43,7 +43,7 @@ register_toolchains("@rust_toolchains//:all")
 crate = use_extension("@rules_rust//crate_universe:extensions.bzl", "crate")
 crate.spec(
     package = "cxx",
-    version = "1.0.160",
+    version = "1.0.179",
 )
 crate.spec(
     package = "serde",
@@ -74,7 +74,7 @@ cargo_bindeps = use_extension("@rules_rust//crate_universe:extension.bzl", "crat
 cargo_bindeps.spec(
     artifact = "bin",
     package = "cxxbridge-cmd",
-    version = "1.0.160",
+    version = "1.0.179",
 )
 cargo_bindeps.annotation(
     crate = "cxxbridge-cmd",

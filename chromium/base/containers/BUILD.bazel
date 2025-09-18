@@ -225,6 +225,7 @@ chromium_cc_test(
     deps = [
         ":heap_array",
         ":span",
+        "//chromium/base/memory:raw_ptr",
         "//chromium/base/memory:raw_ptr_exclusion",
         "//chromium/base/test:gtest_util",
         "//chromium/testing:gtest",

@@ -10,10 +10,7 @@ chromium_cc_library(
     name = "byte_conversions",
     hdrs = ["byte_conversions.h"],
     visibility = ["//visibility:public"],
-    deps = [
-        ":basic_ops_impl",
-        "//chromium/build:build_config",
-    ],
+    deps = [":basic_ops_impl"],
 )
 
 chromium_cc_library(
@@ -40,10 +37,7 @@ chromium_cc_library(
         "safe_math.h",
     ],
     visibility = ["//visibility:public"],
-    deps = [
-        ":integral_constant_like",
-        "//chromium/build:build_config",
-    ],
+    deps = [":integral_constant_like"],
 )
 
 chromium_cc_test(

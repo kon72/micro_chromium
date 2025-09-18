@@ -14,6 +14,9 @@ LockImpl::LockImpl() : native_handle_(SRWLOCK_INIT) {}
 LockImpl::~LockImpl() = default;
 
 void LockImpl::LockInternal() {
+#if 0
+  LockMetricsRecorder::ScopedLockAcquisitionTimer timer;
+#endif  // 0
   ::AcquireSRWLockExclusive(reinterpret_cast<PSRWLOCK>(&native_handle_));
 }
 

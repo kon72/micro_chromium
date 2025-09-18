@@ -1,6 +1,6 @@
 --- a/base/files/file_path.cc
 +++ b/base/files/file_path.cc
-@@ -26,7 +26,6 @@
+@@ -25,7 +25,6 @@
  #include "base/strings/sys_string_conversions.h"
  #include "base/strings/utf_ostream_operators.h"
  #include "base/strings/utf_string_conversions.h"
@@ -8,7 +8,7 @@
  
  #if BUILDFLAG(IS_ANDROID)
  #include "base/android/virtual_document_path.h"
-@@ -1608,10 +1607,6 @@ FilePath FilePath::NormalizePathSeparato
+@@ -1607,10 +1606,6 @@ FilePath FilePath::NormalizePathSeparato
    return NormalizePathSeparatorsTo(kSeparators[0]);
  }
  
@@ -21,7 +21,7 @@
    DCHECK_NE(kSeparators + kSeparatorsLength,
 --- a/base/files/file_path.h
 +++ b/base/files/file_path.h
-@@ -111,7 +111,6 @@
+@@ -110,7 +110,6 @@
  
  #include "base/base_export.h"
  #include "base/compiler_specific.h"
@@ -29,7 +29,7 @@
  #include "build/build_config.h"
  
  // Windows-style drive letter support and pathname separator characters can be
-@@ -492,9 +491,6 @@ class BASE_EXPORT FilePath {
+@@ -491,9 +490,6 @@ class BASE_EXPORT FilePath {
      return CompareIgnoreCase(string1, string2) < 0;
    }
  
@@ -133,6 +133,47 @@
 +#endif  // 0
  
  }  // namespace base
+--- a/base/synchronization/lock_impl_posix.cc
++++ b/base/synchronization/lock_impl_posix.cc
+@@ -14,7 +14,6 @@
+ #include "base/check_op.h"
+ #include "base/posix/safe_strerror.h"
+ #include "base/synchronization/lock.h"
+-#include "base/synchronization/lock_metrics_recorder.h"
+ #include "base/synchronization/synchronization_buildflags.h"
+ #include "base/system/sys_info.h"
+ #include "build/build_config.h"
+@@ -128,7 +127,9 @@ LockImpl::~LockImpl() {
+ }
+ 
+ void LockImpl::LockInternal() {
++#if 0
+   LockMetricsRecorder::ScopedLockAcquisitionTimer timer;
++#endif  // 0
+   int rv = pthread_mutex_lock(&native_handle_);
+   DCHECK_EQ(rv, 0) << ". " << SystemErrorCodeToString(rv);
+ }
+--- a/base/synchronization/lock_impl_win.cc
++++ b/base/synchronization/lock_impl_win.cc
+@@ -6,8 +6,6 @@
+ 
+ #include <windows.h>
+ 
+-#include "base/synchronization/lock_metrics_recorder.h"
+-
+ namespace base {
+ namespace internal {
+ 
+@@ -16,7 +14,9 @@ LockImpl::LockImpl() : native_handle_(SR
+ LockImpl::~LockImpl() = default;
+ 
+ void LockImpl::LockInternal() {
++#if 0
+   LockMetricsRecorder::ScopedLockAcquisitionTimer timer;
++#endif  // 0
+   ::AcquireSRWLockExclusive(reinterpret_cast<PSRWLOCK>(&native_handle_));
+ }
+ 
 --- a/base/types/strong_alias.h
 +++ b/base/types/strong_alias.h
 @@ -11,7 +11,6 @@
@@ -193,7 +234,7 @@
  #include "base/types/pass_key.h"
  #include "base/types/to_address.h"
  
-@@ -924,21 +921,10 @@ std::optional<Value> DictValue::ExtractB
+@@ -952,21 +949,10 @@ std::optional<Value> DictValue::ExtractB
    return extracted;
  }
  
@@ -215,7 +256,7 @@
  bool operator==(const DictValue& lhs, const DictValue& rhs) {
    auto deref_2nd = [](const auto& p) { return std::tie(p.first, *p.second); };
    return std::ranges::equal(lhs.storage_, rhs.storage_, {}, deref_2nd,
-@@ -1265,21 +1251,10 @@ size_t ListValue::EraseValue(const Value
+@@ -1293,21 +1279,10 @@ size_t ListValue::EraseValue(const Value
    return std::erase(storage_, value);
  }
  
@@ -237,7 +278,7 @@
  ListValue::ListValue(const std::vector<Value>& storage) {
    storage_.reserve(storage.size());
    for (const auto& value : storage) {
-@@ -1316,48 +1291,10 @@ bool Value::operator==(const ListValue&
+@@ -1344,48 +1319,10 @@ bool Value::operator==(const ListValue&
    return is_list() && GetList() == rhs;
  }
  
@@ -313,7 +354,7 @@
   private:
    using ListStorage = std::vector<Value>;
  
-@@ -540,16 +532,9 @@ class BASE_EXPORT GSL_OWNER DictValue {
+@@ -548,16 +540,9 @@ class BASE_EXPORT GSL_OWNER DictValue {
  
    std::optional<Value> ExtractByDottedPath(std::string_view path);
  
@@ -330,7 +371,7 @@
   private:
    BASE_EXPORT friend bool operator==(const DictValue& lhs,
                                       const DictValue& rhs);
-@@ -821,8 +806,6 @@ class BASE_EXPORT GSL_OWNER Value {
+@@ -829,8 +814,6 @@ class BASE_EXPORT GSL_OWNER Value {
    Dict TakeDict() &&;
    List TakeList() &&;
  
@@ -339,7 +380,7 @@
    // Note: Do not add more types. See the file-level comment above for why.
  
    // Comparison operators so that Values can easily be used with standard
-@@ -852,16 +835,9 @@ class BASE_EXPORT GSL_OWNER Value {
+@@ -860,16 +843,9 @@ class BASE_EXPORT GSL_OWNER Value {
    bool operator==(const DictValue& rhs) const;
    bool operator==(const ListValue& rhs) const;
  
@@ -358,7 +399,7 @@
      return std::visit(std::forward<Visitor>(visitor), data_);
 --- a/base/values_unittest.cc
 +++ b/base/values_unittest.cc
-@@ -32,7 +32,6 @@
+@@ -34,7 +34,6 @@
  #include "build/build_config.h"
  #include "testing/gmock/include/gmock/gmock.h"
  #include "testing/gtest/include/gtest/gtest.h"
@@ -366,7 +407,7 @@
  
  namespace base {
  
-@@ -2205,6 +2204,7 @@ TEST(ValuesTest, MutableGetBlob) {
+@@ -2227,6 +2226,7 @@ TEST(ValuesTest, MutableGetBlob) {
    EXPECT_EQ(new_blob, value.GetBlob());
  }
  
@@ -374,7 +415,7 @@
  TEST(ValuesTest, TracingSupport) {
    EXPECT_EQ(perfetto::TracedValueToString(Value(false)), "false");
    EXPECT_EQ(perfetto::TracedValueToString(Value(1)), "1");
-@@ -2228,6 +2228,7 @@ TEST(ValuesTest, TracingSupport) {
+@@ -2250,6 +2250,7 @@ TEST(ValuesTest, TracingSupport) {
                "{key:value}");
    }
  }

@@ -16,6 +16,7 @@
 #include <tuple>
 
 #include "base/threading/platform_thread_handle.h"
+#include "base/time/time.h"
 #include "build/build_config.h"
 
 #if BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS)
@@ -86,6 +87,9 @@ void* ThreadFunc(void* params) {
   ThreadIdNameManager::GetInstance()->RemoveName(
       PlatformThread::CurrentHandle().platform_handle(),
       PlatformThread::CurrentId());
+#if BUILDFLAG(IS_ANDROID)
+  PlatformThreadPriorityMonitor::Get().UnregisterCurrentThread();
+#endif
 
 #if PA_BUILDFLAG(USE_PARTITION_ALLOC_AS_MALLOC)
   partition_alloc::internal::StackTopRegistry::Get().NotifyThreadDestroyed();

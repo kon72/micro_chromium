@@ -19,7 +19,6 @@
 #include "base/base_export.h"
 #include "base/threading/platform_thread_handle.h"
 #include "base/threading/platform_thread_ref.h"
-#include "base/time/time.h"
 #include "build/build_config.h"
 
 #if BUILDFLAG(IS_WIN)
@@ -32,6 +31,8 @@
 #endif
 
 namespace base {
+
+class TimeDelta;
 
 #if 0
 // Used for uniquely identifying a thread.

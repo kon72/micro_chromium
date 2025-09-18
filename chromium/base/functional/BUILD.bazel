@@ -23,7 +23,6 @@ chromium_cc_library(
         "//chromium/base/memory:raw_ptr",
         "//chromium/base/memory:raw_ref",
         "//chromium/base/memory:weak_ptr",
-        "//chromium/base/types:always_false",
         "//chromium/base/types:is_complete",
         "//chromium/base/types:is_instantiation",
         "//chromium/base/types:to_address",
@@ -47,7 +46,6 @@ chromium_cc_library(
         "//chromium/base:check",
         "//chromium/base:compiler_specific",
         "//chromium/base:notreached",
-        "//chromium/base/types:always_false",
     ],
 )
 
